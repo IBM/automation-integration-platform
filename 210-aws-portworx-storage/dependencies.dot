@@ -1,0 +1,6 @@
+digraph {
+    rankdir="BT"
+    "aws-portworx (aws-portworx)" -> "cluster (ocp-login)"
+"aws-portworx (aws-portworx)"
+"cluster (ocp-login)"
+  }

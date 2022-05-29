@@ -1,0 +1,13 @@
+digraph {
+    rankdir="BT"
+    "gitops-ibm-portworx (gitops-ibm-portworx)" -> "gitops_repo (gitops-repo)"
+"gitops-ibm-portworx (gitops-ibm-portworx)" -> "gitops-ibmcloud-operator (gitops-ibmcloud-operator)"
+"gitops-ibm-portworx (gitops-ibm-portworx)" -> "resource_group (ibm-resource-group)"
+"gitops-ibm-portworx (gitops-ibm-portworx)"
+"gitops_repo (gitops-repo)"
+"gitops-ibmcloud-operator (gitops-ibmcloud-operator)" -> "gitops_repo (gitops-repo)"
+"gitops-ibmcloud-operator (gitops-ibmcloud-operator)"
+"resource_group (ibm-resource-group)"
+"portworx_namespace (gitops-namespace)" -> "gitops_repo (gitops-repo)"
+"portworx_namespace (gitops-namespace)"
+  }

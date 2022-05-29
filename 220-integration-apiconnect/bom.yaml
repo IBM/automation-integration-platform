@@ -1,0 +1,97 @@
+apiVersion: cloud.ibm.com/v1alpha1
+kind: BillOfMaterial
+metadata:
+  name: 220-integration-apiconnect
+  labels:
+    type: software
+    code: '220'
+  annotations:
+    displayName: Integration Platform - APIConnect Only
+    description: >-
+      Populates a GitOps repository with APIConnect component of the IBM
+      Integration Platform
+spec:
+  modules:
+    - name: gitops-cp-apic
+      alias: gitops-cp-apic
+      version: v0.0.1
+      dependencies:
+        - name: namespace
+          ref: cp4i-apic
+      variables:
+        - name: storage_class
+          alias: rwo_storage_class
+          scope: global
+        - name: entitlement_key
+          scope: global
+    - name: gitops-cp-apic-operator
+      alias: gitops-cp-apic-operator
+      version: v1.2.5
+    - name: gitops-cp-catalogs
+      alias: gitops-cp-catalogs
+      version: v1.2.1
+      variables:
+        - name: entitlement_key
+          scope: global
+    - name: gitops-namespace
+      alias: cp4i-apic
+      version: v1.11.2
+      variables:
+        - name: name
+          value: cp4i-apic
+    - name: ocp-login
+      alias: cluster
+      version: v1.2.12
+    - name: olm
+      alias: olm
+      version: v1.3.2
+    - name: sealed-secret-cert
+      alias: sealed-secret-cert
+      version: v1.0.1
+    - name: gitops-repo
+      alias: gitops_repo
+      version: v1.16.0
+    - name: cp4i-dependency-management
+      version: v1.2.3
+    - name: gitops-cp-platform-navigator
+      version: v1.0.6
+  variables:
+    - name: rwo_storage_class
+      type: string
+      description: ReadWriteOnce access type Storage Class
+      defaultValue: ''
+    - name: entitlement_key
+      type: string
+      description: >-
+        The entitlement key used to access the CP4I images in the container
+        registry. Visit https://myibm.ibm.com/products-services/containerlibrary
+        to get the key
+      sensitive: true
+    - name: server_url
+      type: string
+      description: The url for the OpenShift api
+    - name: cluster_login_token
+      type: string
+      description: Token used for authentication
+      sensitive: true
+    - name: gitops_repo_host
+      type: string
+      description: The host for the git repository.
+    - name: gitops_repo_type
+      type: string
+      description: The type of the hosted git repository (github or gitlab).
+    - name: gitops_repo_org
+      type: string
+      description: The org/group where the git repository exists/will be provisioned.
+    - name: gitops_repo_repo
+      type: string
+      description: >-
+        The short name of the repository (i.e. the part after the org/group
+        name)
+    - name: gitops_repo_username
+      type: string
+      description: The username of the user with access to the repository
+    - name: gitops_repo_token
+      type: string
+      description: The personal access token used to access the repository
+      sensitive: true

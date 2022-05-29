@@ -1,0 +1,46 @@
+apiVersion: cloud.ibm.com/v1alpha1
+kind: BillOfMaterial
+metadata:
+  name: 210-azure-portworx-storage
+  labels:
+    type: software
+    code: '210'
+    platform: azure
+  annotations:
+    displayName: Azure - Portworx Cluster Storage
+    description: Installs Portworx into an OCP cluster on Azure
+spec:
+  modules:
+    - name: azure-portworx
+      alias: azure-portworx
+      version: v0.0.2
+    - name: ocp-login
+      alias: cluster
+      version: v1.2.14
+  variables:
+    - name: azure-portworx_variable cluster_name {
+      type: string
+      description: The name of the ARO cluster
+    - name: region
+      type: string
+      description: Azure Region the cluster is deployed in
+    - name: azure-portworx_resource_group_name
+      type: string
+      description: Resource group where cluster is deployed
+    - name: azure-portworx_portworx_config
+      type: |-
+        object({
+            type=string,
+            cluster_id=string,
+            enable_encryption=bool,
+            user_id=string,
+            osb_endpoint=string
+          })
+      description: Portworx configuration
+    - name: server_url
+      type: string
+      description: The url for the OpenShift api
+    - name: cluster_login_token
+      type: string
+      description: Token used for authentication
+      sensitive: true
