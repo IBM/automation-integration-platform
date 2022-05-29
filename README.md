@@ -30,7 +30,7 @@ The reference architectures are provided in three different forms, with increasi
 
 For each of these reference architecture, we have provided a detailed set of automation to create the environment for the software. If you do not have an OpenShift environment provisioned, please use one of these. They are optimized for the installation of this solution.  
 
-Note:  [Cloud Pak for Data system requirements](https://www.ibm.com/docs/en/cloud-paks/cp-integration/2021.4?topic=planning-system-requirements) recommend at least 3 worker nodes, with minimum 16vCPU per node and minimum 64 GB RAM per done (128 GB RAM is recommended).
+Note:  [Cloud Pak for Integration system requirements](https://www.ibm.com/docs/en/cloud-paks/cp-integration/2021.4?topic=planning-system-requirements) recommend at least 3 worker nodes, with minimum 16vCPU per node and minimum 64 GB RAM per done (128 GB RAM is recommended).
 
 | Cloud Platform                                                                                                            | Automation and Documentation                                                                                                                                                                                  |   
 |---------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -58,7 +58,7 @@ The following reference architecture represents the logical view of how CP4I wor
 ![Reference Architecture](images/cp4i-diagram.png)
 
 
-## Deploying Data Foundation
+## Deploying Cloud Pak for Integration
 
 
 The following instructions will help you install Maximo Core into AWS, Azure, and IBM Cloud OpenShift Kubernetes environment.
@@ -71,7 +71,7 @@ Details on Cloud Pak for Integration licensing available at https://www.ibm.com/
 ### Obtaining your IBM entitlement API key
 You must have your IBM entitlement API key to access images in the IBM Entitled Registry.
 
-After you purchase Cloud Pak for Data, an entitlement API key for the software is associated with your My IBM account. You need this key to complete the Cloud Pak for Data installation. To obtain the entitlement key, complete the following steps:
+After you purchase Cloud Pak for Integration, an entitlement API key for the software is associated with your My IBM account. You need this key to complete the Cloud Pak for Integration installation. To obtain the entitlement key, complete the following steps:
 * Log in to [Container software library on My IBM](https://myibm.ibm.com/products-services/containerlibrary) with the IBM ID and password that are associated with the entitled software.
 * On the **Get entitlement key** tab, select **Copy key** to copy the entitlement key to the clipboard.
 * Save the API key for later in this installation.
@@ -222,7 +222,7 @@ Steps:
      ```
 
 
-9. We are now ready to start installing Data Foundation, run the `launch.sh` command, make sure you are in the root of the `automation-data-foundation` repository
+9. We are now ready to start installing CP4I, run the `launch.sh` command, make sure you are in the root of the `automation-integration-platform` repository
 
    ```
    ./launch.sh
@@ -300,7 +300,7 @@ rwx_storage_class="ocs-storagecluster-cephfs"
 
 17. For the `repo_org` value set it to your default org name, or specific a custom org value. This is the organization where the GitOps Repository will be created in. Click on top right menu and select Your Profile to take you to your default organization.
 
-18. Set the `repo_repo` value to a unique name that you will recognize as the place where the GitOps configuration is going to be placed before Data Foundation is installed into the cluster.
+18. Set the `repo_repo` value to a unique name that you will recognize as the place where the GitOps configuration is going to be placed before CP4I is installed into the cluster.
 
 19. You can change the `gitops-cluster-config_banner_text` banner text to something useful for your client project or demo.
 
@@ -339,7 +339,7 @@ Change directories to the `210-*` folder and run the following commands to deplo
     
     Storage configuration will run asynchronously in the background inside of the Cluster and should be complete within 10 minutes.
     
-26. Change directories to the `300-integration-platform-multicloud` folder and run the following commands to deploy Data Foundation into the cluster.
+26. Change directories to the `300-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
 
     ```
     cd ../300-integration-platform-multicloud
