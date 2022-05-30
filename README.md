@@ -89,7 +89,10 @@ The Integration capabilities automation is broken into what we call layers of au
 | 300    | [300 - Cloud Pak for Integration](./300-integration-platform-multicloud)                                                                                                                                                                                     | Deploy the Cloud Pak for Integration components                                                                                                        | 30 Mins  |
 | 215 | [215 - Integration Platform Navigator](./215-integration-platform-navigator) | _(Optional)_ Install integration PlatformNavigator Operator & Instance into the cluster | 45 Mins |
 | 220 | [220 - Integration API Connect](./220-integration-apiconnect) | _(Optional)_ Install API Connect Operator & Instance into the cluster | 45 Mins |
-| 230 | [230 - Integration MQ](./230-integration-mq) | _(Optional)_ Install IBM MQ Operator & Instance into the cluster | 45 Mins || 240 | [240 - Integration App Connect Enterprise](./240-integration-ace) | _(Optional)_ Install IBM ACE Operator & ACE Designer Instance into the cluster | 20 Mins || 250 | [250 - Integration EventStreams](./250-integration-eventstreams) | _(Optional)_ Install IBM EventStreams Operator & Instance into the cluster | 10 Mins || 260 | [260 - Integration MQ Uniform Cluster](./260-integration-mq-uniform-cluster) | _(Optional)_ Install IBM MQ UniformCluster Instance into the cluster | 10 Mins |
+| 230 | [230 - Integration MQ](./230-integration-mq) | _(Optional)_ Install IBM MQ Operator & Instance into the cluster | 45 Mins |
+| 240 | [240 - Integration App Connect Enterprise](./240-integration-ace) | _(Optional)_ Install IBM ACE Operator & ACE Designer Instance into the cluster | 20 Mins |
+| 250 | [250 - Integration EventStreams](./250-integration-eventstreams) | _(Optional)_ Install IBM EventStreams Operator & Instance into the cluster | 10 Mins |
+| 260 | [260 - Integration MQ Uniform Cluster](./260-integration-mq-uniform-cluster) | _(Optional)_ Install IBM MQ UniformCluster Instance into the cluster | 10 Mins |
 
 
 
