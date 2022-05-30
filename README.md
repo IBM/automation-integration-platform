@@ -98,7 +98,7 @@ The Integration capabilities automation is broken into what we call layers of au
 
 Note:
 BOM ID 300, will install PlatformNavigator, APIConnect, App Connect Enterprise, MQ, EventStreams & MQ Uniform Cluster. 
-If you decide to 
+'If you decide to 
 CHOOSE
      'APIConnect Only' :
         In such case choose BOM ID [220 & 215] only instead of BOM ID [300]. APIConnect is dependent on PlatformNavigator. 
@@ -114,7 +114,7 @@ CHOOSE
 
      'MQ UniformCluster' :
         In such case choose BOM ID [260 & 215] only instead of BOM ID [300] . MQ Uniform cluster is dependent on PlatformNavigator. 
-End
+End'
 
 > At this time the most reliable way of running this automation is with Terraform in your local machine either through a bootstrapped container image or with native tools installed. We provide a Container image that has all the common SRE tools installed. [CLI Tools Image,](https://quay.io/repository/ibmgaragecloud/cli-tools?tab=tags) [Source Code for CLI Tools](https://github.com/cloud-native-toolkit/image-cli-tools)
 
