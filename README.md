@@ -230,6 +230,42 @@ Steps:
     * *(Coming Soon)* AWS Deployments require an [Access Key and Secret Key](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)
     * *(Coming Soon)* Azure Deployments require a [service principal to deploy Portworx](https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/README.md#prerequisites).
 
+9. Next you will need to set-up your terraform.tfvars file. 
+
+    ```
+    cp terraform.tfvars.template terraform.tfvars
+    code terraform.tfvars
+    ```
+    Below provided the Sample Values
+    ```
+###########################################################################################################################
+# Name: Cloud Pak for Integration Terraform Variable File
+# Desc: Initial input variables to support installation of Cloud Pak for Integration into the cloud provider of your choice
+###########################################################################################################################
+
+## rwo_storage_class: ReadWriteOnce access type Storage Class
+rwo_storage_class="ibmc-vpc-block-10iops-tier"
+
+## rwx_storage_class: ReadWriteMany access type Storage Class
+rwx_storage_class="ocs-storagecluster-cephfs"
+
+## gitops-repo_host: The host for the git repository.
+gitops_repo_host="github.com"
+
+## gitops-repo_type: The type of the hosted git repository (github or gitlab).
+gitops_repo_type="github"
+
+## gitops-repo_org: The org/group where the git repository exists/will be provisioned.
+gitops_repo_org="<some meaning full name>"
+
+## gitops-repo_repo: The short name of the repository (i.e. the part after the org/group name)
+gitops_repo_repo="cp4i-all"
+
+## gitops-cluster-config_banner_text: The text that will appear in the top banner in the cluster
+gitops-cluster-config_banner_text="Software Everywhere CP4Integration"
+
+```
+
 9. If your corporate policy does not allow use of Docker Desktop, then you need to install **Colima** as an alternative
 
      ```
