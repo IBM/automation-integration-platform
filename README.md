@@ -218,20 +218,19 @@ Steps:
 
 5. From you OpenShift console click on top right menu and select Copy login command and click on Display Token
     ![Copy Login Command](images/ocp_login_command.png)
-    
-6. Copy the API Token value into the `cluster_login_token` value
 
-7. Copy the Server URL into the `server_url` value, only the part starting with https
+6. Copy the API Token value into the `cluster_login_token` value and  Server URL into the `server_url` value, only the part starting with https
+    ![Copy Server URL and LoginToken](images/server_url_and_token.png)
 
-8. Copy the entitlement key, this can be obtained from visiting the [IBM Container Library](https://myibm.ibm.com/products-services/containerlibrary) and place it in the `entitlement_key` variable.
+7. Copy the entitlement key, this can be obtained from visiting the [IBM Container Library](https://myibm.ibm.com/products-services/containerlibrary) and place it in the `entitlement_key` variable.
 
-9. Complete the cloud-specific credentials to be able to provision storage **only for the platform of your choice**.
+8. Complete the cloud-specific credentials to be able to provision storage **only for the platform of your choice**.
 
     * IBM Cloud deployments require an [API Key](https://cloud.ibm.com/iam/apikeys).
     * *(Coming Soon)* AWS Deployments require an [Access Key and Secret Key](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)
     * *(Coming Soon)* Azure Deployments require a [service principal to deploy Portworx](https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/README.md#prerequisites).
 
-10. If your corporate policy does not allow use of Docker Desktop, then you need to install **Colima** as an alternative
+9. If your corporate policy does not allow use of Docker Desktop, then you need to install **Colima** as an alternative
 
      ```
      brew install colima
@@ -239,7 +238,7 @@ Steps:
      ```
 
 
-9. We are now ready to start installing CP4I, run the `launch.sh` command, make sure you are in the root of the `automation-integration-platform` repository
+10. We are now ready to start installing CP4I, run the `launch.sh` command, make sure you are in the root of the `automation-integration-platform` repository
 
    ```
    ./launch.sh
@@ -250,13 +249,13 @@ Steps:
    ```
 
 
-10. **launch.sh** will download a container image that contains all the command line tools to enable easy installation of the software. Once it has downloaded, it will mount the local file system and exec into the container for you to start running commands from within this custom container.
+11. **launch.sh** will download a container image that contains all the command line tools to enable easy installation of the software. Once it has downloaded, it will mount the local file system and exec into the container for you to start running commands from within this custom container.
 
 
 > we expect partners and clients will use their own specific **Continuous Integration** tools to support this the IBM team has focused on getting it installed in the least complicated way possible
 
 
-11. Next step is to create a workspace to run the Terraform automation.  Below you can see the parameters to configure your workspace for terraform execution.
+12. Next step is to create a workspace to run the Terraform automation.  Below you can see the parameters to configure your workspace for terraform execution.
 
     ```
     /terraform $ ./setup-workspace.sh -h
@@ -274,7 +273,7 @@ Steps:
 
     > ⚠️ At this time, only IBM Cloud is supported, but support for Azure and AWS will be released in the coming days.
 
-12. Run the command `./setup-workspace.sh -p ibm -s portworx -n df`
+13. Run the command `./setup-workspace.sh -p ibm -s portworx -n df`
 
     ```
     /terraform $ ./setup-workspace.sh -p ibm -s portworx -n df
@@ -292,9 +291,9 @@ Steps:
     Setting up current/300-integration-platform-multicloud from 300-integration-platform-multicloud
     move to /workspaces/current this is where your automation is configured
     ```
-13. The default `terraform.tfvars` file is symbolically linked to the new `workspaces/current` folder so this enables you to edit the file in your native operating system using your editor of choice.
+14. The default `terraform.tfvars` file is symbolically linked to the new `workspaces/current` folder so this enables you to edit the file in your native operating system using your editor of choice.
 
-14. Edit the default `terraform.tfvars` file this will enable you to setup the GitOps parameters.
+15. Edit the default `terraform.tfvars` file this will enable you to setup the GitOps parameters.
 
 The following you will be prompted for and some suggested values.
 
@@ -308,26 +307,26 @@ The following you will be prompted for and some suggested values.
 The `gitops-repo_repo`, `gitops-repo_token`, `entitlement_key`, `server_url`, and `cluster_login_token` values will be loaded automatically from the credentials.properties file that was configured in an earlier step.
 
 
-15. For `rwo_storage_class=""` & `rwx_storage_class=""` variables in `terraform.tfvars`, follow the below instruction carefully
+16. For `rwo_storage_class=""` & `rwx_storage_class=""` variables in `terraform.tfvars`, follow the below instruction carefully
 Before you proceed to install OCS or PortWorx on OpenShift, pls double check whether the OCS Storage is provisioned already. There are different ways to check. Login to OpenShift Console. NAvigate to "Storage" on the left menu. Select 'StorageClass'. If you find "ibmc-vpc-block-10iops-tier" & "ocs-storagecluster-cephfs" then set the following 
 rwo_storage_class="ibmc-vpc-block-10iops-tier"
 rwx_storage_class="ocs-storagecluster-cephfs"
 
-16. You will see that the `repo_type` and `repo_host` are set to GitHub you can change these to other Git Providers, like GitHub Enterprise or GitLab.
+17. You will see that the `repo_type` and `repo_host` are set to GitHub you can change these to other Git Providers, like GitHub Enterprise or GitLab.
 
-17. For the `repo_org` value set it to your default org name, or specific a custom org value. This is the organization where the GitOps Repository will be created in. Click on top right menu and select Your Profile to take you to your default organization.
+18. For the `repo_org` value set it to your default org name, or specific a custom org value. This is the organization where the GitOps Repository will be created in. Click on top right menu and select Your Profile to take you to your default organization.
 
-18. Set the `repo_repo` value to a unique name that you will recognize as the place where the GitOps configuration is going to be placed before CP4I is installed into the cluster.
+19. Set the `repo_repo` value to a unique name that you will recognize as the place where the GitOps configuration is going to be placed before CP4I is installed into the cluster.
 
-19. You can change the `gitops-cluster-config_banner_text` banner text to something useful for your client project or demo.
+20. You can change the `gitops-cluster-config_banner_text` banner text to something useful for your client project or demo.
 
-20. Save the `terraform.tfvars` file
+21. Save the `terraform.tfvars` file
 
-21. Navigate into the `/workspaces/current` folder
+22. Navigate into the `/workspaces/current` folder
 
     > ❗️ Do not skip this step.  You must execute from the `/worksapces/current` folder.
     
-22. Navigate into the `200` folder and run the following commands
+23. Navigate into the `200` folder and run the following commands
 
     ```
     cd 200-openshift-gitops
@@ -336,16 +335,16 @@ rwx_storage_class="ocs-storagecluster-cephfs"
     ```
 
 
-23. This will kick off the automation for setting up the GitOps Operator into your cluster.  Once complete, you should see message similar to:
+24. This will kick off the automation for setting up the GitOps Operator into your cluster.  Once complete, you should see message similar to:
 
     ```
     Apply complete! Resources: 71 added, 0 changed, 0 destroyed.
     ```
 
-24. You can check the progress by looking at two places, first look in your github repository. You will see the git repository has been created based on the name you have provided. The Maximo Core install will populate this with information to let OpenShift GitOps install the software. The second place is to look at the OpenShift console, Click Workloads->Pods and you will see the GitOps operator being installed.
+25. You can check the progress by looking at two places, first look in your github repository. You will see the git repository has been created based on the name you have provided. The Maximo Core install will populate this with information to let OpenShift GitOps install the software. The second place is to look at the OpenShift console, Click Workloads->Pods and you will see the GitOps operator being installed.
 
 
-25. Again an important note to be followed. In case of TechZone,  OCS storage is configured automatically. If it is already provisioned, skip this step and proceed with Step.26
+26. Again an important note to be followed. In case of TechZone,  OCS storage is configured automatically. If it is already provisioned, skip this step and proceed with Step.26
 Change directories to the `210-*` folder and run the following commands to deploy storage into your cluster:
 
     ```
@@ -356,7 +355,7 @@ Change directories to the `210-*` folder and run the following commands to deplo
     
     Storage configuration will run asynchronously in the background inside of the Cluster and should be complete within 10 minutes.
     
-26. Change directories to the `300-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
+27. Change directories to the `300-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
 
     ```
     cd ../300-integration-platform-multicloud
@@ -366,7 +365,7 @@ Change directories to the `210-*` folder and run the following commands to deplo
 
     Cloud Pak fo Integration deployment will run asynchronously in the background, and may require up to 90 minutes to complete.
 
-27. You can check the progress of the deployment by opening up Argo CD (OpenShift GitOps).  From the OpenShift user interface, click on the Application menu 3x3 Icon on the header and select **Cluster Argo CD** menu item.)
+28. You can check the progress of the deployment by opening up Argo CD (OpenShift GitOps).  From the OpenShift user interface, click on the Application menu 3x3 Icon on the header and select **Cluster Argo CD** menu item.)
 
    
 29. Once deployment is complete, go back into the OpenShift cluster user interface and navigate to view `Routes` for the `cp4i-pn` namespace.  Here you can see the URL to the deployed Platform Navigator instance.  Open this url in a new browser window.
