@@ -92,7 +92,7 @@ The Integration capabilities automation is broken into what we call layers of au
 | 240 | [240 - Integration App Connect Enterprise](./240-integration-ace) | _(Optional)_ Install IBM ACE Operator & ACE Designer Instance into the cluster | 20 Mins |
 | 250 | [250 - Integration EventStreams](./250-integration-eventstreams) | _(Optional)_ Install IBM EventStreams Operator & Instance into the cluster | 10 Mins |
 | 260 | [260 - Integration MQ Uniform Cluster](./260-integration-mq-uniform-cluster) | _(Optional)_ Install IBM MQ UniformCluster Instance into the cluster | 10 Mins |
-| 300    | [280 - Cloud Pak for Integration](./280-integration-platform-multicloud)                                                                                                                                                                                     | Deploy the Cloud Pak for Integration components                                                                                                        | 90 Mins  |
+| 280    | [280 - Cloud Pak for Integration](./280-integration-platform-multicloud)                                                                                                                                                                                     | Deploy the Cloud Pak for Integration components                                                                                                        | 90 Mins  |
 
 ```
 Note:
