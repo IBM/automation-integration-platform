@@ -38,7 +38,7 @@ spec:
           value: toolkit
     - name: ocp-login
       alias: cluster
-      version: v1.2.14
+      version: v1.3.1
     - name: olm
       version: v1.3.2
     - name: sealed-secret-cert

@@ -19,17 +19,13 @@ module "gitops_repo" {
   username = var.gitops_repo_username
 }
 module "gitops-ibm-odf" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-ibm-odf?ref=v0.1.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-ibm-odf?ref=v0.2.0"
 
-  cluster_name = var.cluster_name
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   ibmcloud_api_key = var.ibmcloud_api_key
-  job_container_image = var.gitops-ibm-odf_job_container_image
-  job_container_image_tag = var.gitops-ibm-odf_job_container_image_tag
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
   namespace = module.odf_namespace.name
-  region = var.region
   server_name = module.gitops_repo.server_name
 }
 module "odf_namespace" {

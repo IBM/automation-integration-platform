@@ -37,6 +37,17 @@ module "cp4i-dependency-management" {
 
   cp4i_version = var.cp4i-dependency-management_cp4i_version
 }
+module "cp4i-es" {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.11.2"
+
+  argocd_namespace = var.cp4i-es_argocd_namespace
+  ci = var.cp4i-es_ci
+  create_operator_group = var.cp4i-es_create_operator_group
+  git_credentials = module.gitops_repo.git_credentials
+  gitops_config = module.gitops_repo.gitops_config
+  name = var.cp4i-es_name
+  server_name = module.gitops_repo.server_name
+}
 module "cp4i-mq" {
   source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.11.2"
 
@@ -155,6 +166,33 @@ module "gitops-cp-catalogs" {
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
   namespace = var.gitops-cp-catalogs_namespace
   server_name = module.gitops_repo.server_name
+}
+module "gitops-cp-event-streams" {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams?ref=v1.1.3"
+
+  cpulimits = var.gitops-cp-event-streams_cpulimits
+  cpurequests = var.gitops-cp-event-streams_cpurequests
+  entitlement_key = module.gitops-cp-catalogs.entitlement_key
+  es_version = var.gitops-cp-event-streams_es_version
+  git_credentials = module.gitops_repo.git_credentials
+  gitops_config = module.gitops_repo.gitops_config
+  kafka_replicas = var.gitops-cp-event-streams_kafka_replicas
+  kafka_storageclass = var.rwo_storage_class
+  kafka_storagesize = var.gitops-cp-event-streams_kafka_storagesize
+  kafka_storagetype = var.gitops-cp-event-streams_kafka_storagetype
+  kubeseal_cert = module.gitops_repo.sealed_secrets_cert
+  license_use = module.cp4i-dependency-management.eventstreams.license_use
+  memorylimits = var.gitops-cp-event-streams_memorylimits
+  memoryrequests = var.gitops-cp-event-streams_memoryrequests
+  namespace = module.cp4i-es.name
+  requestIbmServices_iam = var.gitops-cp-event-streams_requestIbmServices_iam
+  requestIbmServices_monitoring = var.gitops-cp-event-streams_requestIbmServices_monitoring
+  server_name = module.gitops_repo.server_name
+  service_name = var.gitops-cp-event-streams_service_name
+  zookeeper_replicas = var.gitops-cp-event-streams_zookeeper_replicas
+  zookeeper_storageclass = var.rwo_storage_class
+  zookeeper_storagesize = var.gitops-cp-event-streams_zookeeper_storagesize
+  zookeeper_storagetype = var.gitops-cp-event-streams_zookeeper_storagetype
 }
 module "gitops-cp-eventstreams-operator" {
   source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams-operator?ref=v1.0.1"

@@ -1,9 +1,3 @@
-## cluster_name: The name of the ROKS cluster where ODF will be installed
-#cluster_name=""
-
-## region: The region where the cluster is deployed
-#region=""
-
 ## ibmcloud_api_key: The api key for IBM Cloud access
 #ibmcloud_api_key=""
 

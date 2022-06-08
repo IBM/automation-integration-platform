@@ -6,6 +6,7 @@ metadata:
     type: infrastructure
     platform: ibm
     code: '210'
+    storage: odf
   annotations:
     displayName: IBM - ODF Cluster Storage
     description: Installs OpenShift Data Foundation in an IBM cluster
@@ -13,7 +14,7 @@ spec:
   modules:
     - name: gitops-ibm-odf
       alias: gitops-ibm-odf
-      version: v0.1.0
+      version: v0.2.0
       variables:
         - name: cluster_name
           scope: global
@@ -25,12 +26,6 @@ spec:
       alias: gitops_repo
       version: v1.18.1
   variables:
-    - name: cluster_name
-      type: string
-      description: The name of the ROKS cluster where ODF will be installed
-    - name: region
-      type: string
-      description: The region where the cluster is deployed
     - name: ibmcloud_api_key
       type: string
       description: The api key for IBM Cloud access

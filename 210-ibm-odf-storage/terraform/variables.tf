@@ -1,24 +1,6 @@
-variable "cluster_name" {
-  type = string
-  description = "The name of the ROKS cluster where ODF will be installed"
-}
-variable "region" {
-  type = string
-  description = "The region where the cluster is deployed"
-}
 variable "ibmcloud_api_key" {
   type = string
   description = "The api key for IBM Cloud access"
-}
-variable "gitops-ibm-odf_job_container_image" {
-  type = string
-  description = "The the container image that the job will be executed within"
-  default = "quay.io/ibmgaragecloud/cli-tools"
-}
-variable "gitops-ibm-odf_job_container_image_tag" {
-  type = string
-  description = "The the container image tag"
-  default = "v0.15"
 }
 variable "odf_namespace_name" {
   type = string

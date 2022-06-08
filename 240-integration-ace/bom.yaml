@@ -6,10 +6,8 @@ metadata:
     type: software
     code: '240'
   annotations:
-    displayName: Integration Platform
-    description: >-
-      Populates a GitOps repository with App Connect Enterprise component of the
-      IBM Integration Platform
+    displayName: Integration - App Connect
+    description: GitOps deployment of App Connect for Cloud pak for Integrationm
 spec:
   modules:
     - name: gitops-cp-ace

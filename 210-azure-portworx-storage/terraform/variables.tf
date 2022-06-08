@@ -5,39 +5,19 @@ variable "azure-portworx_provision" {
 }
 variable "azure_subscription_id" {
   type = string
-  description = "the value of azure_subscription_id"
-  default = ""
-}
-variable "azure_client_id" {
-  type = string
-  description = "the value of azure_client_id"
-  default = ""
-}
-variable "azure_client_secret" {
-  type = string
-  description = "the value of azure_client_secret"
-  default = ""
+  description = "The subscription id of the Azure account where the OpenShift cluster has been provisioned"
 }
 variable "azure_tenant_id" {
   type = string
-  description = "the value of azure_tenant_id"
-  default = ""
+  description = "The tenant id of the Azure account where the OpenShift cluster has been provisioned"
 }
-variable "azure-portworx_variable cluster_name {" {
+variable "azure_client_id" {
   type = string
-  description = "The name of the ARO cluster"
+  description = "The client id used to access the Azure account"
 }
-variable "region" {
+variable "azure_client_secret" {
   type = string
-  description = "Azure Region the cluster is deployed in"
-}
-variable "azure-portworx_resource_group_name" {
-  type = string
-  description = "Resource group where cluster is deployed"
-}
-variable "azure-portworx_portworx_config" {
-  type = string
-  description = "Portworx configuration"
+  description = "The client secret used to access the Azure account"
 }
 variable "azure-portworx_cluster_type" {
   type = string
@@ -63,6 +43,21 @@ variable "azure-portworx_px_enable_csi" {
   type = bool
   description = "Enable CSI on PX"
   default = true
+}
+variable "portworx_spec_file" {
+  type = string
+  description = "The path to the file that contains the yaml spec for the Portworx config. Either the `portworx_spec_file` or `portworx_spec` must be provided. The instructions for creating this configuration can be found at https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md"
+  default = ""
+}
+variable "portworx_spec" {
+  type = string
+  description = "The yaml spec for the Portworx config. Either the `portworx_spec_file` or `portworx_spec` must be provided. The instructions for creating this configuration can be found at https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md"
+  default = ""
+}
+variable "azure-portworx_enable_encryption" {
+  type = bool
+  description = "Flag indicating portworx volumes should be encrypted"
+  default = false
 }
 variable "server_url" {
   type = string
@@ -100,5 +95,15 @@ variable "cluster_ingress_subdomain" {
 variable "cluster_tls_secret_name" {
   type = string
   description = "The name of the secret containing the tls certificates for the ingress subdomain (passed through to the output)"
+  default = ""
+}
+variable "cluster_ca_cert" {
+  type = string
+  description = "The base64 encoded ca certificate"
+  default = ""
+}
+variable "cluster_ca_cert_file" {
+  type = string
+  description = "The path to the file that contains the ca certificate"
   default = ""
 }

@@ -41,7 +41,7 @@ variable "rwx_storage_class" {
 variable "gitops-cp-apic_profile" {
   type = string
   description = "apic profile template"
-  default = "n1xc7.m48"
+  default = ""n1xc7.m48" "
 }
 variable "entitlement_key" {
   type = string
@@ -71,6 +71,76 @@ variable "gitops-cp-catalogs_namespace" {
   type = string
   description = "The namespace where the application should be deployed"
   default = "openshift-marketplace"
+}
+variable "gitops-cp-event-streams_requestIbmServices_iam" {
+  type = bool
+  description = "IAM services"
+  default = true
+}
+variable "gitops-cp-event-streams_requestIbmServices_monitoring" {
+  type = bool
+  description = "Monitoring services"
+  default = true
+}
+variable "gitops-cp-event-streams_kafka_replicas" {
+  type = number
+  description = "Number of kafka replicas"
+  default = 3
+}
+variable "gitops-cp-event-streams_zookeeper_replicas" {
+  type = number
+  description = "Number of zookeeper replicas"
+  default = 3
+}
+variable "gitops-cp-event-streams_es_version" {
+  type = string
+  description = "Version of Event streams to be installed"
+  default = "10.5.0"
+}
+variable "gitops-cp-event-streams_cpulimits" {
+  type = string
+  description = "CPU limits for the kafka instance"
+  default = "1"
+}
+variable "gitops-cp-event-streams_cpurequests" {
+  type = string
+  description = "CPU requests for the kafka instance"
+  default = "100m"
+}
+variable "gitops-cp-event-streams_memorylimits" {
+  type = string
+  description = "Memory limits for the kafka instance"
+  default = "2Gi"
+}
+variable "gitops-cp-event-streams_memoryrequests" {
+  type = string
+  description = "Memory requests for the kafka instance"
+  default = "128Mi"
+}
+variable "gitops-cp-event-streams_kafka_storagetype" {
+  type = string
+  description = "Storage type for kafka"
+  default = "persistent-claim"
+}
+variable "gitops-cp-event-streams_zookeeper_storagetype" {
+  type = string
+  description = "Storage type for zookeeper"
+  default = "persistent-claim"
+}
+variable "gitops-cp-event-streams_kafka_storagesize" {
+  type = string
+  description = "Storage size - applicable only for persistent storage type"
+  default = "10Gi"
+}
+variable "gitops-cp-event-streams_zookeeper_storagesize" {
+  type = string
+  description = "Storage size - applicable only for persistent storage type"
+  default = "4Gi"
+}
+variable "gitops-cp-event-streams_service_name" {
+  type = string
+  description = "Event stream instance name"
+  default = "es-instance"
 }
 variable "gitops-cp-eventstreams-operator_namespace" {
   type = string
@@ -223,6 +293,26 @@ variable "cp4i-apic_create_operator_group" {
   default = true
 }
 variable "cp4i-apic_argocd_namespace" {
+  type = string
+  description = "The namespace where argocd has been deployed"
+  default = "openshift-gitops"
+}
+variable "cp4i-es_name" {
+  type = string
+  description = "The value that should be used for the namespace"
+  default = "cp4i-es"
+}
+variable "cp4i-es_ci" {
+  type = bool
+  description = "Flag indicating that this namespace will be used for development (e.g. configmaps and secrets)"
+  default = false
+}
+variable "cp4i-es_create_operator_group" {
+  type = bool
+  description = "Flag indicating that an operator group should be created in the namespace"
+  default = true
+}
+variable "cp4i-es_argocd_namespace" {
   type = string
   description = "The namespace where argocd has been deployed"
   default = "openshift-gitops"

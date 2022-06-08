@@ -6,6 +6,7 @@ metadata:
     type: infrastructure
     platform: ibm
     code: '210'
+    storage: portworx
   annotations:
     displayName: IBM - Portworx Cluster Storage
     description: Installs Portworx in an IBM cluster

@@ -53,7 +53,7 @@ module "gitops-cp-catalogs" {
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-event-streams" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams?ref=v1.1.2"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams?ref=v1.1.3"
 
   cpulimits = var.gitops-cp-event-streams_cpulimits
   cpurequests = var.gitops-cp-event-streams_cpurequests
@@ -66,7 +66,7 @@ module "gitops-cp-event-streams" {
   kafka_storagesize = var.gitops-cp-event-streams_kafka_storagesize
   kafka_storagetype = var.gitops-cp-event-streams_kafka_storagetype
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  license_use = module.cp4i-dependency-management.operator.license_use
+  license_use = module.cp4i-dependency-management.eventstreams.license_use
   memorylimits = var.gitops-cp-event-streams_memorylimits
   memoryrequests = var.gitops-cp-event-streams_memoryrequests
   namespace = module.cp4i-es.name

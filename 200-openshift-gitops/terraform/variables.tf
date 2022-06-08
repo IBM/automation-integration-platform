@@ -169,6 +169,16 @@ variable "cluster_tls_secret_name" {
   description = "The name of the secret containing the tls certificates for the ingress subdomain (passed through to the output)"
   default = ""
 }
+variable "cluster_ca_cert" {
+  type = string
+  description = "The base64 encoded ca certificate"
+  default = ""
+}
+variable "cluster_ca_cert_file" {
+  type = string
+  description = "The path to the file that contains the ca certificate"
+  default = ""
+}
 variable "sealed-secret-cert_cert" {
   type = string
   description = "The public key that will be used to encrypt sealed secrets. If not provided, a new one will be generated"

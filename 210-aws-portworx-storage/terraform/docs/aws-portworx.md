@@ -40,6 +40,8 @@ This module makes use of the output from other modules:
 
 ### Example usage
 
+Note: `osb_endpoint` and `user_id` are only required in `portworx_config` if `type` is `essentials`.  These values are not required for type `enterprise`.
+
 ```hcl-terraform
 locals {
   portworx_config = {

@@ -6,10 +6,8 @@ metadata:
     type: software
     code: '260'
   annotations:
-    displayName: Integration Platform
-    description: >-
-      Populates a GitOps repository with IBM MQ Uniform Cluster components of
-      the IBM Integration Platform
+    displayName: Integration - MQ Uniform Cluster
+    description: GitOps deployment of MQ Uniform Cluster for Cloud pak for Integration
 spec:
   modules:
     - name: gitops-cp-catalogs

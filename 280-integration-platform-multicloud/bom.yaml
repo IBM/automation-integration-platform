@@ -1,15 +1,13 @@
 apiVersion: cloud.ibm.com/v1alpha1
 kind: BillOfMaterial
 metadata:
-  name: 300-integration-platform-multicloud
+  name: 280-integration-platform-multicloud
   labels:
     type: software
-    code: '300'
+    code: '280'
   annotations:
-    displayName: Integration Platform
-    description: >-
-      Populates a GitOps repository with the components of the IBM Integration
-      Platform
+    displayName: Integration Platform - Cloud Pak for Integration
+    description: GitOps deployment of Cloud Pak for Integration
 spec:
   modules:
     - name: gitops-cp-ace
@@ -49,6 +47,25 @@ spec:
       alias: gitops-cp-catalogs
       version: v1.2.1
       variables:
+        - name: entitlement_key
+          scope: global
+    - name: gitops-cp-event-streams
+      alias: gitops-cp-event-streams
+      version: v1.1.3
+      dependencies:
+        - name: namespace
+          ref: cp4i-es
+      variables:
+        - name: kafka_storagetype
+          value: persistent-claim
+        - name: kafka_storageclass
+          alias: rwo_storage_class
+          scope: global
+        - name: zookeeper_storagetype
+          value: persistent-claim
+        - name: zookeeper_storageclass
+          alias: rwo_storage_class
+          scope: global
         - name: entitlement_key
           scope: global
     - name: gitops-cp-eventstreams-operator
@@ -117,6 +134,12 @@ spec:
       variables:
         - name: name
           value: cp4i-apic
+    - name: gitops-namespace
+      alias: cp4i-es
+      version: v1.11.2
+      variables:
+        - name: name
+          value: cp4i-es
     - name: gitops-namespace
       alias: cp4i-pn
       version: v1.11.2

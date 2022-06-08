@@ -6,6 +6,7 @@ metadata:
     type: infrastructure
     code: '210'
     platform: aws
+    storage: portworx
   annotations:
     displayName: AWS - Portworx Cluster Storage
     description: Installs Portworx in and OCP cluster on AWS
@@ -13,10 +14,10 @@ spec:
   modules:
     - name: aws-portworx
       alias: aws-portworx
-      version: v0.0.4
+      version: v0.0.5
     - name: ocp-login
       alias: cluster
-      version: v1.2.14
+      version: v1.3.1
   variables:
     - name: region
       type: string

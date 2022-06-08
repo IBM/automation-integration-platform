@@ -6,10 +6,8 @@ metadata:
     type: software
     code: '230'
   annotations:
-    displayName: Integration Platform
-    description: >-
-      Populates a GitOps repository with MQ component of the IBM Integration
-      Platform
+    displayName: Integration - MQ
+    description: GitOps deployment of MQ for Cloud pak for Integration
 spec:
   modules:
     - name: gitops-cp-catalogs

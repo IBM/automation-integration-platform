@@ -6,10 +6,8 @@ metadata:
     type: software
     code: '220'
   annotations:
-    displayName: Integration Platform - APIConnect Only
-    description: >-
-      Populates a GitOps repository with APIConnect component of the IBM
-      Integration Platform
+    displayName: Integration - APIConnect
+    description: GitOps deployment of API Connect for Cloud pak for Integration
 spec:
   modules:
     - name: gitops-cp-apic

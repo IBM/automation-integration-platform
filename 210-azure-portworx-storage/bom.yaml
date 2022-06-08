@@ -6,6 +6,7 @@ metadata:
     type: software
     code: '210'
     platform: azure
+    storage: portworx
   annotations:
     displayName: Azure - Portworx Cluster Storage
     description: Installs Portworx into an OCP cluster on Azure
@@ -13,30 +14,54 @@ spec:
   modules:
     - name: azure-portworx
       alias: azure-portworx
-      version: v0.0.2
+      version: v0.1.0
+      variables:
+        - name: portworx_spec_file
+          scope: global
+          important: true
+        - name: portworx_spec
+          scope: global
     - name: ocp-login
       alias: cluster
-      version: v1.2.14
+      version: v1.3.1
   variables:
-    - name: azure-portworx_variable cluster_name {
+    - name: azure_subscription_id
       type: string
-      description: The name of the ARO cluster
-    - name: region
+      description: >-
+        The subscription id of the Azure account where the OpenShift cluster has
+        been provisioned
+    - name: azure_tenant_id
       type: string
-      description: Azure Region the cluster is deployed in
-    - name: azure-portworx_resource_group_name
+      description: >-
+        The tenant id of the Azure account where the OpenShift cluster has been
+        provisioned
+    - name: azure_client_id
       type: string
-      description: Resource group where cluster is deployed
-    - name: azure-portworx_portworx_config
-      type: |-
-        object({
-            type=string,
-            cluster_id=string,
-            enable_encryption=bool,
-            user_id=string,
-            osb_endpoint=string
-          })
-      description: Portworx configuration
+      description: The client id used to access the Azure account
+    - name: azure_client_secret
+      type: string
+      description: The client secret used to access the Azure account
+    - name: portworx_spec_file
+      type: string
+      description: >-
+        The path to the file that contains the yaml spec for the Portworx
+        config. Either the `portworx_spec_file` or `portworx_spec` must be
+        provided. The instructions for creating this configuration can be found
+        at
+        https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md
+      defaultValue: ''
+    - name: portworx_spec
+      type: string
+      description: >-
+        The yaml spec for the Portworx config. Either the `portworx_spec_file`
+        or `portworx_spec` must be provided. The instructions for creating this
+        configuration can be found at
+        https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md
+      defaultValue: ''
+    - name: azure-portworx_enable_encryption
+      type: bool
+      description: Flag indicating portworx volumes should be encrypted
+      defaultValue: false
     - name: server_url
       type: string
       description: The url for the OpenShift api
