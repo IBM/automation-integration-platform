@@ -217,7 +217,8 @@ Steps:
 4. Add your Git Hub username and your Personal Access Token to `gitops_repo_username` and `gitops_repo_token`
 
 5. From you OpenShift console click on top right menu and select Copy login command and click on Display Token
-
+    ![Copy Login Command](images/ocp_login_command.png)
+    
 6. Copy the API Token value into the `cluster_login_token` value
 
 7. Copy the Server URL into the `server_url` value, only the part starting with https
