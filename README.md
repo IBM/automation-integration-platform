@@ -208,37 +208,15 @@ Pre-requisites:
 
 - If allowed by your corporate policy, install [Docker Desktop](https://www.docker.com/products/docker-desktop/). If not allowed, install [Colima](https://github.com/abiosoft/colima), a replacement for Docker Desktop
 
-  
-
 ```
-
-  
-
 brew install colima
-
-  
-
 ```
-
-  
-  
 
 Ensure the following before continuing
 
-  
-
 - Github account exists
-
-  
-
 - A Github [token](https://docs.github.com/en/enterprise-server@3.3/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) is available with permissions set to create and remove repositories
-
-  
-
 - You are able to login to the OpenShift cluster and obtain an OpenShift login token
-
-  
-
 - Cloud Pak entitlement key, this can be obtained from visiting the [IBM Container Library](https://myibm.ibm.com/products-services/containerlibrary) as described above.
 
   
@@ -246,122 +224,77 @@ Ensure the following before continuing
 
 ### Installing Integration Platform
 
-  
-  
-
 The installation process will use a standard GitOps repository that has been built using the Modules to support CP4I platform installation. The automation is consistent across three cloud environments AWS, Azure, and IBM Cloud.
-
   
-  
-
 Steps:
-
-  
-  
-
 1. First step is to clone the automation code to your local machine. Run this git command in your favorite command line shell.
 
-  
-
-```
-
-git clone git@github.com:IBM/automation-integration-platform.git
-
-```
-
-  
-
+	```
+	git clone git@github.com:IBM/automation-integration-platform.git
+	```
 2. Navigate into the `automation-integration-platform` folder using your command line.
 
-  
+	```
+	cd automation-integration-platform
+	```
 
-a. The README.md has a comprehensive instructions on how to install this into other cloud environments than TechZone. This document focuses on getting it running in a TechZone requested environment.
+	The README.md has a comprehensive instructions on how to install this into other cloud environments than TechZone. This document focuses on getting it running in a TechZone requested environment.
 
-  
 
 3. Next you will need to set-up your credentials.properties file. This will enable a secure deployment to your cluster.
-
   
-
 ```
-
 cp credentials.template credentials.properties
 
+#edit the credential.properties file to provide the required sensitive information
 code credential.properties
 
 ```
 
-  
-
 In the `credentials.properties` file you will need to populate the values for your deployment.
 
-```
+	```
 
-# Add the values for the Credentials to access the IBM Cloud
+	# Add the values for the Credentials to access the IBM Cloud
+	# Instructions to access this information can be found in the README.MD
+	# This is a template file and the ./launch.sh script looks for a file based on this template named credentials.properties
 
-# Instructions to access this information can be found in the README.MD
+	TF_VAR_gitops_repo_username=
+	TF_VAR_gitops_repo_token=
+	TF_VAR_cluster_login_token=
+	TF_VAR_server_url=
+	TF_VAR_entitlement_key=
 
-# This is a template file and the ./launch.sh script looks for a file based on this template named credentials.properties
+	# Pls be noted,TF_VAR_ibmcloud_api_key ONLY needed if targeting IBM Cloud Deployment
+	TF_VAR_ibmcloud_api_key=""
 
-TF_VAR_gitops_repo_username=
+	# Pls be noted,below 2 properties required ONLY needed if targeting AWS DeploymentDeployment
+	TF_VAR_access_key=""
+	TF_VAR_secret_key=""
 
-TF_VAR_gitops_repo_token=
+	# Pls be noted,below 4 properties required ONLY needed if targeting Azure Deployment
+	TF_VAR_azure_subscription_id=""
+	TF_VAR_azure_client_id=""
+	TF_VAR_azure_client_secret=""
+	TF_VAR_azure_tenant_id=""
 
-TF_VAR_cluster_login_token=
-
-TF_VAR_server_url=
-
-TF_VAR_entitlement_key=
-
-# Only needed if targeting IBM Cloud Deployment
-
-TF_VAR_ibmcloud_api_key=""
-
-# Only needed if targeting AWS Deployment
-
-TF_VAR_access_key=""
-
-TF_VAR_secret_key=""
-
-# Only needed if targeting Azure Deployment
-
-TF_VAR_azure_subscription_id=""
-
-TF_VAR_azure_client_id=""
-
-TF_VAR_azure_client_secret=""
-
-TF_VAR_azure_tenant_id=""
-
-```
-
-  
-  
+	```
 
 4. Add your Git Hub username and your Personal Access Token to `gitops_repo_username` and `gitops_repo_token`
-
-  
 
 5. From you OpenShift console click on top right menu and select Copy login command and click on Display Token
 
 ![Copy Login Command](images/ocp_login_command.png)
 
   
-
 6. Copy the API Token value into the `cluster_login_token` value and Server URL into the `server_url` value, only the part starting with https
 
 ![Copy Server URL and LoginToken](images/server_url_and_token.png)
 
-  
-
 7. Copy the entitlement key, this can be obtained from visiting the [IBM Container Library](https://myibm.ibm.com/products-services/containerlibrary) and place it in the `entitlement_key` variable.
 
-  
 
 8. Complete the cloud-specific credentials to be able to provision storage **only for the platform of your choice**.
-
-  
-
 * IBM Cloud deployments require an [API Key](https://cloud.ibm.com/iam/apikeys).
 
 *  *(Coming Soon)* AWS Deployments require an [Access Key and Secret Key](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)
@@ -371,18 +304,18 @@ TF_VAR_azure_tenant_id=""
   
 
 9. Next you will need to set-up your terraform.tfvars file.
-
-  
-
 ```
 
 cp terraform.tfvars.template terraform.tfvars
-
+#edit the terraform.tfvars file to provide the required information
 code terraform.tfvars
 
 ```
 
-Below provided the Sample Values
+Below provided the Sample values are ⚠️just for your reference⚠️. Please be very careful while providing the values.
+
+'rwo_storage_class' : This property will hold the name of the RWO StorageClass. You need to work with your OCP administrator to get this value.
+'rwx_storage_class' : This property will hold the name of the RWX StorageClass. You need to work with your OCP administrator to get this value.
 
 ```
 
@@ -390,84 +323,47 @@ Below provided the Sample Values
 
 # Desc: Initial input variables to support installation of Cloud Pak for Integration into the cloud provider of your choice
 
-  
-
 ## rwo_storage_class: ReadWriteOnce access type Storage Class
-
 rwo_storage_class="ibmc-vpc-block-10iops-tier"
 
-  
-
 ## rwx_storage_class: ReadWriteMany access type Storage Class
-
 rwx_storage_class="ocs-storagecluster-cephfs"
 
-  
-
 ## gitops-repo_host: The host for the git repository.
-
 gitops_repo_host="github.com"
 
-  
-
 ## gitops-repo_type: The type of the hosted git repository (github or gitlab).
-
 gitops_repo_type="github"
 
-  
-
 ## gitops-repo_org: The org/group where the git repository exists/will be provisioned.
+gitops_repo_org="<We are sure you will have an organization created in your own GitHub account. Provide that Org name>"
 
-gitops_repo_org="<some meaning full name>"
-
-  
-
-## gitops-repo_repo: The short name of the repository (i.e. the part after the org/group name)
-
+## gitops-repo_repo: The short name of the repository (i.e. the part after the org/group name). This repo will be created under the org name you mentioned above.
 gitops_repo_repo="cp4i-all"
 
-  
-
 ## gitops-cluster-config_banner_text: The text that will appear in the top banner in the cluster
-
 gitops-cluster-config_banner_text="Software Everywhere CP4Integration"
 
-  
-
 ```
-
   
-
 9. If your corporate policy does not allow use of Docker Desktop, then you need to install **Colima** as an alternative
 
-  
-
 ```
-
 brew install colima
-
 colima start
-
-```
-
-  
-  
+```  
 
 10. We are now ready to start installing CP4I, run the `launch.sh` command, make sure you are in the root of the `automation-integration-platform` repository
-
-  
 
 ```
 
 ./launch.sh
 
-Cleaning up old container: cli-tools-WljCg
-
-Initializing container cli-tools-WljCg from quay.io/cloudnativetoolkit/cli-tools:v1.1
-
+Cleaning up old container: cli-tools-DRpCg
+Initializing container cli-tools-DRpCg from quay.io/cloudnativetoolkit/cli-tools:v1.1-v1.8.1
+ee3aa545fc57756c57cd3a41a5f18f657626c0ebf3bdb4504726351b18da855c
 Attaching to running container...
-
-/terraform $
+/terraform $ 
 
 ```
 
@@ -486,210 +382,97 @@ Attaching to running container...
 
 12. Next step is to create a workspace to run the Terraform automation. Below you can see the parameters to configure your workspace for terraform execution.
 
-  
-
 ```
 
-/terraform $ ./setup-workspace.sh -h
-
-Creates a workspace folder and populates it with automation bundles you require.
-
-Usage: setup-workspace.sh
-
-options:
-
--p Cloud provider (aws, azure, ibm)
-
--s Storage (portworx or odf)
-
--n (optional) prefix that should be used for all variables
-
--h Print this help
-
-```
-
-  
-
-You will need to select the cloud provider of your choice, storage option, and if desired, a prefix for naming new resource instances on the Cloud account.
-
-  
-
-> ⚠️ At this time, only IBM Cloud is supported, but support for Azure and AWS will be released in the coming days.
-
-  
-
-13. Run the command `./setup-workspace.sh -p ibm -s portworx -n df`
-
-  
-
-```
-
-/terraform $ ./setup-workspace.sh -p ibm -s portworx -n df
-
+/terraform $ ./setup-workspace.sh 
 Setting up workspace in '/terraform/../workspaces/current'
-
 *****
-
 Setting up workspace from '' template
-
 *****
-
-Setting up automation /workspaces/current
-
+Setting up automation  /workspaces/current
 /terraform
-
 Setting up current/200-openshift-gitops from 200-openshift-gitops
-
-Skipping 210-aws-portworx-storage because it does't match ibm
-
-Skipping 210-azure-portworx-storage because it does't match ibm
-
+Setting up current/210-aws-portworx-storage from 210-aws-portworx-storage
+Setting up current/210-azure-portworx-storage from 210-azure-portworx-storage
 Setting up current/210-ibm-odf-storage from 210-ibm-odf-storage
-
 Setting up current/210-ibm-portworx-storage from 210-ibm-portworx-storage
-
-Setting up current/300-integration-platform-multicloud from 300-integration-platform-multicloud
-
+Setting up current/215-integration-platform-navigator from 215-integration-platform-navigator
+Setting up current/220-integration-apiconnect from 220-integration-apiconnect
+Setting up current/230-integration-mq from 230-integration-mq
+Setting up current/240-integration-ace from 240-integration-ace
+Setting up current/250-integration-eventstreams from 250-integration-eventstreams
+Setting up current/260-integration-mq-uniform-cluster from 260-integration-mq-uniform-cluster
+Setting up current/280-integration-platform-multicloud from 280-integration-platform-multicloud
 move to /workspaces/current this is where your automation is configured
 
 ```
+
+  
+> ⚠️ At this time, only IBM Cloud is supported, but support for Azure and AWS will be released in the coming days.
+
+  
 
 14. The default `terraform.tfvars` file is symbolically linked to the new `workspaces/current` folder so this enables you to edit the file in your native operating system using your editor of choice.
 
   
 
-15. Edit the default `terraform.tfvars` file this will enable you to setup the GitOps parameters.
-
-  
-
-The following you will be prompted for and some suggested values.
-
-  
-
-| Variable | Description | Suggested Value |
-
-| ----------- |-----------------------------------------------------------|-------------------------------------------------------
-
-| gitops-repo_host | The host for the git repository. | github.com |
-
-| gitops-repo_type | The type of the hosted git repository (github or gitlab). | github |
-
-| gitops-repo_org | The org/group/username where the git repository exists | github userid or org - if left blank the value will default to your username |
-
-| gitops-repo_repo | The short name of the repository to create | cp4i-gitops |
-
-  
+15. Double check the details of the `terraform.tfvars` file which is required to setup the GitOps parameters. You should have provided the right values in step-9  
 
 The `gitops-repo_repo`, `gitops-repo_token`, `entitlement_key`, `server_url`, and `cluster_login_token` values will be loaded automatically from the credentials.properties file that was configured in an earlier step.
 
   
-  
 
-16. For `rwo_storage_class=""` & `rwx_storage_class=""` variables in `terraform.tfvars`, follow the below instruction carefully
-
-Before you proceed to install OCS or PortWorx on OpenShift, pls double check whether the OCS Storage is provisioned already. There are different ways to check. Login to OpenShift Console. NAvigate to "Storage" on the left menu. Select 'StorageClass'. If you find "ibmc-vpc-block-10iops-tier" & "ocs-storagecluster-cephfs" then set the following
-
-rwo_storage_class="ibmc-vpc-block-10iops-tier"
-
-rwx_storage_class="ocs-storagecluster-cephfs"
-
-  
-
-17. You will see that the `repo_type` and `repo_host` are set to GitHub you can change these to other Git Providers, like GitHub Enterprise or GitLab.
-
-  
-
-18. For the `repo_org` value set it to your default org name, or specific a custom org value. This is the organization where the GitOps Repository will be created in. Click on top right menu and select Your Profile to take you to your default organization.
-
-  
-
-19. Set the `repo_repo` value to a unique name that you will recognize as the place where the GitOps configuration is going to be placed before CP4I is installed into the cluster.
-
-  
-
-20. You can change the `gitops-cluster-config_banner_text` banner text to something useful for your client project or demo.
-
-  
-
-21. Save the `terraform.tfvars` file
-
-  
-
-22. Navigate into the `/workspaces/current` folder
-
-  
+16. Navigate into the `/workspaces/current` folder
 
 > ❗️ Do not skip this step. You must execute from the `/worksapces/current` folder.
 
-23. Navigate into the `200` folder and run the following commands
-
-  
+17. Navigate into the `200` folder and run the following commands
 
 ```
-
 cd 200-openshift-gitops
-
 terraform init
-
 terraform apply --auto-approve
-
 ```
 
-  
-  
-
-24. This will kick off the automation for setting up the GitOps Operator into your cluster. Once complete, you should see message similar to:
+18. This will kick off the automation for setting up the GitOps Operator into your cluster. Once complete, you should see message similar to:
 
   
 
 ```
-
 Apply complete! Resources: 71 added, 0 changed, 0 destroyed.
-
 ```
 
-  
+19. You can check the progress by looking at two places, first look in your github repository. You will see the git repository has been created based on the name you have provided. The Cloud Pak for Integration install will populate this with information to let OpenShift GitOps install the software. The second place is to look at the OpenShift console, Click Workloads->Pods and you will see the GitOps operator being installed.
 
-25. You can check the progress by looking at two places, first look in your github repository. You will see the git repository has been created based on the name you have provided. The Cloud Pak for Integration install will populate this with information to let OpenShift GitOps install the software. The second place is to look at the OpenShift console, Click Workloads->Pods and you will see the GitOps operator being installed.
 
-  
-  
-
-26. Again an important note to be followed. In case of TechZone, OCS storage is configured automatically. If it is already provisioned, skip this step and proceed with Step.26
+20. Again an important note to be followed. In case of IBM TechZone Cluster, OCS storage is configured automatically. If it is already provisioned, skip this step and proceed with Step.26
 
 Change directories to the `210-*` folder and run the following commands to deploy storage into your cluster:
-
-  
-
 ```
-
 cd 210-ibm-odf-storage
+terraform init
+terraform apply --auto-approve
+```
+
+Storage configuration will run asynchronously in the background inside of the Cluster and should be complete within 15 minutes.
+> ❗️ ***** Very Important Note ******❗️ 
+![Choice of CP4I Capabilities](images/cp4i-capabilities-choice.png)
+
+Assuming you wanted to go for choosing all the available capabilities
+21. Change directories to the `280-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
+
+
+```
+cd ../280-integration-platform-multicloud
 
 terraform init
-
 terraform apply --auto-approve
 
 ```
 
-Storage configuration will run asynchronously in the background inside of the Cluster and should be complete within 10 minutes.
 
-27. Change directories to the `300-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
 
-  
-
-```
-
-cd ../300-integration-platform-multicloud
-
-terraform init
-
-terraform apply --auto-approve
-
-```
-
-  
-
-Cloud Pak fo Integration deployment will run asynchronously in the background, and may require up to 90 minutes to complete.
+Cloud Pak fo Integration deployment will run asynchronously in the background, and may require up to 90 to 100 minutes to complete.
 
   
 
