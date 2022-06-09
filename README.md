@@ -64,7 +64,7 @@ Note: [Cloud Pak for Integration system requirements](https://www.ibm.com/docs/e
 |  [AWS](https://aws.amazon.com/)| [AWS Quick Start](https://github.com/IBM/automation-aws-infra-openshift/tree/1-quick-start) <br> [AWS Standard - Coming soon](https://github.com/IBM/automation-integration-platform/blob/draft) |
 |  [Azure](https://portal.azure.com/#home)|  [Azure Quick Start - Coming soon](https://github.com/IBM/automation-integration-platform/blob/draft)|
 |  Bring You Own Infrastructure|  You will need to setup GitOps and Storage details on the following steps|
-|||
+
 
 
   
