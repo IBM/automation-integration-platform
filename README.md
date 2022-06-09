@@ -144,77 +144,21 @@ After you purchase Cloud Pak for Integration, an entitlement API key for the sof
 The Integration capabilities automation is broken into what we call layers of automation or bundles. The bundles enable SRE activities to be optimized. The automation is generic between clouds other than configuration storage options, which are platform specific.
 
  
-|  BOM ID| Name  | Description  | Runtime  | 
+|  BOM ID| Name      | Description  | Runtime  | 
 |--|--|--|--|
 | 200 | [200 - OpenShift Gitops](https://stackedit.io/200-openshift-gitops) | Set up OpenShift GitOps tools in an OpenShift cluster. This is required to install the software using gitops approaches. | 10Mins |
  |210|[210 - IBM Portworx Storage](https://stackedit.io/210-ibm-portworx-storage)<BR>[210 - IBM OpenShift Data Foundation](https://stackedit.io/210-ibm-odf-storage)<Br> [210 - AWS Portworx Storage](https://stackedit.io/210-aws-portworx-storage)<BR>[210 - Azure Portworx Storage](https://stackedit.io/210-azure-portworx-storage)|Use this automation to deploy a storage solution for your cluster._⚠️Portworks on AWS and Azure are currently not released, but are coming soon.⚠️_ |10 Mins|
- |--|--|--|--|
+ |215|[215 - Integration Platform Navigator](https://github.com/IBM/automation-integration-platform/blob/draft/215-integration-platform-navigator)|_(MustRequire)_ Install integration Platform Navigator Operator & Instance into the cluster|45Mins|
+|220|[220 - Integration API Connect](https://github.com/IBM/automation-integration-platform/blob/draft/220-integration-apiconnect)|_(Optional)_ Install API Connect Operator & Instance into the cluster|30Mins|
+|230|[230 - Integration MQ](https://github.com/IBM/automation-integration-platform/blob/draft/230-integration-mq)|_(Optional)_ Install IBM MQ Operator & Instance into the cluster|10Mins|
+| 240 | [240 - Integration App Connect Enterprise](https://github.com/IBM/automation-integration-platform/blob/draft/240-integration-ace) | _(Optional)_ Install IBM ACE Operator & ACE Designer Instance into the cluster | 20 Mins |
+| 250 | [250 - Integration EventStreams](https://github.com/IBM/automation-integration-platform/blob/draft/250-integration-eventstreams) | _(Optional)_ Install IBM EventStreams Operator & Instance into the cluster | 10 Mins |
+| 260 | [260 - Integration MQ Uniform Cluster](https://github.com/IBM/automation-integration-platform/blob/draft/260-integration-mq-uniform-cluster) | _(Optional)_ Install IBM MQ Uniform Cluster Instance into the cluster | 10 Mins |
+| 280 | [280 - Cloud Pak for Integration](https://github.com/IBM/automation-integration-platform/blob/draft/280-integration-platform-multicloud) | Deploy the Cloud Pak for Integration components (Platform Navigator/APIConnect/ACE/Event Streams/MQ <BR> **Pls Note: <br> ⚠️If you choose to go with BOM ID: 280 then please ignore BOM ID 215/220/230/240/250/260 because 280 contains all the components of Cloud Pak for Integration ⚠️**| 90 to 100 Mins |
 
-| BOM ID | Name | Description | Run Time |
 
-|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 
-| 200 | [200 - OpenShift Gitops](./200-openshift-gitops) | Set up OpenShift GitOps tools in an OpenShift cluster. This is required to install the software using gitops approaches. | 10 Mins |
 
-| 210 | [210 - IBM Portworx Storage](./210-ibm-portworx-storage) <br> [210 - IBM OpenShift Data Foundation](./210-ibm-odf-storage) <br> [210 - AWS Portworx Storage](./210-aws-portworx-storage) <br> [210 - Azure Portworx Storage](./210-azure-portworx-storage) | Use this automation to deploy a storage solution for your cluster. <br>  _⚠️Portworks on AWS and Azure are currently not released, but are coming soon.⚠️_ | 10 Mins |
-
-| 215 | [215 - Integration Platform Navigator](./215-integration-platform-navigator) | _(Optional)_ Install integration PlatformNavigator Operator & Instance into the cluster | 45 Mins |
-
-| 220 | [220 - Integration API Connect](./220-integration-apiconnect) | _(Optional)_ Install API Connect Operator & Instance into the cluster | 45 Mins |
-
-| 230 | [230 - Integration MQ](./230-integration-mq) | _(Optional)_ Install IBM MQ Operator & Instance into the cluster | 45 Mins |
-
-| 240 | [240 - Integration App Connect Enterprise](./240-integration-ace) | _(Optional)_ Install IBM ACE Operator & ACE Designer Instance into the cluster | 20 Mins |
-
-| 250 | [250 - Integration EventStreams](./250-integration-eventstreams) | _(Optional)_ Install IBM EventStreams Operator & Instance into the cluster | 10 Mins |
-
-| 260 | [260 - Integration MQ Uniform Cluster](./260-integration-mq-uniform-cluster) | _(Optional)_ Install IBM MQ UniformCluster Instance into the cluster | 10 Mins |
-
-| 280 | [280 - Cloud Pak for Integration](./280-integration-platform-multicloud) | Deploy the Cloud Pak for Integration components | 90 Mins |
-
-  
-
-```
-
-Note:
-
-BOM ID 280, will install PlatformNavigator, APIConnect, App Connect Enterprise, MQ, EventStreams & MQ Uniform Cluster.
-
-If you decide to
-
-CHOOSE
-
-'APIConnect Only' :
-
-In such case choose BOM ID [220 & 215] ONLY. APIConnect is dependent on PlatformNavigator.
-
-  
-
-'App Designer Only' :
-
-In such case choose BOM ID [240 & 215] ONLY. ACE Designer is dependent on PlatformNavigator.
-
-  
-
-'EventStreams Only' :
-
-In such case choose BOM ID [250 & 215] ONLY. ACE Designer is dependent on PlatformNavigator.
-
-  
-
-'MQ Only' :
-
-In such case choose BOM ID [230 & 215] ONLY. MQ is dependent on PlatformNavigator.
-
-  
-
-'MQ UniformCluster' :
-
-In such case choose BOM ID [260 & 215] ONLY. MQ Uniform cluster is dependent on PlatformNavigator.
-
-End
-
-```
 
 > At this time the most reliable way of running this automation is with Terraform in your local machine either through a bootstrapped container image or with native tools installed. We provide a Container image that has all the common SRE tools installed. [CLI Tools Image,](https://quay.io/repository/ibmgaragecloud/cli-tools?tab=tags) [Source Code for CLI Tools](https://github.com/cloud-native-toolkit/image-cli-tools)
 
