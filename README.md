@@ -455,13 +455,34 @@ terraform apply --auto-approve
 ```
 
 Storage configuration will run asynchronously in the background inside of the Cluster and should be complete within 15 minutes.
+
+20. Before you proceed to choose the capabilities of CP4I, take a look at the below diagram and understand what capabilities to be chosen based on your requirement.
 > ❗️ ***** Very Important Note ******❗️ 
 ![Choice of CP4I Capabilities](images/cp4i-capabilities-choice.png)
+```
+For example, if you choose to go with APIC/ACE/MQ only, then you need to execute the following
 
-Assuming you wanted to go for choosing all the available capabilities
+Note: PlatformNavigator is required for APIConnect & ACE. Hence we need to set this up first.
+
+cd 215-integration-platform-navigator
+terraform init
+terraform apply --auto-approve
+
+cd 220-integration-apiconnect
+terraform init
+terraform apply --auto-approve
+
+cd 230-integration-mq
+terraform init
+terraform apply --auto-approve
+
+cd 240-integration-ace
+terraform init
+terraform apply --auto-approve
+
+```
+If wanted to go for choosing all the available capabilities
 21. Change directories to the `280-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
-
-
 ```
 cd ../280-integration-platform-multicloud
 
@@ -482,7 +503,6 @@ Cloud Pak fo Integration deployment will run asynchronously in the background, a
 
 29. Once deployment is complete, go back into the OpenShift cluster user interface and navigate to view `Routes` for the `cp4i-pn` namespace. Here you can see the URL to the deployed Platform Navigator instance. Open this url in a new browser window.
 
-  
 
 ![Reference Architecture](images/cp4i-pn-route.png)
 
