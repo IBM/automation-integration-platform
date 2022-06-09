@@ -1,4 +1,5 @@
 
+
 # Cloud Pak for Integration - Automation for AWS, Azure, and IBM Cloud
 
   
@@ -105,7 +106,7 @@ The following reference architecture represents the logical view of how CP4I wor
   
   
 
-The following instructions will help you install Maximo Core into AWS, Azure, and IBM Cloud OpenShift Kubernetes environment.
+The following instructions will help you install Cloud Pak for Integration into AWS, Azure, and IBM Cloud OpenShift Kubernetes environment.
 
   
   
@@ -120,7 +121,7 @@ Details on Cloud Pak for Integration licensing available at https://www.ibm.com/
 
 ### Obtaining your IBM entitlement API key
 
-You must have your IBM entitlement API key to access images in the IBM Entitled Registry.
+You must have your IBM entitlement API key to access images in the IBM Entitled Container Registry.
 
   
 
@@ -136,13 +137,18 @@ After you purchase Cloud Pak for Integration, an entitlement API key for the sof
   
   
 
-### Integation Capabilities Layered Installation
+### Integration Capabilities Layered Installation
 
   
 
 The Integration capabilities automation is broken into what we call layers of automation or bundles. The bundles enable SRE activities to be optimized. The automation is generic between clouds other than configuration storage options, which are platform specific.
 
-  
+ 
+|  BOM ID| Name  | Description  | Runtime  | 
+|--|--|--|--|
+| 200 | [200 - OpenShift Gitops](https://stackedit.io/200-openshift-gitops) | Set up OpenShift GitOps tools in an OpenShift cluster. This is required to install the software using gitops approaches. | 10Mins |
+ |210|[210 - IBM Portworx Storage](https://stackedit.io/210-ibm-portworx-storage)<BR>[210 - IBM OpenShift Data Foundation](https://stackedit.io/210-ibm-odf-storage)<Br> [210 - AWS Portworx Storage](https://stackedit.io/210-aws-portworx-storage)<BR>[210 - Azure Portworx Storage](https://stackedit.io/210-azure-portworx-storage)|Use this automation to deploy a storage solution for your cluster._⚠️Portworks on AWS and Azure are currently not released, but are coming soon.⚠️_ |10 Mins|
+ |--|--|--|--|
 
 | BOM ID | Name | Description | Run Time |
 
@@ -700,7 +706,7 @@ Apply complete! Resources: 71 added, 0 changed, 0 destroyed.
 
   
 
-25. You can check the progress by looking at two places, first look in your github repository. You will see the git repository has been created based on the name you have provided. The Maximo Core install will populate this with information to let OpenShift GitOps install the software. The second place is to look at the OpenShift console, Click Workloads->Pods and you will see the GitOps operator being installed.
+25. You can check the progress by looking at two places, first look in your github repository. You will see the git repository has been created based on the name you have provided. The Cloud Pak for Integration install will populate this with information to let OpenShift GitOps install the software. The second place is to look at the OpenShift console, Click Workloads->Pods and you will see the GitOps operator being installed.
 
   
   
