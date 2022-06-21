@@ -31,6 +31,9 @@ Before you start to install and configure Cloud Pak for Integration, you will ne
 
 ### Reference Architectures
 
+  
+  
+
 The reference architectures are provided in three different forms, with increasing security and associated sophistication to support production configuration. These three forms are as follows:
 
   
@@ -442,7 +445,7 @@ Apply complete! Resources: 71 added, 0 changed, 0 destroyed.
 19. You can check the progress by looking at two places, first look in your github repository. You will see the git repository has been created based on the name you have provided. The Cloud Pak for Integration install will populate this with information to let OpenShift GitOps install the software. The second place is to look at the OpenShift console, Click Workloads->Pods and you will see the GitOps operator being installed.
 
 
-20. Again an important note to be followed. In case of IBM TechZone Cluster, OCS storage is configured automatically. If it is already provisioned, skip this step and proceed with Step.26
+20. Again an important note to be followed. In case of IBM TechZone Cluster, OCS storage is configured automatically. If it is already provisioned, skip this step and proceed with Step.21
 
 Change directories to the `210-*` folder and run the following commands to deploy storage into your cluster:
 ```
@@ -453,7 +456,7 @@ terraform apply --auto-approve
 
 Storage configuration will run asynchronously in the background inside of the Cluster and should be complete within 15 minutes.
 
-20. Before you proceed to choose the capabilities of CP4I, take a look at the below diagram and understand what capabilities to be chosen based on your requirement.
+21. Before you proceed to choose the capabilities of CP4I, take a look at the below diagram and understand what capabilities to be chosen based on your requirement.
 > ❗️ ***** Very Important Note ******❗️ 
 ![Choice of CP4I Capabilities](images/cp4i-capabilities-choice.png)
 ```
@@ -479,7 +482,7 @@ terraform apply --auto-approve
 
 ```
 If wanted to go for choosing all the available capabilities
-21. Change directories to the `280-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
+22. Change directories to the `280-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
 ```
 cd ../280-integration-platform-multicloud
 
@@ -494,22 +497,22 @@ Cloud Pak fo Integration deployment will run asynchronously in the background, a
 
   
 
-28. You can check the progress of the deployment by opening up Argo CD (OpenShift GitOps). From the OpenShift user interface, click on the Application menu 3x3 Icon on the header and select **Cluster Argo CD** menu item.)
+23. You can check the progress of the deployment by opening up Argo CD (OpenShift GitOps). From the OpenShift user interface, click on the Application menu 3x3 Icon on the header and select **Cluster Argo CD** menu item.)
 
   
 
-29. Once deployment is complete, go back into the OpenShift cluster user interface and navigate to view `Routes` for the `cp4i-pn` namespace. Here you can see the URL to the deployed Platform Navigator instance. Open this url in a new browser window.
+24. Once deployment is complete, go back into the OpenShift cluster user interface and navigate to view `Routes` for the `cp4i-pn` namespace. Here you can see the URL to the deployed Platform Navigator instance. Open this url in a new browser window.
 
 
 ![Reference Architecture](images/cp4i-pn-route.png)
 
   
 
-30. Navigate to `Secrets` in the `ibm-common-services` namespace, and find the `platform-auth-idp-credentials` secret. Copy the value of `password` key inside of that secret.
+25. Navigate to `Secrets` in the `ibm-common-services` namespace, and find the `platform-auth-idp-credentials` secret. Copy the value of `password` key inside of that secret.
 
   
 
-31. Go back to the PlatformNavigator instance that you opened in a separate window. Log in using the username `admin` with the password copied in the previous step.
+26. Go back to the PlatformNavigator instance that you opened in a separate window. Log in using the username `admin` with the password copied in the previous step.
 
   
 
