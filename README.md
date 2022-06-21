@@ -31,9 +31,6 @@ Before you start to install and configure Cloud Pak for Integration, you will ne
 
 ### Reference Architectures
 
-  
-  
-
 The reference architectures are provided in three different forms, with increasing security and associated sophistication to support production configuration. These three forms are as follows:
 
   
