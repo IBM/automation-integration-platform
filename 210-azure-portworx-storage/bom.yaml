@@ -14,7 +14,7 @@ spec:
   modules:
     - name: azure-portworx
       alias: azure-portworx
-      version: v0.1.0
+      version: v0.1.1
       variables:
         - name: portworx_spec_file
           scope: global

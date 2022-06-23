@@ -20,7 +20,7 @@ The provided `scripts/portworx-prereq.sh` script will collect/create the necessa
 2. Run the `scripts/portworx-prereq.sh` script.
 
     ```shell
-    ./scripts/portworx-prereq.sh -t aro -r rg-name -c cluster-name
+    ./scripts/portworx-prereq.sh -t aro -g rg-name -n cluster-name
     ```
 
 3. If successful, the output of the script will look like the following. The output values can be provided as input to the automation.

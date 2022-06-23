@@ -96,7 +96,7 @@ spec:
           scope: global
     - name: gitops-cp-queue-manager
       alias: gitops-cp-queue-manager
-      version: v1.0.4
+      version: v1.0.5
       dependencies:
         - name: namespace
           ref: cp4i-mq
@@ -107,7 +107,7 @@ spec:
           value: mq-instance
         - name: config_map
           value: oms-queue-config
-        - name: storageclass
+        - name: storageClass
           alias: rwo_storage_class
           scope: global
     - name: gitops-namespace

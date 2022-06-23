@@ -64,7 +64,7 @@ module "gitops-cp-mq" {
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-queue-manager" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-queue-manager?ref=v1.0.4"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-queue-manager?ref=v1.0.5"
 
   config_map = var.gitops-cp-queue-manager_config_map
   cpulimits = var.gitops-cp-queue-manager_cpulimits
@@ -80,7 +80,7 @@ module "gitops-cp-queue-manager" {
   qmgr_instance_name = var.gitops-cp-queue-manager_qmgr_instance_name
   qmgr_name = var.gitops-cp-queue-manager_qmgr_name
   server_name = module.gitops_repo.server_name
-  storageclass = var.rwo_storage_class
+  storageClass = var.rwo_storage_class
 }
 module "olm" {
   source = "github.com/cloud-native-toolkit/terraform-k8s-olm?ref=v1.3.2"

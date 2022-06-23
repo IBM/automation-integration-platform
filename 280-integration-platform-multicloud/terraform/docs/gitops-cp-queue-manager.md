@@ -46,6 +46,7 @@ module "mq_instance" {
    qmgr_instance_name = var.qmgr_instance_name
    qmgr_name = var.qmgr_name
    config_map = var.config_map
+   storageClass = var.storageClass
 }
 
 ```
