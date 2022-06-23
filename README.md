@@ -347,14 +347,14 @@ gitops-cluster-config_banner_text="Software Everywhere CP4Integration"
 
 ```
   
-9. If your corporate policy does not allow use of Docker Desktop, then you need to install **Colima** as an alternative
+10. If your corporate policy does not allow use of Docker Desktop, then you need to install **Colima** as an alternative
 
 ```
 brew install colima
 colima start
 ```  
 
-10. We are now ready to start installing CP4I, run the `launch.sh` command, make sure you are in the root of the `automation-integration-platform` repository
+11. We are now ready to start installing CP4I, run the `launch.sh` command, make sure you are in the root of the `automation-integration-platform` repository
 
 ```
 
@@ -371,7 +371,7 @@ Attaching to running container...
   
   
 
-11. **launch.sh** will download a container image that contains all the command line tools to enable easy installation of the software. Once it has downloaded, it will mount the local file system and exec into the container for you to start running commands from within this custom container.
+12. **launch.sh** will download a container image that contains all the command line tools to enable easy installation of the software. Once it has downloaded, it will mount the local file system and exec into the container for you to start running commands from within this custom container.
 
   
   
@@ -381,7 +381,7 @@ Attaching to running container...
   
   
 
-12. Next step is to create a workspace to run the Terraform automation. Below you can see the parameters to configure your workspace for terraform execution.
+13. Next step is to create a workspace to run the Terraform automation. Below you can see the parameters to configure your workspace for terraform execution.
 
 ```
 
@@ -484,11 +484,12 @@ terraform apply --auto-approve
 ```
 If wanted to go for choosing all the available capabilities
 22. Change directories to the `280-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
+⚠️`IMPORTANT: Please be noted. In the below steps, while applying ensure to set -parallelism=3 `⚠️
 ```
 cd ../280-integration-platform-multicloud
 
 terraform init
-terraform apply --auto-approve
+terraform apply --auto-approve -parallelism=3
 
 ```
 
