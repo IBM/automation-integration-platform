@@ -1,0 +1,56 @@
+apiVersion: cloud.ibm.com/v1alpha1
+kind: BillOfMaterial
+metadata:
+  name: 210-ibm-odf-storage
+  labels:
+    type: infrastructure
+    platform: ibm
+    code: '210'
+    storage: odf
+  annotations:
+    displayName: IBM - ODF Cluster Storage
+    description: Installs OpenShift Data Foundation in an IBM cluster
+spec:
+  modules:
+    - name: gitops-ibm-odf
+      alias: gitops-ibm-odf
+      version: v0.2.0
+      variables:
+        - name: cluster_name
+          scope: global
+    - name: gitops-namespace
+      alias: odf_namespace
+      version: v1.11.2
+      default: true
+    - name: gitops-repo
+      alias: gitops_repo
+      version: v1.18.1
+  variables:
+    - name: ibmcloud_api_key
+      type: string
+      description: The api key for IBM Cloud access
+    - name: odf_namespace_name
+      type: string
+      description: The value that should be used for the namespace
+    - name: gitops_repo_host
+      type: string
+      description: The host for the git repository.
+      defaultValue: ''
+    - name: gitops_repo_org
+      type: string
+      description: The org/group where the git repository exists/will be provisioned.
+      defaultValue: ''
+    - name: gitops_repo_username
+      type: string
+      description: The username of the user with access to the repository
+      defaultValue: ''
+    - name: gitops_repo_token
+      type: string
+      description: The personal access token used to access the repository
+      defaultValue: ''
+      sensitive: true
+    - name: gitops_repo_repo
+      type: string
+      description: >-
+        The short name of the repository (i.e. the part after the org/group
+        name)

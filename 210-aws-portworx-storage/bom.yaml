@@ -1,0 +1,41 @@
+apiVersion: cloud.ibm.com/v1alpha1
+kind: BillOfMaterial
+metadata:
+  name: 210-aws-portworx-storage
+  labels:
+    type: infrastructure
+    code: '210'
+    platform: aws
+    storage: portworx
+  annotations:
+    displayName: AWS - Portworx Cluster Storage
+    description: Installs Portworx in and OCP cluster on AWS
+spec:
+  modules:
+    - name: aws-portworx
+      alias: aws-portworx
+      version: v0.0.5
+    - name: ocp-login
+      alias: cluster
+      version: v1.3.1
+  variables:
+    - name: region
+      type: string
+      description: AWS Region the cluster is deployed in
+    - name: aws-portworx_portworx_config
+      type: |-
+        object({
+            type=string,
+            cluster_id=string,
+            enable_encryption=bool,
+            user_id=string,
+            osb_endpoint=string
+          })
+      description: Portworx configuration
+    - name: server_url
+      type: string
+      description: The url for the OpenShift api
+    - name: cluster_login_token
+      type: string
+      description: Token used for authentication
+      sensitive: true

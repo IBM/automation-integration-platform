@@ -1,0 +1,6 @@
+digraph {
+    rankdir="BT"
+    "azure-portworx (azure-portworx)" -> "cluster (ocp-login)"
+"azure-portworx (azure-portworx)"
+"cluster (ocp-login)"
+  }
