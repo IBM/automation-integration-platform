@@ -41,7 +41,7 @@ variable "rwx_storage_class" {
 variable "gitops-cp-apic_profile" {
   type = string
   description = "apic profile template"
-  default = "n1xc7.m48"
+  default = ""n1xc7.m48" "
 }
 variable "entitlement_key" {
   type = string

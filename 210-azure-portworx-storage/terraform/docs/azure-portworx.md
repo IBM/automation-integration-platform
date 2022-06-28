@@ -78,44 +78,43 @@ The module depends on the following software components:
 
 #### Terraform providers
 
-- IBM Cloud provider >= 1.5.3
+- nil
 
 ### Module dependencies
 
 This module makes use of the output from other modules:
 
-- Cluster - github.com/cloud-native-toolkit/terraform-ocp-login.git
+- github.com/cloud-native-toolkit/terraform-ocp-login.git
+  - provides the `cluster_config_file` variable for the `azure-portworx` module.
 
 ### Example usage
 
 Note: `osb_endpoint` and `user_id` are only required in `portworx_config` if `type` is `essentials`.  These values are not required for type `enterprise`. 
 
 ```hcl-terraform
-locals {
-  portworx_config = {
-    cluster_id = var.px_cluster_id
-    user_id = var.px_user_id
-    osb_endpoint = var.px_osb_endpoint
-    type = "essentials"
-    enable_encryption = false
-  }
+module "cluster-login" {
+  source = "github.com/cloud-native-toolkit/terraform-ocp-login.git"
+
+  server_url = var.server_url
+  login_user = var.cluster_username
+  login_password = var.cluster_password
+  login_token = ""
+  ca_cert = var.ca_cert  
 }
 
-module "portworx" {
+module "azure-portworx" {
   source = "./module"
 
-  region                = var.region
   azure_client_id       = var.azure_client_id
   azure_client_secret   = var.azure_client_secret
   azure_subscription_id = var.azure_subscription_id
   azure_tenant_id       = var.azure_tenant_id
-  cluster_name          = var.cluster_name
-  cluster_config_file   = module.dev_cluster.platform.kubeconfig
-  portworx_config       = local.portworx_config
-  resource_group_name   = var.resource_group_name
+  cluster_config_file   = module.terraform-ocp-login.platform.kubeconfig
+  cluster_type          = "IPI"
+  portworx_spec_file    = "${path.module}/px_spec.yaml"
 }
 ```
 
 ## Acknowledgements
-This module is derivative from https://github.com/ibm-hcbt/terraform-ibm-cloud-pak/tree/main/modules/portworx_aws
+This module is a derivative of https://github.com/ibm-hcbt/terraform-ibm-cloud-pak/tree/main/modules/portworx_aws
 

@@ -11,7 +11,7 @@ module "cluster" {
   tls_secret_name = var.cluster_tls_secret_name
 }
 module "cp4i-dependency-management" {
-  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.3"
+  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.4"
 
   cp4i_version = var.cp4i-dependency-management_cp4i_version
 }

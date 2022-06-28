@@ -22,7 +22,7 @@ module "cp4i-apic" {
   server_name = module.gitops_repo.server_name
 }
 module "cp4i-dependency-management" {
-  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.3"
+  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.4"
 
   cp4i_version = var.cp4i-dependency-management_cp4i_version
 }

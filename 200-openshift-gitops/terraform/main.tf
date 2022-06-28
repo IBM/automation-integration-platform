@@ -30,7 +30,7 @@ module "cluster" {
   tls_secret_name = var.cluster_tls_secret_name
 }
 module "gitops_repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.18.1"
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.19.4"
 
   branch = var.gitops_repo_branch
   gitea_host = var.gitops_repo_gitea_host
@@ -40,6 +40,7 @@ module "gitops_repo" {
   gitops_namespace = var.gitops_repo_gitops_namespace
   host = var.gitops_repo_host
   org = var.gitops_repo_org
+  project = var.gitops_repo_project
   public = var.gitops_repo_public
   repo = var.gitops_repo_repo
   sealed_secrets_cert = module.sealed-secret-cert.cert
