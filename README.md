@@ -484,6 +484,7 @@ terraform apply --auto-approve
 ```
 If wanted to go for choosing all the available capabilities
 22. Change directories to the `280-integration-platform-multicloud` folder and run the following commands to deploy CP4I into the cluster.
+
 ⚠️`IMPORTANT: Please be noted. In the below steps, while applying ensure to set -parallelism=3 `⚠️
 ```
 cd ../280-integration-platform-multicloud
