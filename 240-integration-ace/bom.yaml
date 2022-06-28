@@ -7,7 +7,8 @@ metadata:
     code: '240'
   annotations:
     displayName: Integration - App Connect
-    description: GitOps deployment of App Connect for Cloud pak for Integrationm
+    description: GitOps deployment of App Connect for Cloud pak for Integration
+    deployment-type/gitops: 'true'
 spec:
   modules:
     - name: gitops-cp-ace
@@ -55,7 +56,7 @@ spec:
     - name: gitops-cp-platform-navigator
       version: v1.0.6
     - name: cp4i-dependency-management
-      version: v1.2.3
+      version: v1.2.4
   variables:
     - name: rwo_storage_class
       type: string

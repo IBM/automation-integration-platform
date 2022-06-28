@@ -1,5 +1,5 @@
 module "azure-portworx" {
-  source = "github.com/cloud-native-toolkit/terraform-azure-portworx?ref=v0.1.1"
+  source = "github.com/cloud-native-toolkit/terraform-azure-portworx?ref=v1.0.1"
 
   azure_client_id = var.azure_client_id
   azure_client_secret = var.azure_client_secret

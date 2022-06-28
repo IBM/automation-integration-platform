@@ -8,6 +8,7 @@ metadata:
   annotations:
     displayName: Integration Platform - Cloud Pak for Integration
     description: GitOps deployment of Cloud Pak for Integration
+    deployment-type/gitops: 'true'
 spec:
   modules:
     - name: gitops-cp-ace
@@ -159,7 +160,7 @@ spec:
       alias: gitops_repo
       version: v1.16.0
     - name: cp4i-dependency-management
-      version: v1.2.3
+      version: v1.2.4
   variables:
     - name: rwo_storage_class
       type: string

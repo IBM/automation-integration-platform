@@ -8,6 +8,7 @@ metadata:
   annotations:
     displayName: Integration - MQ
     description: GitOps deployment of MQ for Cloud pak for Integration
+    deployment-type/gitops: 'true'
 spec:
   modules:
     - name: gitops-cp-catalogs
@@ -54,7 +55,7 @@ spec:
       alias: gitops_repo
       version: v1.16.0
     - name: cp4i-dependency-management
-      version: v1.2.3
+      version: v1.2.4
   variables:
     - name: entitlement_key
       type: string

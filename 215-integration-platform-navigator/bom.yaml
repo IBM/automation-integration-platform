@@ -10,6 +10,7 @@ metadata:
     description: >-
       Populates a GitOps repository with PlatformNavigator component of the IBM
       Integration Platform
+    deployment-type/gitops: 'true'
 spec:
   modules:
     - name: gitops-cp-catalogs
@@ -47,7 +48,7 @@ spec:
       alias: gitops_repo
       version: v1.16.0
     - name: cp4i-dependency-management
-      version: v1.2.3
+      version: v1.2.4
   variables:
     - name: entitlement_key
       type: string
