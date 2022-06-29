@@ -18,17 +18,18 @@ Usage()
 CLOUD_PROVIDER=""
 STORAGE=""
 PREFIX_NAME=""
-STORAGEVENDOR=""
 
+echo "CLOUD_PROVIDER>>"$CLOUD_PROVIDER
+echo "STORAGE>>"$STORAGE
 
 # Get the options
-while getopts ":p:s:n:h:" o; do
-   case "${o}" in
+while getopts ":p:s:n:h:" option; do
+   case $option in
       h) # display Help
          Usage
          exit 1;;
       p)
-         CLOUD_PROVIDER=$OPTARG;;
+         CLOUD_PROVIDER=${OPTARG};;
       s) # Enter a name
          STORAGE=$OPTARG;;
       n) # Enter a name
@@ -40,11 +41,15 @@ while getopts ":p:s:n:h:" o; do
    esac
 done
 
+echo "CLOUD_PROVIDER>>"$CLOUD_PROVIDER
+echo "STORAGE>>"$STORAGE
 
-shift $((OPTIND-1))
 
-if [ -z "${CLOUD_PROVIDER}" ] || [ -z "${STORAGE}" ]; then
+#shift $((OPTIND-1))
+
+if [ -z "$CLOUD_PROVIDER" ] || [ -z "$STORAGE" ]; then
     Usage
+    exit 1
 fi
 
 SCRIPT_DIR=$(cd $(dirname $0); pwd -P)
@@ -71,7 +76,7 @@ echo "*****"
 
 WORKSPACE_DIR=$(cd "${WORKSPACE_DIR}"; pwd -P)
 
-ALL_ARCH="200|210|215|220|230|240|250|260|260"
+ALL_ARCH="200|210|215|220|230|240|250|260|280"
 
 echo "Setting up automation  ${WORKSPACE_DIR}"
 
@@ -82,6 +87,7 @@ find ${SCRIPT_DIR}/. -type d -maxdepth 1 | grep -vE "[.][.]/[.].*" | grep -v wor
 do
 
   name=$(echo "$dir" | sed -E "s/.*\///")
+  echo "name>>>" $name
 
   if [[ ! -d "${SCRIPT_DIR}/${name}/terraform" ]]; then
     continue
