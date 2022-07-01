@@ -4,10 +4,10 @@
 ########################################################
 
 ## rwo_storage_class: ReadWriteOnce access type Storage Class
-rwo_storage_class=""
+rwo_storage_class="TO_BE_REPLACED_RWO_STORAGE"
 
 ## rwx_storage_class: ReadWriteMany access type Storage Class
-rwx_storage_class=""
+rwx_storage_class="TO_BE_REPLACED_RWX_STORAGE"
 
 ## gitops-repo_host: The host for the git repository.
 gitops_repo_host="github.com"
@@ -19,7 +19,10 @@ gitops_repo_type="github"
 gitops_repo_org="<your gitorg - most likely your username>"
 
 ## gitops-repo_repo: The short name of the repository (i.e. the part after the org/group name)
-gitops_repo_repo="<repo name to create for git ops configuration>"
+gitops_repo_repo="TO_BE_REPLACED_PREFIXcp4i-gitops"
 
 ## gitops-cluster-config_banner_text: The text that will appear in the top banner in the cluster
 gitops-cluster-config_banner_text="Cloud Pak for Integration"
+
+## portworx_spec_file: The name of the file containing the Portworx configuration spec yaml
+portworx_spec_file="TO_BE_REPLACED_PORTWORX_SPEC_FILE"

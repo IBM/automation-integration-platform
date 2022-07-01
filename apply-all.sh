@@ -12,9 +12,10 @@ find . -type d -maxdepth 1 | grep -vE "[.]/[.].*" | grep -vE "^[.]$" | grep -v w
   while read dir;
 do
   name=$(echo "$dir" | sed -E "s~[.]/(.*)~\1~g")
+  echo $name
 
   TYPE=$(grep "deployment-type/gitops" ./${name}/bom.yaml | sed -E "s~[^:]+: [\"'](.*)[\"']~\1~g")
-
+  echo $TYPE
   if [[ "${TYPE}" == "true" ]]; then
     PARALLELISM=3
     echo "***** Setting parallelism for gitops type deployment for step ${name} to ${PARALLELISM} *****"
