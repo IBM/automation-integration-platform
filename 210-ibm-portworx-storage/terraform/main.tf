@@ -55,7 +55,7 @@ module "portworx_namespace" {
 }
 module "resource_group" {
   source = "cloud-native-toolkit/resource-group/ibm"
-  version = "3.2.15"
+  version = "3.2.16"
 
   ibmcloud_api_key = var.ibmcloud_api_key
   resource_group_name = var.resource_group_name

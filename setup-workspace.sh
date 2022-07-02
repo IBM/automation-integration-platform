@@ -243,7 +243,6 @@ Copy_Required_Module_In_CurrentWorkSpace()
   cp -R "${SCRIPT_DIR}/${name}/terraform/"* .
   cp "${SCRIPT_DIR}/${name}/bom.yaml" .
   cp "${SCRIPT_DIR}/${name}/destroy.sh" .
-
   ln -s "${WORKSPACE_DIR}"/terraform.tfvars ./terraform.tfvars
   cd - > /dev/null
 
