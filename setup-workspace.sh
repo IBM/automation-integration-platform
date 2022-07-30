@@ -30,7 +30,7 @@ PORTWORX_SPEC_FILE=""
 
 Usage()
 {
-   echo "Creates a workspace folder and populates it with automation bundles you require."
+   
    echo
    echo "Usage: setup-workspace.sh"
    echo "  options:"
@@ -39,12 +39,19 @@ Usage()
    echo "  -n     (optional) prefix that should be used for all variables"
    echo "  -h     Print this help"
    echo
+   echo "Creates a workspace folder and populates it with automation bundles you require."
 }
 
 Validate_Input_Param()
 {
-  if [ -z "$CLOUD_PROVIDER" ] || [ -z "$STORAGE" ]; then
-    echo "Both Storage Provider or Cloud Provider Can not be empty."
+  # if [ -z "$CLOUD_PROVIDER" ] || [ -z "$STORAGE" ]; then
+  #   echo "You must provide Cloud Provider!!!"
+  #   Usage
+  #   exit 1
+  # fi
+
+  if [ -z "$CLOUD_PROVIDER" ] ; then
+    echo "Cloud Provider Can not be empty."
     Usage
     exit 1
   fi
@@ -55,12 +62,18 @@ Validate_Input_Param()
     exit 1
   fi
 
-  if [[ ! ${VALID_STORAGE_PROVIDERS[*]} =~ ${STORAGE} ]]; then
-    echo "Invalid Storage Provider. Valid Choice are (odf/portworx)!!!!!!"
-    Usage
-    exit 1
-  fi
+# If Storage provider is provided then it has be a valid one
+  if [ ! -z "$STORAGE" ] ; then
+    if [[ ! ${VALID_STORAGE_PROVIDERS[*]} =~ ${STORAGE} ]]; then
+      echo "Invalid Storage Provider. Valid Choice are (odf/portworx)!!!!!!"
+      Usage
+      exit 1
+    fi
+  fi  
 
+  if [ ! -z "$CLOUD_PROVIDER" ] && [  -z "$STORAGE" ] ; then
+    echo "********** It is assumed that OpenShift Cluster is already provisioned with Storage ***********"
+  fi
 
 }
 

@@ -77,6 +77,11 @@ variable "gitops_repo_strict" {
   description = "Flag indicating that an error should be thrown if the repo already exists"
   default = false
 }
+variable "debug" {
+  type = bool
+  description = "Flag indicating that debug loggging should be enabled"
+  default = false
+}
 variable "argocd-bootstrap_bootstrap_prefix" {
   type = string
   description = "The prefix used in ArgoCD to bootstrap the application"
@@ -161,17 +166,17 @@ variable "cluster_skip" {
 }
 variable "cluster_cluster_version" {
   type = string
-  description = "The version of the cluster (passed through to the output)"
+  description = "[Deprecated] The version of the cluster (passed through to the output)"
   default = ""
 }
 variable "cluster_ingress_subdomain" {
   type = string
-  description = "The ingress subdomain of the cluster (passed through to the output)"
+  description = "[Deprecated] The ingress subdomain of the cluster (passed through to the output)"
   default = ""
 }
 variable "cluster_tls_secret_name" {
   type = string
-  description = "The name of the secret containing the tls certificates for the ingress subdomain (passed through to the output)"
+  description = "[Deprecated] The name of the secret containing the tls certificates for the ingress subdomain (passed through to the output)"
   default = ""
 }
 variable "cluster_ca_cert" {

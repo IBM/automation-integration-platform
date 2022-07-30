@@ -14,7 +14,7 @@ spec:
   modules:
     - name: azure-portworx
       alias: azure-portworx
-      version: v1.0.1
+      version: v1.0.2
       variables:
         - name: region
           scope: global
@@ -35,7 +35,7 @@ spec:
           scope: global
     - name: ocp-login
       alias: cluster
-      version: v1.3.1
+      version: v1.5.1
   variables:
     - name: azure_subscription_id
       type: string

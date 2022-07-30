@@ -6,7 +6,7 @@
 
 ### Change Log
 
--  **06/2022** - Initial Release
+-  **07/2022** - Initial Release
 
   
 > This collection of Cloud Pak for Integration terraform automation layers has been crafted from a set of [Terraform modules](https://modules.cloudnativetoolkit.dev/) created by the IBM GSI Ecosystem Lab team part of the [IBM Partner Ecosystem organization](https://www.ibm.com/partnerworld/public?mhsrc=ibmsearch_a&mhq=partnerworld). Please contact **Matthew Perrins**  _mjperrin@us.ibm.com_, **Sean Sundberg**  _seansund@us.ibm.com_, **Andrew Trice**  _amtrice@us.ibm.com_, **Gowdhaman Jayaseelan**  _gjayasee@in.ibm.com_, **Vijay K Sukthankar**  _vksuktha@in.ibm.com_ or **Jyoti Rani**  _jyotirani10@in.ibm.com_ for more details or raise an issue on the repository.
@@ -135,11 +135,6 @@ A container image is used to provide a consistent runtime environment for the au
     brew install colima docker
     ```
 
-2. Start **Colima**. This needs to be done after each time the computer is restarted. (The first time **Colima** is started takes longer to prepare the environment.)
-
-    ```shell
-    colima start
-    ```
 #### Set up environment credentials
 
 1. First step is to clone the automation code to your local machine. Run this git command in your favorite command line shell.
@@ -163,27 +158,32 @@ A container image is used to provide a consistent runtime environment for the au
     ```
 
     ```text
-    ## Add the values for the Credentials to access the OpenShift Environment
-    ## Instructions to access this information can be found in the README.MD
-    ## This is a template file and the ./launch.sh script looks for a file based on this template named credentials.properties
-    
-    ## gitops_repo_host: The host for the git repository
-    TF_VAR_gitops_repo_host=github.com
+    # Add the values for the Credentials to access the IBM Cloud
+    # Instructions to access this information can be found in the README.MD
+    # This is a template file and the ./launch.sh script looks for a file based on this template named credentials.properties
+
     ## gitops_repo_username: The username of the user with access to the repository
     TF_VAR_gitops_repo_username=
+
     ## gitops_repo_token: The personal access token used to access the repository
     TF_VAR_gitops_repo_token=
-    
-    ## TF_VAR_server_url: The url for the OpenShift api server
-    TF_VAR_server_url=
+
     ## TF_VAR_cluster_login_token: Token used for authentication to the api server
     TF_VAR_cluster_login_token=
-    
+
+    ## TF_VAR_server_url: The url for the OpenShift api server
+    TF_VAR_server_url=
+
     ## TF_VAR_entitlement_key: The entitlement key used to access the IBM software images in the container registry. Visit https://myibm.ibm.com/products-services/containerlibrary to get the key
     TF_VAR_entitlement_key=
-    
+
+
     ## TF_VAR_ibmcloud_api_key: IBM Cloud API Key required to provision storage on IBM Cloud
     TF_VAR_ibmcloud_api_key=
+
+    # Only needed if targeting AWS Deployment
+    TF_VAR_access_key=
+    TF_VAR_secret_key=
 
     ##
     ## Azure credentials
@@ -191,7 +191,8 @@ A container image is used to provide a consistent runtime environment for the au
     ## particular permissions in order to interact with the account and the OpenShift cluster. Use the
     ## provided `azure-portworx-credentials.sh` script to retrieve/generate these credentials.
     ##
-    
+    # Only needed if targeting Azure Deployment
+
     ## TF_VAR_azure_subscription_id: The subscription id for the Azure account. This is required if Azure portworx is used
     TF_VAR_azure_subscription_id=
     ## TF_VAR_azure_tenant_id: The tenant id for the Azure account. This is required if Azure portworx is used
@@ -200,7 +201,7 @@ A container image is used to provide a consistent runtime environment for the au
     TF_VAR_azure_client_id=
     ## TF_VAR_azure_client_secret: The client id of the user for the Azure account. This is required if Azure portworx is used
     TF_VAR_azure_client_secret=
-    ```
+   ```
 
  4. You will need to populate these values. Add your Git Hub username and your Personal Access Token to `TF_VAR_gitops_repo_username` and `TF_VAR_gitops_repo_token`.
 
@@ -214,6 +215,14 @@ A container image is used to provide a consistent runtime environment for the au
     ![Copy Server URL and LoginToken](images/server_url_and_token.png)
 
  7. Copy the entitlement key, this can be obtained from visiting the [IBM Container Library](https://myibm.ibm.com/products-services/containerlibrary) and place it in the `entitlement_key` variable.
+
+ 8. Start **Colima**. This needs to be done after each time the computer is restarted. (The first time **Colima** is started takes longer to prepare the environment.)
+
+    ```shell
+    $ pwd
+    ~/automation-integration-platform/ (for e.g this is the current working directory which contains lanch.sh)
+    colima start --mount  ~/automation-integration-platform:/cp4i:w
+    ```
 
 
 ##### Deploying on IBM Cloud (Portworx or ODF)
@@ -288,21 +297,42 @@ You can install these clis on your local machine **OR** run the following comman
    > We expect partners and clients will use their own specific **Continuous Integration** tools to support this the IBM team has focused on getting it installed in the least complicated way possible
 
 3. Next we need to set up the working directory for the automation:
-
-   ```shell
-   ./setup-workspace.sh [-p {cloud provider}] [-s {storage}] [-n {prefix name}] [-x {portworx spec file}]
+    ⚠️`IMPORTANT NOTE:` ⚠️  setup-workspace.sh script is responsible for choosing the required module to be deployed on Openshift Cluster. The module we refer here is cater to "GitOps,Storage & Cloud Pak capabilities(PlatformNavigator,APIC,MQ,ACE & EventStreams)". 
+    
+    ```shell
+        ./setup-workspace.sh [-p {cloud provider}] [-s {storage}] [-n {prefix name}] [-x {portworx spec file}]
    ```
     
    where:
-   - **cloud provider** (optional) - the target cloud provider for the deployment (`aws`, `azure`, or `ibm`)
-   - **storage** (optional) - the intended storage provider (`portworx` or `odf`)
+   - **cloud provider**  - the target cloud provider for the deployment (`aws`, `azure`, or `ibm`)
+   - **storage**  - the intended storage provider (`portworx` or `odf`)
    - **prefix name** (optional) - the name prefix that will be used for the gitops repo
    - **portworx spec file** (optional) - the name of the file containing the Portworx configuration spec yaml
-    
-   **Example:**
-   ```shell
-   ./setup-workspace.sh -p azure -s portworx -n cp4i-demo -x portworx_essentials.yaml
-   ```
+   
+    At this stage, We assume you have Openshift Cluster is up & running. Following info will help the user in setting up the right workspace.
+    ```
+    if [OpenShift Cluster is already provioned with 'Storage']         
+        There is No necessacity to execute any module cater to provision Storage in cluster. Hence
+         ./setup-workspace.sh -p ibm 
+    else
+        if [OpenShift Cluster is Provisoned on IBM Cloud && No Storage Provisioned]
+            In IBM Cloud you have a choice to provision 'Open Data Foundation' or 'Portworx'
+            In case 
+                'OpenData Foundation' :
+                    ./setup-workspace.sh -p ibm -s odf 
+                'portworx' :
+                    ./setup-workspace.sh -p ibm -s portworx  [-x {portworx spec file}]
+                    
+        if [OpenShift Cluster is Provisoned on Azure && No Storage Provisioned]
+            In Azure, at this point of time you can only go with 'portworx'
+                    ./setup-workspace.sh -p azure -s portworx  [-x {portworx spec file}]
+
+        if [OpenShift Cluster is Provisoned on aws && No Storage Provisioned]
+            In aws, at this point of time you can only go with 'portworx'
+                    ./setup-workspace.sh -p aws -s portworx  [-x {portworx spec file}]
+
+    fi        
+    ```
 
 4. The `setup-workspace.sh` script configures the `terraform.tfvars` file with reasonable defaults. There are no other changes required in order to run the automation.
 

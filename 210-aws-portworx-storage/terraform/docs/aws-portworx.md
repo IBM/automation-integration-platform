@@ -55,13 +55,18 @@ locals {
 }
 
 module "aws_portworx" {
-  source = "./module"
+  source = "github.com/cloud-native-toolkit/terraform-aws-portworx.git"
 
   region                = var.region
   access_key            = var.access_key
   secret_key            = var.secret_key
   cluster_config_file   = module.dev_cluster.platform.kubeconfig
-  portworx_config       = local.portworx_config
+  
+  #Provide  either path to the file using parameter `portworx_spec_file`   or base64 encoding of the file content using parameter `portworx_spec` 
+  
+  #portworx_spec_file = var.portworx_spec_file
+  portworx_spec = var.portworx_spec
+
 }
 
 ```
