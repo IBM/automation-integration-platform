@@ -386,7 +386,7 @@ This concludes the instructions for installing *Cloud Pak for Integration * on A
 
 Please refer to the [Troubleshooting Guide](./TROUBLESHOOTING.md) for uninstallation instructions and instructions to correct common issues.
 
-## How to Generate this repository from teh source Bill of Materials.
+## How to Generate this repository from the source Bill of Materials.
 
 This set of automation packages was generated using the open-source [`isacable`](https://github.com/cloud-native-toolkit/iascable) tool. This tool enables a [Bill of Material yaml](https://github.com/cloud-native-toolkit/automation-solutions/tree/main/boms/software/maximo) file to describe your software requirements. If you want up stream releases or versions you can use `iascable` to generate a new terraform module.
 
