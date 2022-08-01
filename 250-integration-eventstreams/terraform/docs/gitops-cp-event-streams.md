@@ -22,7 +22,7 @@ This module makes use of the output from other modules:
 - Namespace - github.com/cloud-native-toolkit/terraform-gitops-namespace.git
 - Catalogs - github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs.git
 - Cp4i-Dependency - github.com/cloud-native-toolkit/terraform-cp4i-dependency-management.git
-- EventStreams Operator - github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams
+- EventStreams Operator - github.com/cloud-native-toolkit/terraform-gitops-cp-es-operator.git
 
 ## Example usage
 

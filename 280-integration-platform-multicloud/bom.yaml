@@ -11,12 +11,18 @@ metadata:
     deployment-type/gitops: 'true'
 spec:
   modules:
+    - name: cp4i-dependency-management
+      alias: cp4i-version-dependency
+      version: v1.2.6
+      variables:
+        - name: cp4i_version
+          value: '2022_2_1'
     - name: gitops-cp-ace
       alias: gitops-cp-ace
-      version: v1.0.5
+      version: v1.0.7
     - name: gitops-cp-ace-designer
       alias: gitops-cp-ace-designer
-      version: v1.0.1
+      version: v1.0.3
       dependencies:
         - name: namespace
           ref: cp4i-ace
@@ -31,7 +37,7 @@ spec:
           value: false
     - name: gitops-cp-apic
       alias: gitops-cp-apic
-      version: v0.0.1
+      version: v0.0.2
       dependencies:
         - name: namespace
           ref: cp4i-apic
@@ -43,16 +49,19 @@ spec:
           scope: global
     - name: gitops-cp-apic-operator
       alias: gitops-cp-apic-operator
-      version: v1.2.5
+      version: v1.2.6
     - name: gitops-cp-catalogs
       alias: gitops-cp-catalogs
-      version: v1.2.1
+      version: v1.2.4
       variables:
         - name: entitlement_key
           scope: global
+    - name: gitops-cp-es-operator
+      alias: gitops-cp-es-operator
+      version: v1.1.0
     - name: gitops-cp-event-streams
       alias: gitops-cp-event-streams
-      version: v1.1.3
+      version: v2.0.0
       dependencies:
         - name: namespace
           ref: cp4i-es
@@ -69,15 +78,12 @@ spec:
           scope: global
         - name: entitlement_key
           scope: global
-    - name: gitops-cp-eventstreams-operator
-      alias: gitops-cp-eventstreams-operator
-      version: v1.0.1
     - name: gitops-cp-mq
       alias: gitops-cp-mq
-      version: v1.1.5
+      version: v1.1.6
     - name: gitops-cp-mq-uniform-cluster
       alias: gitops-cp-mq-uniform-cluster
-      version: v1.0.3
+      version: v1.0.4
       dependencies:
         - name: namespace
           ref: cp4i-mq-cluster
@@ -87,7 +93,7 @@ spec:
           scope: global
     - name: gitops-cp-platform-navigator
       alias: gitops-cp-platform-navigator
-      version: v1.0.6
+      version: v2.0.0
       dependencies:
         - name: namespace
           ref: cp4i-pn
@@ -97,7 +103,7 @@ spec:
           scope: global
     - name: gitops-cp-queue-manager
       alias: gitops-cp-queue-manager
-      version: v1.0.5
+      version: v1.0.6
       dependencies:
         - name: namespace
           ref: cp4i-mq
@@ -149,7 +155,7 @@ spec:
           value: cp4i-pn
     - name: ocp-login
       alias: cluster
-      version: v1.2.12
+      version: v1.5.1
     - name: olm
       alias: olm
       version: v1.3.2
@@ -158,9 +164,7 @@ spec:
       version: v1.0.1
     - name: gitops-repo
       alias: gitops_repo
-      version: v1.16.0
-    - name: cp4i-dependency-management
-      version: v1.2.4
+      version: v1.21.0
   variables:
     - name: rwo_storage_class
       type: string
@@ -187,21 +191,32 @@ spec:
     - name: gitops_repo_host
       type: string
       description: The host for the git repository.
+      defaultValue: ''
     - name: gitops_repo_type
       type: string
       description: The type of the hosted git repository (github or gitlab).
+      defaultValue: ''
     - name: gitops_repo_org
       type: string
       description: The org/group where the git repository exists/will be provisioned.
+      defaultValue: ''
+    - name: gitops_repo_project
+      type: string
+      description: >-
+        The project that will be used for the git repo. (Primarily used for
+        Azure DevOps repos)
+      defaultValue: ''
+    - name: gitops_repo_username
+      type: string
+      description: The username of the user with access to the repository
+      defaultValue: ''
+    - name: gitops_repo_token
+      type: string
+      description: The personal access token used to access the repository
+      defaultValue: ''
+      sensitive: true
     - name: gitops_repo_repo
       type: string
       description: >-
         The short name of the repository (i.e. the part after the org/group
         name)
-    - name: gitops_repo_username
-      type: string
-      description: The username of the user with access to the repository
-    - name: gitops_repo_token
-      type: string
-      description: The personal access token used to access the repository
-      sensitive: true

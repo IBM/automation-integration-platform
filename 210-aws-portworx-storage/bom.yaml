@@ -14,24 +14,30 @@ spec:
   modules:
     - name: aws-portworx
       alias: aws-portworx
-      version: v0.0.5
+      version: v0.1.0
     - name: ocp-login
       alias: cluster
-      version: v1.3.1
+      version: v1.5.1
   variables:
     - name: region
       type: string
       description: AWS Region the cluster is deployed in
-    - name: aws-portworx_portworx_config
-      type: |-
-        object({
-            type=string,
-            cluster_id=string,
-            enable_encryption=bool,
-            user_id=string,
-            osb_endpoint=string
-          })
-      description: Portworx configuration
+    - name: aws-portworx_portworx_spec
+      type: string
+      defaultValue: ''
+    - name: aws-portworx_portworx_spec_file
+      type: string
+      description: >-
+        The path to the file that contains the yaml spec for the Portworx
+        config. Either the `portworx_spec_file` or `portworx_spec` must be
+        provided. The instructions for creating this configuration can be found
+        at
+        https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md
+      defaultValue: ''
+    - name: aws-portworx_enable_encryption
+      type: bool
+      description: Flag indicating portworx volumes should be encrypted
+      defaultValue: false
     - name: server_url
       type: string
       description: The url for the OpenShift api
