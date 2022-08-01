@@ -1,6 +1,8 @@
 module "cluster" {
-  source = "github.com/cloud-native-toolkit/terraform-ocp-login?ref=v1.2.12"
+  source = "github.com/cloud-native-toolkit/terraform-ocp-login?ref=v1.5.1"
 
+  ca_cert = var.cluster_ca_cert
+  ca_cert_file = var.cluster_ca_cert_file
   cluster_version = var.cluster_cluster_version
   ingress_subdomain = var.cluster_ingress_subdomain
   login_password = var.cluster_login_password
@@ -9,11 +11,6 @@ module "cluster" {
   server_url = var.server_url
   skip = var.cluster_skip
   tls_secret_name = var.cluster_tls_secret_name
-}
-module "cp4i-dependency-management" {
-  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.4"
-
-  cp4i_version = var.cp4i-dependency-management_cp4i_version
 }
 module "cp4i-mq-cluster" {
   source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.11.2"
@@ -26,13 +23,24 @@ module "cp4i-mq-cluster" {
   name = var.cp4i-mq-cluster_name
   server_name = module.gitops_repo.server_name
 }
+module "cp4i-version-dependency" {
+  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.6"
+
+  cp4i_version = var.cp4i-version-dependency_cp4i_version
+}
 module "gitops_repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.16.0"
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.21.0"
 
   branch = var.gitops_repo_branch
+  debug = var.debug
+  gitea_host = var.gitops_repo_gitea_host
+  gitea_org = var.gitops_repo_gitea_org
+  gitea_token = var.gitops_repo_gitea_token
+  gitea_username = var.gitops_repo_gitea_username
   gitops_namespace = var.gitops_repo_gitops_namespace
   host = var.gitops_repo_host
   org = var.gitops_repo_org
+  project = var.gitops_repo_project
   public = var.gitops_repo_public
   repo = var.gitops_repo_repo
   sealed_secrets_cert = module.sealed-secret-cert.cert
@@ -43,7 +51,7 @@ module "gitops_repo" {
   username = var.gitops_repo_username
 }
 module "gitops-cp-catalogs" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.1"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.4"
 
   entitlement_key = var.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
@@ -53,28 +61,28 @@ module "gitops-cp-catalogs" {
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-mq" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq?ref=v1.1.5"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq?ref=v1.1.6"
 
   catalog = module.gitops-cp-catalogs.catalog_ibmoperators
   catalog_namespace = var.gitops-cp-mq_catalog_namespace
-  channel = module.cp4i-dependency-management.mq.channel
+  channel = module.cp4i-version-dependency.mq.channel
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   namespace = var.gitops-cp-mq_namespace
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-mq-uniform-cluster" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq-uniform-cluster?ref=v1.0.3"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq-uniform-cluster?ref=v1.0.4"
 
   entitlement_key = module.gitops-cp-catalogs.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   ini_configmap = var.gitops-cp-mq-uniform-cluster_ini_configmap
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  license = module.cp4i-dependency-management.mq.license
-  license_use = module.cp4i-dependency-management.mq.license_use
+  license = module.cp4i-version-dependency.mq.license
+  license_use = module.cp4i-version-dependency.mq.license_use
   MQ_AvailabilityType = var.gitops-cp-mq-uniform-cluster_MQ_AvailabilityType
-  mq_version = module.cp4i-dependency-management.mq.version
+  mq_version = module.cp4i-version-dependency.mq.version
   mqsc_configmap = var.gitops-cp-mq-uniform-cluster_mqsc_configmap
   namespace = module.cp4i-mq-cluster.name
   server_name = module.gitops_repo.server_name

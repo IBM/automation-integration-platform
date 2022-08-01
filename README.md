@@ -1,12 +1,12 @@
 
 
-# Cloud Pak for Integration - Automation for AWS, Azure, and IBM Cloud
+# Cloud Pak for Integration 2022.2.1 - Automation for AWS, Azure, and IBM Cloud
 
   
 
 ### Change Log
 
--  **06/2022** - Initial Release
+-  **07/2022** - Initial Release
 
   
 > This collection of Cloud Pak for Integration terraform automation layers has been crafted from a set of [Terraform modules](https://modules.cloudnativetoolkit.dev/) created by the IBM GSI Ecosystem Lab team part of the [IBM Partner Ecosystem organization](https://www.ibm.com/partnerworld/public?mhsrc=ibmsearch_a&mhq=partnerworld). Please contact **Matthew Perrins**  _mjperrin@us.ibm.com_, **Sean Sundberg**  _seansund@us.ibm.com_, **Andrew Trice**  _amtrice@us.ibm.com_, **Gowdhaman Jayaseelan**  _gjayasee@in.ibm.com_, **Vijay K Sukthankar**  _vksuktha@in.ibm.com_ or **Jyoti Rani**  _jyotirani10@in.ibm.com_ for more details or raise an issue on the repository.
@@ -17,6 +17,8 @@ The automation will support the installation of Cloud Pak for Integration on thr
 ⚠️`IMPORTANT: Please be noted. In this release, the focus is only on key/essential cabilities like PlatformNavigator, IBM APIConnect, IBM APPConnect, IBM Event Streams & IBM MQ. In future release, other capabilities like IBM Aspera, IBM DataPower, AssetRepo & OperationDashboard will be considered based on the customer or partner needs.` ⚠️
   
 ### Releases
+
+[Cloud Pak for Integration 2021.4.1](https://github.com/IBM/automation-integration-platform/tree/cp4i-v2021.4.1)
 
 ## Target Infrastructure
 
@@ -36,7 +38,7 @@ The reference architectures are provided in three different forms, with increasi
 For each of these reference architecture, we have provided a detailed set of automation to create the environment for the software. If you do not have an OpenShift environment provisioned, please use one of these. They are optimized for the installation of this solution.
 
 
-Note: [Cloud Pak for Integration system requirements](https://www.ibm.com/docs/en/cloud-paks/cp-integration/2021.4?topic=planning-system-requirements) recommend at least 3 worker nodes, with minimum 16vCPU per node and minimum 64 GB RAM per done (128 GB RAM is recommended).
+Note: [Cloud Pak for Integration system requirements](https://www.ibm.com/docs/en/cloud-paks/cp-integration/2022.2?topic=planning-system-requirements) recommend at least 3 worker nodes, with minimum 16vCPU per node and minimum 64 GB RAM per done (128 GB RAM is recommended).
 
   
 | Cloud Platform                          | Automation and Documentation                                                                                                                                                                                                                                              |   
@@ -64,7 +66,7 @@ The following instructions will help you install Cloud Pak for Integration into 
 
 ### Licenses and Entitlements
 
-Details on Cloud Pak for Integration licensing available at https://www.ibm.com/docs/en/cloud-paks/cp-integration/2021.4?topic=planning-licensing
+Details on Cloud Pak for Integration licensing available at https://www.ibm.com/docs/en/cloud-paks/cp-integration/2022.2?topic=planning-licensing
 
 ### Obtaining your IBM entitlement API key
 To install Cloud Pak for Integration you are required to have an entitlement key that provides access to the software components. After the necessary entitlements have been granted, use the following steps to download the entitlement key and apply it to the automation:
@@ -135,11 +137,6 @@ A container image is used to provide a consistent runtime environment for the au
     brew install colima docker
     ```
 
-2. Start **Colima**. This needs to be done after each time the computer is restarted. (The first time **Colima** is started takes longer to prepare the environment.)
-
-    ```shell
-    colima start
-    ```
 #### Set up environment credentials
 
 1. First step is to clone the automation code to your local machine. Run this git command in your favorite command line shell.
@@ -163,27 +160,32 @@ A container image is used to provide a consistent runtime environment for the au
     ```
 
     ```text
-    ## Add the values for the Credentials to access the OpenShift Environment
-    ## Instructions to access this information can be found in the README.MD
-    ## This is a template file and the ./launch.sh script looks for a file based on this template named credentials.properties
-    
-    ## gitops_repo_host: The host for the git repository
-    TF_VAR_gitops_repo_host=github.com
+    # Add the values for the Credentials to access the IBM Cloud
+    # Instructions to access this information can be found in the README.MD
+    # This is a template file and the ./launch.sh script looks for a file based on this template named credentials.properties
+
     ## gitops_repo_username: The username of the user with access to the repository
     TF_VAR_gitops_repo_username=
+
     ## gitops_repo_token: The personal access token used to access the repository
     TF_VAR_gitops_repo_token=
-    
-    ## TF_VAR_server_url: The url for the OpenShift api server
-    TF_VAR_server_url=
+
     ## TF_VAR_cluster_login_token: Token used for authentication to the api server
     TF_VAR_cluster_login_token=
-    
+
+    ## TF_VAR_server_url: The url for the OpenShift api server
+    TF_VAR_server_url=
+
     ## TF_VAR_entitlement_key: The entitlement key used to access the IBM software images in the container registry. Visit https://myibm.ibm.com/products-services/containerlibrary to get the key
     TF_VAR_entitlement_key=
-    
+
+
     ## TF_VAR_ibmcloud_api_key: IBM Cloud API Key required to provision storage on IBM Cloud
     TF_VAR_ibmcloud_api_key=
+
+    # Only needed if targeting AWS Deployment
+    TF_VAR_access_key=
+    TF_VAR_secret_key=
 
     ##
     ## Azure credentials
@@ -191,7 +193,8 @@ A container image is used to provide a consistent runtime environment for the au
     ## particular permissions in order to interact with the account and the OpenShift cluster. Use the
     ## provided `azure-portworx-credentials.sh` script to retrieve/generate these credentials.
     ##
-    
+    # Only needed if targeting Azure Deployment
+
     ## TF_VAR_azure_subscription_id: The subscription id for the Azure account. This is required if Azure portworx is used
     TF_VAR_azure_subscription_id=
     ## TF_VAR_azure_tenant_id: The tenant id for the Azure account. This is required if Azure portworx is used
@@ -200,7 +203,7 @@ A container image is used to provide a consistent runtime environment for the au
     TF_VAR_azure_client_id=
     ## TF_VAR_azure_client_secret: The client id of the user for the Azure account. This is required if Azure portworx is used
     TF_VAR_azure_client_secret=
-    ```
+   ```
 
  4. You will need to populate these values. Add your Git Hub username and your Personal Access Token to `TF_VAR_gitops_repo_username` and `TF_VAR_gitops_repo_token`.
 
@@ -214,6 +217,14 @@ A container image is used to provide a consistent runtime environment for the au
     ![Copy Server URL and LoginToken](images/server_url_and_token.png)
 
  7. Copy the entitlement key, this can be obtained from visiting the [IBM Container Library](https://myibm.ibm.com/products-services/containerlibrary) and place it in the `entitlement_key` variable.
+
+ 8. Start **Colima**. This needs to be done after each time the computer is restarted. (The first time **Colima** is started takes longer to prepare the environment.)
+
+    ```shell
+    $ pwd
+    ~/automation-integration-platform/ (for e.g this is the current working directory which contains lanch.sh)
+    colima start --mount  ~/automation-integration-platform:/cp4i:w
+    ```
 
 
 ##### Deploying on IBM Cloud (Portworx or ODF)
@@ -266,11 +277,11 @@ You can install these clis on your local machine **OR** run the following comman
 ##### Get the Portworx configuration spec (for AWS or Azure deployments)
 
 1. Follow the steps to download the [portworx confituration spec](./PORTWORX_CONFIG.md)
-2. Copy the downloaded file into the root directory of the cloned automation-maximo-app-suite repository
+2. Copy the downloaded file into the root directory of the cloned automation-integration-platform repository
 
 ##### Set up the automation workspace
 
-1. Next we need to configure the installation of Maximo Core. Run the `launch.sh` command from the root directory of the cloned automation-maximo-app-suite repository
+1. Next we need to configure the installation of Cloud pak for integration. Run the `launch.sh` command from the root directory of the cloned automation-integration-platform repository
 
     ```shell
     ./launch.sh
@@ -288,21 +299,42 @@ You can install these clis on your local machine **OR** run the following comman
    > We expect partners and clients will use their own specific **Continuous Integration** tools to support this the IBM team has focused on getting it installed in the least complicated way possible
 
 3. Next we need to set up the working directory for the automation:
-
-   ```shell
-   ./setup-workspace.sh [-p {cloud provider}] [-s {storage}] [-n {prefix name}] [-x {portworx spec file}]
+    ⚠️`IMPORTANT NOTE:` ⚠️  setup-workspace.sh script is responsible for choosing the required module to be deployed on Openshift Cluster. The module we refer here is cater to "GitOps,Storage & Cloud Pak capabilities(PlatformNavigator,APIC,MQ,ACE & EventStreams)". 
+    
+    ```shell
+        ./setup-workspace.sh [-p {cloud provider}] [-s {storage}] [-n {prefix name}] [-x {portworx spec file}]
    ```
     
    where:
-   - **cloud provider** (optional) - the target cloud provider for the deployment (`aws`, `azure`, or `ibm`)
-   - **storage** (optional) - the intended storage provider (`portworx` or `odf`)
+   - **cloud provider**  - the target cloud provider for the deployment (`aws`, `azure`, or `ibm`)
+   - **storage**  - the intended storage provider (`portworx` or `odf`)
    - **prefix name** (optional) - the name prefix that will be used for the gitops repo
    - **portworx spec file** (optional) - the name of the file containing the Portworx configuration spec yaml
-    
-   **Example:**
-   ```shell
-   ./setup-workspace.sh -p azure -s portworx -n cp4i-demo -x portworx_essentials.yaml
-   ```
+   
+    At this stage, We assume you have Openshift Cluster is up & running. Following info will help the user in setting up the right workspace.
+    ```
+    if [OpenShift Cluster is already provioned with 'Storage']         
+        There is No necessacity to execute any module cater to provision Storage in cluster. Hence
+         ./setup-workspace.sh -p ibm 
+    else
+        if [OpenShift Cluster is Provisoned on IBM Cloud && No Storage Provisioned]
+            In IBM Cloud you have a choice to provision 'Open Data Foundation' or 'Portworx'
+            In case 
+                'OpenData Foundation' :
+                    ./setup-workspace.sh -p ibm -s odf 
+                'portworx' :
+                    ./setup-workspace.sh -p ibm -s portworx  [-x {portworx spec file}]
+                    
+        if [OpenShift Cluster is Provisoned on Azure && No Storage Provisioned]
+            In Azure, at this point of time you can only go with 'portworx'
+                    ./setup-workspace.sh -p azure -s portworx  [-x {portworx spec file}]
+
+        if [OpenShift Cluster is Provisoned on aws && No Storage Provisioned]
+            In aws, at this point of time you can only go with 'portworx'
+                    ./setup-workspace.sh -p aws -s portworx  [-x {portworx spec file}]
+
+    fi        
+    ```
 
 4. The `setup-workspace.sh` script configures the `terraform.tfvars` file with reasonable defaults. There are no other changes required in order to run the automation.
 
@@ -358,6 +390,6 @@ Please refer to the [Troubleshooting Guide](./TROUBLESHOOTING.md) for uninstalla
 
 ## How to Generate this repository from teh source Bill of Materials.
 
-This set of automation packages was generated using the open-source [`isacable`](https://github.com/cloud-native-toolkit/iascable) tool. This tool enables a [Bill of Material yaml](https://github.com/cloud-native-toolkit/automation-solutions/tree/main/boms/software/maximo) file to describe your software requirements. If you want up stream releases or versions you can use `iascable` to generate a new terraform module.
+This set of automation packages was generated using the open-source [`isacable`](https://github.com/cloud-native-toolkit/iascable) tool. This tool enables a [Bill of Material yaml](https://github.com/cloud-native-toolkit/automation-solutions/tree/main/boms/software/integration) file to describe your software requirements. If you want up stream releases or versions you can use `iascable` to generate a new terraform module.
 
 > The `iascable` tool is targeted for use by advanced SRE developers. It requires deep knowledge of how the modules plug together into a customized architecture. This repository is a fully tested output from that tool. This makes it ready to consume for projects.

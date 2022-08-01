@@ -17,10 +17,6 @@ variable "region" {
   type = string
   description = "AWS Region the cluster is deployed in"
 }
-variable "aws-portworx_portworx_config" {
-  type = string
-  description = "Portworx configuration"
-}
 variable "aws-portworx_disk_size" {
   type = string
   description = "Disk size for each Portworx volume"
@@ -40,6 +36,21 @@ variable "aws-portworx_px_enable_csi" {
   type = bool
   description = "Enable CSI on PX"
   default = true
+}
+variable "aws-portworx_portworx_spec" {
+  type = string
+  description = "the value of aws-portworx_portworx_spec"
+  default = ""
+}
+variable "aws-portworx_portworx_spec_file" {
+  type = string
+  description = "The path to the file that contains the yaml spec for the Portworx config. Either the `portworx_spec_file` or `portworx_spec` must be provided. The instructions for creating this configuration can be found at https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md"
+  default = ""
+}
+variable "aws-portworx_enable_encryption" {
+  type = bool
+  description = "Flag indicating portworx volumes should be encrypted"
+  default = false
 }
 variable "server_url" {
   type = string
@@ -66,17 +77,17 @@ variable "cluster_skip" {
 }
 variable "cluster_cluster_version" {
   type = string
-  description = "The version of the cluster (passed through to the output)"
+  description = "[Deprecated] The version of the cluster (passed through to the output)"
   default = ""
 }
 variable "cluster_ingress_subdomain" {
   type = string
-  description = "The ingress subdomain of the cluster (passed through to the output)"
+  description = "[Deprecated] The ingress subdomain of the cluster (passed through to the output)"
   default = ""
 }
 variable "cluster_tls_secret_name" {
   type = string
-  description = "The name of the secret containing the tls certificates for the ingress subdomain (passed through to the output)"
+  description = "[Deprecated] The name of the secret containing the tls certificates for the ingress subdomain (passed through to the output)"
   default = ""
 }
 variable "cluster_ca_cert" {

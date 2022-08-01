@@ -1,5 +1,5 @@
 module "azure-portworx" {
-  source = "github.com/cloud-native-toolkit/terraform-azure-portworx?ref=v1.0.1"
+  source = "github.com/cloud-native-toolkit/terraform-azure-portworx?ref=v1.0.2"
 
   azure_client_id = var.azure_client_id
   azure_client_secret = var.azure_client_secret
@@ -17,7 +17,7 @@ module "azure-portworx" {
   px_enable_monitoring = var.azure-portworx_px_enable_monitoring
 }
 module "cluster" {
-  source = "github.com/cloud-native-toolkit/terraform-ocp-login?ref=v1.3.1"
+  source = "github.com/cloud-native-toolkit/terraform-ocp-login?ref=v1.5.1"
 
   ca_cert = var.cluster_ca_cert
   ca_cert_file = var.cluster_ca_cert_file

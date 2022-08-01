@@ -1,6 +1,8 @@
 module "cluster" {
-  source = "github.com/cloud-native-toolkit/terraform-ocp-login?ref=v1.2.12"
+  source = "github.com/cloud-native-toolkit/terraform-ocp-login?ref=v1.5.1"
 
+  ca_cert = var.cluster_ca_cert
+  ca_cert_file = var.cluster_ca_cert_file
   cluster_version = var.cluster_cluster_version
   ingress_subdomain = var.cluster_ingress_subdomain
   login_password = var.cluster_login_password
@@ -31,11 +33,6 @@ module "cp4i-apic" {
   gitops_config = module.gitops_repo.gitops_config
   name = var.cp4i-apic_name
   server_name = module.gitops_repo.server_name
-}
-module "cp4i-dependency-management" {
-  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.4"
-
-  cp4i_version = var.cp4i-dependency-management_cp4i_version
 }
 module "cp4i-es" {
   source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.11.2"
@@ -81,13 +78,24 @@ module "cp4i-pn" {
   name = var.cp4i-pn_name
   server_name = module.gitops_repo.server_name
 }
+module "cp4i-version-dependency" {
+  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.6"
+
+  cp4i_version = var.cp4i-version-dependency_cp4i_version
+}
 module "gitops_repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.16.0"
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.21.0"
 
   branch = var.gitops_repo_branch
+  debug = var.debug
+  gitea_host = var.gitops_repo_gitea_host
+  gitea_org = var.gitops_repo_gitea_org
+  gitea_token = var.gitops_repo_gitea_token
+  gitea_username = var.gitops_repo_gitea_username
   gitops_namespace = var.gitops_repo_gitops_namespace
   host = var.gitops_repo_host
   org = var.gitops_repo_org
+  project = var.gitops_repo_project
   public = var.gitops_repo_public
   repo = var.gitops_repo_repo
   sealed_secrets_cert = module.sealed-secret-cert.cert
@@ -98,67 +106,64 @@ module "gitops_repo" {
   username = var.gitops_repo_username
 }
 module "gitops-cp-ace" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-app-connect?ref=v1.0.5"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-app-connect?ref=v1.0.7"
 
   catalog = module.gitops-cp-catalogs.catalog_ibmoperators
   catalog_namespace = var.gitops-cp-ace_catalog_namespace
-  channel = module.cp4i-dependency-management.ace.channel
+  channel = module.cp4i-version-dependency.ace.channel
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   namespace = var.gitops-cp-ace_namespace
-  platform_navigator_name = module.gitops-cp-platform-navigator.name
+  platform_navigator_name = var.gitops-cp-ace_platform_navigator_name
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-ace-designer" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-ace-designer?ref=v1.0.1"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-ace-designer?ref=v1.0.3"
 
   ace_designer_instance_name = var.gitops-cp-ace-designer_ace_designer_instance_name
-  ace_designer_instance_namespace = var.gitops-cp-ace-designer_ace_designer_instance_namespace
-  ace_version = module.cp4i-dependency-management.ace.version
+  ace_version = module.cp4i-version-dependency.ace.version
   entitlement_key = module.gitops-cp-catalogs.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
-  is_ace_designer_required_dedicated_ns = var.gitops-cp-ace-designer_is_ace_designer_required_dedicated_ns
   is_map_assist_required = var.gitops-cp-ace-designer_is_map_assist_required
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  license = module.cp4i-dependency-management.ace.license
-  license_use = module.cp4i-dependency-management.ace.license_use
+  license = module.cp4i-version-dependency.ace.license
+  license_use = module.cp4i-version-dependency.ace.license_use
   namespace = module.cp4i-ace.name
   server_name = module.gitops_repo.server_name
   storage_class_4_couchdb = var.rwo_storage_class
   storage_class_4_mapassist = var.rwx_storage_class
 }
 module "gitops-cp-apic" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-apic?ref=v0.0.1"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-apic?ref=v0.0.2"
 
-  apic_version = module.cp4i-dependency-management.apic.version
+  apic_version = module.cp4i-version-dependency.apic.version
   catalog = var.gitops-cp-apic_catalog
   catalog_namespace = var.gitops-cp-apic_catalog_namespace
   entitlement_key = var.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  license_id = module.cp4i-dependency-management.apic.license
+  license_id = module.cp4i-version-dependency.apic.license
   namespace = module.cp4i-apic.name
   profile = var.gitops-cp-apic_profile
   server_name = module.gitops_repo.server_name
   storage_class = var.rwo_storage_class
-  usage = module.cp4i-dependency-management.apic.license_use
+  usage = module.cp4i-version-dependency.apic.license_use
 }
 module "gitops-cp-apic-operator" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-apic-operator?ref=v1.2.5"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-apic-operator?ref=v1.2.6"
 
   catalog = module.gitops-cp-catalogs.catalog_ibmoperators
   catalog_namespace = var.gitops-cp-apic-operator_catalog_namespace
-  channel = module.cp4i-dependency-management.apic.channel
+  channel = module.cp4i-version-dependency.apic.channel
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   namespace = var.gitops-cp-apic-operator_namespace
-  platform_navigator_name = module.gitops-cp-platform-navigator.name
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-catalogs" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.1"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.4"
 
   entitlement_key = var.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
@@ -167,21 +172,36 @@ module "gitops-cp-catalogs" {
   namespace = var.gitops-cp-catalogs_namespace
   server_name = module.gitops_repo.server_name
 }
+module "gitops-cp-es-operator" {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-es-operator?ref=v1.1.0"
+
+  catalog = module.gitops-cp-catalogs.catalog_ibmoperators
+  catalog_namespace = var.gitops-cp-es-operator_catalog_namespace
+  channel = module.cp4i-version-dependency.eventstreams.channel
+  git_credentials = module.gitops_repo.git_credentials
+  gitops_config = module.gitops_repo.gitops_config
+  namespace = var.gitops-cp-es-operator_namespace
+  server_name = module.gitops_repo.server_name
+}
 module "gitops-cp-event-streams" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams?ref=v1.1.3"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams?ref=v2.0.0"
 
   cpulimits = var.gitops-cp-event-streams_cpulimits
   cpurequests = var.gitops-cp-event-streams_cpurequests
   entitlement_key = module.gitops-cp-catalogs.entitlement_key
+  es_apiVersion = var.gitops-cp-event-streams_es_apiVersion
   es_version = var.gitops-cp-event-streams_es_version
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
+  kafka_inter_broker_protocol_version = var.gitops-cp-event-streams_kafka_inter_broker_protocol_version
+  kafka_listeners = var.gitops-cp-event-streams_kafka_listeners
+  kafka_log_message_format_version = var.gitops-cp-event-streams_kafka_log_message_format_version
   kafka_replicas = var.gitops-cp-event-streams_kafka_replicas
   kafka_storageclass = var.rwo_storage_class
   kafka_storagesize = var.gitops-cp-event-streams_kafka_storagesize
   kafka_storagetype = var.gitops-cp-event-streams_kafka_storagetype
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  license_use = module.cp4i-dependency-management.eventstreams.license_use
+  license_use = module.cp4i-version-dependency.eventstreams.license_use
   memorylimits = var.gitops-cp-event-streams_memorylimits
   memoryrequests = var.gitops-cp-event-streams_memoryrequests
   namespace = module.cp4i-es.name
@@ -194,57 +214,46 @@ module "gitops-cp-event-streams" {
   zookeeper_storagesize = var.gitops-cp-event-streams_zookeeper_storagesize
   zookeeper_storagetype = var.gitops-cp-event-streams_zookeeper_storagetype
 }
-module "gitops-cp-eventstreams-operator" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams-operator?ref=v1.0.1"
-
-  catalog = module.gitops-cp-catalogs.catalog_ibmoperators
-  catalog_namespace = var.gitops-cp-eventstreams-operator_catalog_namespace
-  channel = module.cp4i-dependency-management.eventstreams.channel
-  git_credentials = module.gitops_repo.git_credentials
-  gitops_config = module.gitops_repo.gitops_config
-  namespace = var.gitops-cp-eventstreams-operator_namespace
-  server_name = module.gitops_repo.server_name
-}
 module "gitops-cp-mq" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq?ref=v1.1.5"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq?ref=v1.1.6"
 
   catalog = module.gitops-cp-catalogs.catalog_ibmoperators
   catalog_namespace = var.gitops-cp-mq_catalog_namespace
-  channel = module.cp4i-dependency-management.mq.channel
+  channel = module.cp4i-version-dependency.mq.channel
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   namespace = var.gitops-cp-mq_namespace
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-mq-uniform-cluster" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq-uniform-cluster?ref=v1.0.3"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq-uniform-cluster?ref=v1.0.4"
 
   entitlement_key = module.gitops-cp-catalogs.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   ini_configmap = var.gitops-cp-mq-uniform-cluster_ini_configmap
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  license = module.cp4i-dependency-management.mq.license
-  license_use = module.cp4i-dependency-management.mq.license_use
+  license = module.cp4i-version-dependency.mq.license
+  license_use = module.cp4i-version-dependency.mq.license_use
   MQ_AvailabilityType = var.gitops-cp-mq-uniform-cluster_MQ_AvailabilityType
-  mq_version = module.cp4i-dependency-management.mq.version
+  mq_version = module.cp4i-version-dependency.mq.version
   mqsc_configmap = var.gitops-cp-mq-uniform-cluster_mqsc_configmap
   namespace = module.cp4i-mq-cluster.name
   server_name = module.gitops_repo.server_name
   storageClass = var.rwo_storage_class
 }
 module "gitops-cp-platform-navigator" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-platform-navigator?ref=v1.0.6"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-platform-navigator?ref=v2.0.0"
 
   catalog = module.gitops-cp-catalogs.catalog_ibmoperators
   catalog_namespace = var.gitops-cp-platform-navigator_catalog_namespace
-  channel = module.cp4i-dependency-management.platform_navigator.channel
+  channel = module.cp4i-version-dependency.platform_navigator.channel
   entitlement_key = module.gitops-cp-catalogs.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
-  instance_version = module.cp4i-dependency-management.platform_navigator.version
+  instance_version = module.cp4i-version-dependency.platform_navigator.version
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  license = module.cp4i-dependency-management.platform_navigator.license
+  license = module.cp4i-version-dependency.platform_navigator.license
   namespace = module.cp4i-pn.name
   replica_count = var.gitops-cp-platform-navigator_replica_count
   server_name = module.gitops_repo.server_name
@@ -252,7 +261,7 @@ module "gitops-cp-platform-navigator" {
   subscription_namespace = var.gitops-cp-platform-navigator_subscription_namespace
 }
 module "gitops-cp-queue-manager" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-queue-manager?ref=v1.0.5"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-queue-manager?ref=v1.0.6"
 
   config_map = var.gitops-cp-queue-manager_config_map
   cpulimits = var.gitops-cp-queue-manager_cpulimits
@@ -261,9 +270,9 @@ module "gitops-cp-queue-manager" {
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  license = module.cp4i-dependency-management.mq.license
-  license_use = module.cp4i-dependency-management.mq.license_use
-  mq_version = module.cp4i-dependency-management.mq.version
+  license = module.cp4i-version-dependency.mq.license
+  license_use = module.cp4i-version-dependency.mq.license_use
+  mq_version = module.cp4i-version-dependency.mq.version
   namespace = module.cp4i-mq.name
   qmgr_instance_name = var.gitops-cp-queue-manager_qmgr_instance_name
   qmgr_name = var.gitops-cp-queue-manager_qmgr_name
