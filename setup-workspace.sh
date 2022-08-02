@@ -154,16 +154,37 @@ Summarize_the_Choice()
       echo " "
       echo "Choices being made....."
       echo " "
-      echo "      1. All - APIC/MQ/ES/ACE/PlatformNavigator : " ${bomIdMap["$bom_280"]}
-      echo "      2. Platform Navigator                     : " ${bomIdMap["$bom_215"]}
-      echo "      3. IBM API Connect                        : " ${bomIdMap["$bom_220"]}
-      echo "      4. IBM MQ                                 : " ${bomIdMap["$bom_230"]}
-      echo "      5. IBM App Connect Enterprise             : " ${bomIdMap["$bom_240"]}
-      echo "      6. IBM EventStreams                       : " ${bomIdMap["$bom_250"]}
-      echo "      7. BM MQ Uniform Cluster                  : " ${bomIdMap["$bom_260"]}
+      if [ ${bomIdMap["$bom_280"]} == 'y' ] ; then
+        echo "       All - APIC/MQ/ES/ACE/PlatformNavigator : " ${bomIdMap["$bom_280"]}
+      fi
+      if [ ${bomIdMap["$bom_215"]} == 'y' ] ; then
+        echo "       Platform Navigator                     : " ${bomIdMap["$bom_215"]}
+      fi
+      if [ ${bomIdMap["$bom_220"]} == 'y' ] ; then
+        echo "       IBM API Connect                        : " ${bomIdMap["$bom_220"]}
+      fi
+      if [ ${bomIdMap["$bom_230"]} == 'y' ] ; then
+        echo "       IBM MQ                                 : " ${bomIdMap["$bom_230"]}
+      fi
+      if [ ${bomIdMap["$bom_240"]} == 'y' ] ; then
+        echo "       IBM App Connect Enterprise             : " ${bomIdMap["$bom_240"]}
+      fi
+      if [ ${bomIdMap["$bom_250"]} == 'y' ] ; then
+        echo "       IBM EventStreams                       : " ${bomIdMap["$bom_250"]}
+      fi
+      if [ ${bomIdMap["$bom_260"]} == 'y' ] ; then
+        echo "       IBM MQ Uniform Cluster                  : " ${bomIdMap["$bom_260"]}
+      fi
 
       echo "      CLOUD_PROVIDER                             : "$CLOUD_PROVIDER
-      echo "      STORAGE                                    : "$STORAGE
+      if [ -z $STORAGE  ] ; then
+        echo "      STORAGE                                    : "'Already Provisioned'
+      else
+        echo "      STORAGE                                    : "$STORAGE
+      fi
+
+
+      
 }
 
 Get_Confirmation_To_Proceed()
