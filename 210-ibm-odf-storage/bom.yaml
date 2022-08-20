@@ -42,7 +42,7 @@ spec:
       version: v1.21.0
     - name: ocp-login
       alias: cluster
-      version: v1.5.1
+      version: v1.6.0
     - name: olm
       version: v1.3.2
     - name: gitops-namespace

@@ -41,7 +41,7 @@ variable "rwx_storage_class" {
 variable "gitops-cp-apic_profile" {
   type = string
   description = "apic profile template"
-  default = "n1xc7.m48"
+  default = ""n1xc7.m48" "
 }
 variable "entitlement_key" {
   type = string
@@ -168,9 +168,9 @@ variable "gitops-cp-event-streams_kafka_log_message_format_version" {
   default = "3.2"
 }
 variable "gitops-cp-event-streams_kafka_listeners" {
-  type = list
+  type = string
   description = "Kafka listerners defaults to secure - override to provide light-insecure"
-  default = []
+  default = "[]"
 }
 variable "gitops-cp-mq_namespace" {
   type = string
