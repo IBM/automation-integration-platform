@@ -57,7 +57,9 @@ do
   echo "***** Applying ${name} *****"
 
   cd "${name}" && \
+    source ../credentials.properties && \
     terraform init && \
+    terraform plan && \
     terraform apply -parallelism=$PARALLELISM -auto-approve && \
     cd - 1> /dev/null || \
     exit 1

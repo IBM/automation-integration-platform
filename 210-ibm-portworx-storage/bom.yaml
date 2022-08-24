@@ -39,10 +39,10 @@ spec:
       version: v1.21.0
     - name: ibm-resource-group
       alias: resource_group
-      version: v3.3.2
+      version: v3.3.3
     - name: ocp-login
       alias: cluster
-      version: v1.5.1
+      version: v1.6.0
     - name: olm
       version: v1.3.2
     - name: gitops-namespace
