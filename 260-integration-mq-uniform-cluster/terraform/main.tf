@@ -1,5 +1,5 @@
 module "cluster" {
-  source = "github.com/cloud-native-toolkit/terraform-ocp-login?ref=v1.5.1"
+  source = "github.com/cloud-native-toolkit/terraform-ocp-login?ref=v1.6.0"
 
   ca_cert = var.cluster_ca_cert
   ca_cert_file = var.cluster_ca_cert_file
@@ -24,7 +24,7 @@ module "cp4i-mq-cluster" {
   server_name = module.gitops_repo.server_name
 }
 module "cp4i-version-dependency" {
-  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.6"
+  source = "github.com/cloud-native-toolkit/terraform-cp4i-dependency-management?ref=v1.2.7"
 
   cp4i_version = var.cp4i-version-dependency_cp4i_version
 }

@@ -35,7 +35,7 @@ spec:
           scope: global
     - name: ocp-login
       alias: cluster
-      version: v1.5.1
+      version: v1.6.0
   variables:
     - name: azure_subscription_id
       type: string

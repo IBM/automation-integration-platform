@@ -17,7 +17,7 @@ spec:
       version: v0.1.0
     - name: ocp-login
       alias: cluster
-      version: v1.5.1
+      version: v1.6.0
   variables:
     - name: region
       type: string
