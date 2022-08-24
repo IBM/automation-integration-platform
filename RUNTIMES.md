@@ -21,7 +21,7 @@ Once installed, use the automation template's `launch.sh` script to launch an in
 
 ### Multipass
 
-[Multipass](https://multipass.run/) is a simplified Ubuntu Linux Virtual Machine that you can spin up with a single command.   With this option you spin up a virtual machine with a predifined configuration that is ready to run the Terraform automation.  
+[Multipass](https://multipass.run/) is a simplified Ubuntu Linux Virtual Machine that you can spin up with a single command.   With this option you spin up a virtual machine with a predefined configuration that is ready to run the Terraform automation.
 
 You can download and install Multipass from <https://multipass.run/install>
 
@@ -51,7 +51,7 @@ Launch the Multipass virtual machine using the following command:
 multipass launch --name cli-tools --cloud-init ./cli-tools.yaml
 ```
 
-This will take several minutes to start the virtual machine and apply the configuration.  
+This will take several minutes to start the virtual machine and apply the configuration.
 
 Once the virtual machine is started, you need to mount the local  file system for use within the virtual machine.
 
@@ -64,15 +64,15 @@ multipass mount $PWD cli-tools:/automation
 This will mount the parent directory to the `/automation` directory inside of the virtual machine.
 
 
-> ⚠️ MacOS users may encounter the following error if Multipass has not been granted file system access.  
+> ⚠️ MacOS users may encounter the following error if Multipass has not been granted file system access.
 > ```
 > mount failed: source "{current directory}" is not readable
 > ```
-> 
+>
 > If you encounter this error, then you need to enable full disk access in the operating system before you can successfully mount the volume.  Go to `System Preferences`, then go to `Security and Privacy`, and select the `Privacy` tab.  Scroll the list on the left and select "Full Disk Access" and allow access for `multipassd`.
 >
 > ![Multipass security settings](https://github.com/cloud-native-toolkit/automation-solutions/raw/main/common-files/multipass-security.png)
-> 
+>
 > After granting access to `multipassd`, then re-run the `multipass mount $PWD cli-tools:/automation` command.
 
 Once the virtual machine has started, run the following command to enter an interactive shell:
@@ -87,7 +87,9 @@ Once in the shell, `cd` into the `/automation/{template}` folder, where `{templa
 source credentials.properties
 ```
 
-Once complete, you will be in an interactive shell that is preconfigured with all dependencies necessary to execute the Terraform automation.
+Once complete, you will be in an interactive shell that is pre-configured with all dependencies necessary to execute the Terraform automation.
+
+> ⚠️ Some MacOS users have reported network connectivity issues with Multipass when Cisco Anyconnect VPN is running at the same time.  If you encounter this issue, please quit Cisco Anyconnect and restart the Multipass VM. AnyConnect cannot be restarted while Multipass is running or the network will be killed, which will break any in progress deployments.
 
 ----
 
@@ -97,10 +99,10 @@ Additional container engines, such as podman or colima may be used at your own r
 
 Known issues include:
 
- 1. Network/DNS failures under load
- 1. Read/write permissions to local storage volumes
- 1. Issues running binary executables from volumes mounted from the host
- 1. Time drift issues when hosts are suspended/resumed
+1. Network/DNS failures under load
+1. Read/write permissions to local storage volumes
+1. Issues running binary executables from volumes mounted from the host
+1. Time drift issues when hosts are suspended/resumed
 
 ### Colima instructions
 
@@ -115,7 +117,7 @@ Known issues include:
 
 ### Podman instructions
 
-Unlike Docker which traditionally has separated a cli from a daemon-based container engine, [Podman](https://podman.io) is a daemonless container engine originally developed for [Linux](#getting-started-with-podman-for-linux) systems. There is a [MacOS](#getting-started-with-podman-for-macos) port which has sufficent features to support running the automation based on container images. Podman can run containers in root or rootless mode. Current permissions setup in the `launch.sh` script will require root mode.
+Unlike Docker which traditionally has separated a cli from a daemon-based container engine, [Podman](https://podman.io) is a daemon-less container engine originally developed for [Linux](#getting-started-with-podman-for-linux) systems. There is a [MacOS](#getting-started-with-podman-for-macos) port which has sufficient features to support running the automation based on container images. Podman can run containers in root or rootless mode. Current permissions setup in the `launch.sh` script will require root mode.
 
 #### Getting started with Podman for MacOS
 
@@ -138,13 +140,13 @@ Once the podman vm is started, use the automation template's `launch.sh` script 
 
 ##### Dealing with known issues for Podman on MacOS
 
-- When resuming from suspend, if the podman machine is left running, it will not automatically syncronize to the host clock. This will cause the podman machine to lose time. Either stop/restart the podman machine or define an alias like this in your startup scripts:
+- When resuming from suspend, if the podman machine is left running, it will not automatically synchronize to the host clock. This will cause the podman machine to lose time. Either stop/restart the podman machine or define an alias like this in your startup scripts:
 
     ```shell
     alias fpt="podman machine ssh \"sudo chronyc -m 'burst 4/4' makestep; date -u\""
     ```
 
-    then fix podman time with the `fpt` command.
+  then fix podman time with the `fpt` command.
 
 - There is currently an QEMU bug which prevents binary files that should be executable by the podman machine vm from operating from inside a mounted volume path. This is most common when using the host automation directory, vs a container volume like `/workspaces` for running the automation. Generally the cli-tools image will have any binary needed and the `utils-cli` module will symbolically link, vs. download a new binary into this path. However there can be drift between binaries in `cli-tools` image used by `launch.sh` and those requested to the `utils-cli` module.
 
