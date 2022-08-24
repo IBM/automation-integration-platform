@@ -428,6 +428,7 @@ ln -s "${SCRIPT_DIR}/terraform.tfvars" ./terraform.tfvars
 
 cp "${SCRIPT_DIR}/apply-all.sh" "${WORKSPACE_DIR}/apply-all.sh"
 cp "${SCRIPT_DIR}/destroy-all.sh" "${WORKSPACE_DIR}/destroy-all.sh"
+cp "${SCRIPT_DIR}/credentials.properties" "${WORKSPACE_DIR}/credentials.properties"
 
 
 WORKSPACE_DIR=$(cd "${WORKSPACE_DIR}"; pwd -P)
