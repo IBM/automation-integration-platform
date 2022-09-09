@@ -1,6 +1,5 @@
-# TechZone Automation - Cloud Pak for Integration 2022.2.1 - Automation for AWS, Azure, and IBM Cloud
-
-  
+# Cloud Pak for Integration 2022.2.1 - Automation for AWS, Azure, and IBM Cloud 
+Created with **Techzone Accelerator Toolkit** 
 
 ### Change Log
 
