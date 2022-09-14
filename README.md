@@ -1,10 +1,11 @@
 # Cloud Pak for Integration 2022.2.1 - Automation for AWS, Azure, and IBM Cloud 
-Created with **Techzone Accelerator Toolkit** 
+
+Created with ***Techzone Accelerator Toolkit***
 
 ### Change Log
 
 - **08/2022** - Added CP4I version, fixed broken links
--  **07/2022** - Initial Release
+- **07/2022** - Initial Release
 
   
 > This collection of Cloud Pak for Integration terraform automation layers has been crafted from a set of [Terraform modules](https://modules.cloudnativetoolkit.dev/) created by the IBM GSI Ecosystem Lab team part of the [IBM Partner Ecosystem organization](https://www.ibm.com/partnerworld/public?mhsrc=ibmsearch_a&mhq=partnerworld). Please contact **Matthew Perrins**  _mjperrin@us.ibm.com_, **Sean Sundberg**  _seansund@us.ibm.com_, **Andrew Trice**  _amtrice@us.ibm.com_, **Gowdhaman Jayaseelan**  _gjayasee@in.ibm.com_, **Keshav Anand**  _keshav.anand@in.ibm.com_, **Vijay K Sukthankar**  _vksuktha@in.ibm.com_ or **Jyoti Rani**  _jyotirani10@in.ibm.com_ for more details or raise an issue on the repository.
