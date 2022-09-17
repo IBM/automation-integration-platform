@@ -37,12 +37,12 @@ variable "aws-portworx_px_enable_csi" {
   description = "Enable CSI on PX"
   default = true
 }
-variable "aws-portworx_portworx_spec" {
+variable "portworx_spec" {
   type = string
-  description = "the value of aws-portworx_portworx_spec"
+  description = "the value of portworx_spec"
   default = ""
 }
-variable "aws-portworx_portworx_spec_file" {
+variable "portworx_spec_file" {
   type = string
   description = "The path to the file that contains the yaml spec for the Portworx config. Either the `portworx_spec_file` or `portworx_spec` must be provided. The instructions for creating this configuration can be found at https://github.com/cloud-native-toolkit/terraform-azure-portworx/blob/main/PORTWORX_CONFIG.md"
   default = ""

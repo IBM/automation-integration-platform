@@ -21,8 +21,13 @@ gitops_repo_org="<your gitorg - most likely your username>"
 ## gitops-repo_repo: The short name of the repository (i.e. the part after the org/group name)
 gitops_repo_repo="TO_BE_REPLACED_PREFIXcp4i-gitops"
 
-## gitops-cluster-config_banner_text: The text that will appear in the top banner in the cluster
-gitops-cluster-config_banner_text="Cloud Pak for Integration"
+## config_banner_text: The text that will appear in the top banner in the cluster
+config_banner_text="Cloud Pak for Integration"
 
-## portworx_spec_file: The name of the file containing the Portworx configuration spec yaml
-portworx_spec_file="TO_BE_REPLACED_PORTWORX_SPEC_FILE"
+
+## REGION: Required for all providers while setting up Portworx storage
+region="TO_BE_REPLACED_REGION"
+
+
+## portworx_spec_file_content in base64 encoded: 
+portworx_spec="TO_BE_REPLACED_CONTENT_OF_PORTWORX_SPEC_IN_BASE64_ENCODED"

@@ -1,4 +1,4 @@
-# Cloud Pak for Integration 2022.2.1 - Automation for AWS, Azure, and IBM Cloud 
+# TechZone Automation - Cloud Pak for Integration 2022.2.1 - Automation for AWS, Azure, and IBM Cloud
 
 Created with ***Techzone Accelerator Toolkit***
 
@@ -212,6 +212,10 @@ We recommend using Docker Desktop if choosing the container image method, and Mu
 
 
 ##### Configure Storage
+###### Deploying RookNFS Server on IBM Cloud, Azure & AWS
+In Cloud Pak for Integration v2022.2.1, IBM introduced the support for deploying Rook NFS server which would facilitate the deployment of PlatformNavigator using the underlying RWO (ReadWriteOnce) storage. The instruction provided in https://www.ibm.com/docs/en/cloud-paks/cp-integration/2022.2?topic=ui-deploying-platform-rwo-storage is automated in this integration-automation asset. 
+⚠️`IMPORTANT: Please be noted. Use this storage in case of PoC/PoTs/Demos. Leverage IBM ODF or Portworx for real customer engagement.` ⚠️
+If you decided to use this, move on to `Set up the Runtime Environment` section.
 ###### Deploying on IBM Cloud (Portworx or ODF)
 
 1. Provide the IBM Cloud API Key for the target IBM Cloud account as the value for `TF_VAR_ibmcloud_api_key`
@@ -255,14 +259,14 @@ You can install these clis on your local machine **OR** run the following comman
     }
     ```
 
-4. If you used the container image to run the script, type `exit` to close the container shell then re-rung `launch.sh` to pick up the changes to the environment variables.
+4. If you used the container image to run the script, type `exit` to close the container shell then re-run `launch.sh` to pick up the changes to the environment variables.
 
 ##### Configure the automation
 
 ###### Get the Portworx configuration spec (for AWS or Azure deployments)
 
 5. Follow the steps to download the [portworx confituration spec](./PORTWORX_CONFIG.md)
-6. Copy the downloaded file into the root directory of the cloned automation-maximo-app-suite repository
+6. Copy the downloaded file into the root directory of the cloned automation-integration repository
 
 
 ###### Set up the runtime environment
@@ -285,43 +289,64 @@ We recommend using Docker Desktop if choosing the container image method, and Mu
 
 2. Next we need to set up the working directory for the automation:
    ⚠️`IMPORTANT NOTE:` ⚠️  setup-workspace.sh script is responsible for choosing the required module to be deployed on Openshift Cluster. The module we refer here is cater to "GitOps,Storage & Cloud Pak capabilities(PlatformNavigator,APIC,MQ,ACE & EventStreams)". 
+   
+   2a. If you decision was to use RookNFS storage
+   ```shell
+        ./setup-workspace-with-rook-NFS.sh [-p {cloud provider}] [-n {prefix name}] 
+   ```
+      where:
+   - **cloud provider**  - the target cloud provider for the deployment (`aws`, `azure`, or `ibm`)
+   - **prefix name** (optional) - the name prefix that will be used for the gitops repo
+
+    At this stage, We assume you have Openshift Cluster is up & running. Following info will help the user in setting up the right workspace.
+    ```
+
+        if [OpenShift Cluster is Provisoned on IBM Cloud ]
+            ./setup-workspace-with-rook-NFS.sh -p ibm 
+                    
+        if [OpenShift Cluster is Provisoned on AWS ]
+            ./setup-workspace-with-rook-NFS.sh -p aws 
+                    
+        if [OpenShift Cluster is Provisoned on Azure ]
+            ./setup-workspace-with-rook-NFS.sh -p azure 
+         
+    ```   
+    2b. If you decided to go with 'odf' or 'portworx' storage
     
    ```shell
-        ./setup-workspace.sh [-p {cloud provider}] [-s {storage}] [-n {prefix name}] [-x {portworx spec file}]
+        ./setup-workspace.sh [-p {cloud provider}] [-s {storage}] [-r {region}] [-x {portworx spec file}] [-n {prefix name}] 
    ```
     
    where:
    - **cloud provider**  - the target cloud provider for the deployment (`aws`, `azure`, or `ibm`)
    - **storage**  - the intended storage provider (`portworx` or `odf`)
+   - **region** (mandatory in case of `azure` & `aws`)   - the region where OpenShift Cluster is deployed
    - **prefix name** (optional) - the name prefix that will be used for the gitops repo
-   - **portworx spec file** (optional) - the name of the file containing the Portworx configuration spec yaml
+   - **portworx spec file** (mandatory in case of `azure` & `aws`) - the name of the file containing the Portworx configuration spec yaml
    
     At this stage, We assume you have Openshift Cluster is up & running. Following info will help the user in setting up the right workspace.
     ```
-    if [OpenShift Cluster is already provioned with 'Storage']         
-        There is No necessacity to execute any module cater to provision Storage in cluster. Hence
-         ./setup-workspace.sh -p ibm 
-    else
+
         if [OpenShift Cluster is Provisoned on IBM Cloud && No Storage Provisioned]
             In IBM Cloud you have a choice to provision 'Open Data Foundation' or 'Portworx'
             In case 
                 'OpenData Foundation' :
-                    ./setup-workspace.sh -p ibm -s odf 
+                    ./setup-workspace-with-odf-or-portworx.sh -p ibm -s odf 
                 'portworx' :
-                    ./setup-workspace.sh -p ibm -s portworx  [-x {portworx spec file}]
+                    ./setup-workspace-with-odf-or-portworx.sh -p ibm -s portworx -r [{ region where OCP is provisioned }] [-x {portworx spec file}]
                     
         if [OpenShift Cluster is Provisoned on Azure && No Storage Provisioned]
             In Azure, at this point of time you can only go with 'portworx'
-                    ./setup-workspace.sh -p azure -s portworx  [-x {portworx spec file}]
+                    ./setup-workspace-with-odf-or-portworx.sh -p azure -s portworx -r [{ region where OCP is provisioned }] [-x {portworx spec file}]
 
         if [OpenShift Cluster is Provisoned on aws && No Storage Provisioned]
             In aws, at this point of time you can only go with 'portworx'
-                    ./setup-workspace.sh -p aws -s portworx  [-x {portworx spec file}]
+                    ./setup-workspace-with-odf-or-portworx.sh -p aws -s portworx -r [{ region where OCP is provisioned }] [-x {portworx spec file}]
 
-    fi        
+         
     ```
 
-3. The `setup-workspace.sh` script configures the `terraform.tfvars` file with reasonable defaults. There are no other changes required in order to run the automation.
+3. The `setup-workspace.sh` script configures the `terraform.tfvars` file with reasonable defaults.
 
      **Note:** 
      The default `terraform.tfvars` file is symbolically linked to the new `workspaces/current` folder so this enables you to edit the file in your native operating system using your editor of choice.
@@ -330,17 +355,17 @@ The following are variables that you will be updating. Here are some suggested v
 
 | Variable                          | Description                                                                                                                                                      | Suggested Value                                       | 
 |-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------
-| rwx_storage_class                 | The storage class to use for Read-Write-Many volumes. Use a portworx or odf storage class (e.g. portworx: portworx-rwx-gp3-sc or odf: ocs-storagecluster-cephfs) | portworx-rwx-gp3-sc                                   |
-| rwo_storage_class                 | The storage class to use for Read-Write-One volumes.  on aws: `gp2`, on azure: `managed-premium`, on ibm: `ibmc-vpc-block-10iops-tier`                           | ibmc-vpc-block-10iops-tier                            |
+| rwx_storage_class                 | The storage class to use for Read-Write-Many volumes. | In case of 'ibm cloud' & 'odf' storage it is 'ocs-storagecluster-cephfs'. In case of 'aws' cloud & 'portworx' storage it is 'portworx-gp3-sc'. In case of 'azure' cloud & 'portworx' storage it is 'portworx-gp3-sc'. In case of 'aws' or 'aws' or 'azure' cloud & 'RookNFS' storage it is 'integration-storage' |
+| rwo_storage_class                 | The storage class to use for Read-Write-One volumes.  on aws: `gp2`, on azure: `managed-premium`, on ibm: `ibmc-vpc-block-10iops-tier`                           | In case of 'ibm cloud' & 'odf' storage it is 'ibmc-vpc-block-10iops-tie'. In case of 'aws' cloud & 'portworx' storage it is 'gp2'. In case of 'azure' cloud & 'portworx' storage it is 'managed-premium'                      |
 | gitops_repo_host                  | The host for the git repository.                                                                                                                                 | github.com                                            |
 | gitops_repo_type                  | The type of the hosted git repository (github or gitlab).                                                                                                        | github                                                |
 | gitops_repo_org                   | The org/group where the git repository will be created. If the value is left blank then it will default to the username                                          | github userid or org                                  |
 | gitops_repo_repo                  | The short name of the repository to create                                                                                                                       | cp4i-gitops                                  |
-| gitops-cluster-config_banner_text | Banner text for the cluster console                                                                                                                              | Cloud Pak for Integration                              |
-| portworx_spec_file                | The name of the file containing the portworx configuration spec yaml                                                                                             | portworx_essentials.yaml                              |
+| config_banner_text | Banner text for the cluster console                                                                                                                              | Cloud Pak for Integration                              |
+| portworx_spec                | The content of Portworx yaml in base64 encoded format                                                                                             | Will be setup by setup-workspace-with-odf-or-portworx                              |
 
-1. Update the desired values in `terraform.tfvars`
-2. Save the `terraform.tfvars` file
+1. Scan through the `terraform.tfvars` file thouroughly and double check the values based on your environment. 
+2. Save the `terraform.tfvars` file.
 
 #### Apply the automation
 1. We are now ready to start installing Cloud Pak for Integration. Ensure you are inside the running container or Multipass VM.
@@ -371,6 +396,6 @@ Please refer to the [Troubleshooting Guide](./TROUBLESHOOTING.md) for uninstalla
 
 ## How to Generate this repository from the source Bill of Materials.
 
-This set of automation packages was generated using the open-source [`isacable`](https://github.com/cloud-native-toolkit/iascable) tool. This tool enables a [Bill of Material yaml](https://github.com/cloud-native-toolkit/automation-solutions/tree/main/boms/software/maximo) file to describe your software requirements. If you want up stream releases or versions you can use `iascable` to generate a new terraform module.
+This set of automation packages was generated using the open-source [`isacable`](https://github.com/cloud-native-toolkit/iascable) tool. This tool enables a [Bill of Material yaml](https://github.com/cloud-native-toolkit/automation-solutions/tree/main/boms/software/integration) file to describe your software requirements. If you want up stream releases or versions you can use `iascable` to generate a new terraform module.
 
 > The `iascable` tool is targeted for use by advanced SRE developers. It requires deep knowledge of how the modules plug together into a customized architecture. This repository is a fully tested output from that tool. This makes it ready to consume for projects.

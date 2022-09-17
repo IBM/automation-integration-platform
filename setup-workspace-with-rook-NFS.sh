@@ -12,19 +12,34 @@ bomIdMap=(
     ["bom_260"]="n"
     ["bom_280"]="n"
     )
-CLOUD_PROVIDER=""
-STORAGE=""
-PREFIX_NAME=""
+
 Confirm_To_Proceed=""
 SCRIPT_DIR=""
 WORKSPACES_DIR=""
 WORKSPACE_DIR=""
 VALID_CLOUD_PROVIDERS=("ibm","aws","azure")
 VALID_STORAGE_PROVIDERS=("odf","portworx")
+STORAGE_CLASS_4_IBM_ODF=""
 
+CLOUD_PROVIDER=""
+STORAGE=""
+PREFIX_NAME=""
 RWO_STORAGE=""
 RWX_STORAGE=""
+REGION=""
 PORTWORX_SPEC_FILE=""
+PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED=""
+DEFAULT_RWO_STORAGECLASS_IBM="ibmc-vpc-block-10iops-tier"
+DEFAULT_RWO_STORAGECLASS_AWS="gp2"
+DEFAULT_RWO_STORAGECLASS_AZURE="managed-premium"
+
+
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+GREEN='\033[0;32m'
+PURPLE='\033[0;35m'
+YELLOW='\033[33;5m'
+
 
 
 
@@ -34,8 +49,7 @@ Usage()
    echo
    echo "Usage: setup-workspace.sh"
    echo "  options:"
-   echo "  -p     Cloud provider (aws, azure, ibm)"
-   echo "  -s     Storage (portworx or odf)"
+   echo "  -p     Cloud provider valid values (aws, azure, ibm)"
    echo "  -n     (optional) prefix that should be used for all variables"
    echo "  -h     Print this help"
    echo
@@ -44,38 +58,30 @@ Usage()
 
 Validate_Input_Param()
 {
-  # if [ -z "$CLOUD_PROVIDER" ] || [ -z "$STORAGE" ]; then
-  #   echo "You must provide Cloud Provider!!!"
-  #   Usage
-  #   exit 1
-  # fi
 
   if [ -z "$CLOUD_PROVIDER" ] ; then
-    echo "Cloud Provider Can not be empty."
+    echo -e "${RED}Cloud Provider Can not be empty.${NC}"
     Usage
     exit 1
   fi
 
   if [[ ! ${VALID_CLOUD_PROVIDERS[*]} =~ ${CLOUD_PROVIDER} ]]; then
-    echo "Invalid Cloud Provider. Valid Choice are (ibm/azure/aws)!!!!!!"
+    echo -e "${RED} Invalid Cloud Provider.${NC} Valid Choice are (ibm/azure/aws)!!!!!!"
     Usage
     exit 1
   fi
 
-# If Storage provider is provided then it has be a valid one
-  if [ ! -z "$STORAGE" ] ; then
-    if [[ ! ${VALID_STORAGE_PROVIDERS[*]} =~ ${STORAGE} ]]; then
-      echo "Invalid Storage Provider. Valid Choice are (odf/portworx)!!!!!!"
-      Usage
-      exit 1
-    fi
-  fi  
-
-  if [ ! -z "$CLOUD_PROVIDER" ] && [  -z "$STORAGE" ] ; then
-    echo "********** It is assumed that OpenShift Cluster is already provisioned with Storage ***********"
-  fi
 
 }
+
+Print_Input_Params()
+{
+  echo -e "${PURPLE}Validated Input Params are ${NC}"
+  echo -e " ${GREEN} Cloud Provider        : $CLOUD_PROVIDER"
+  echo -e " --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- "
+  
+}
+
 
 Select_Individual_Capabilities()
 {
@@ -113,7 +119,7 @@ Select_Individual_Capabilities()
 Select_CP4I_Capabilities()
 {
 
-  echo "The following steps are crucial as the choice of CP4i Capabilities to be chosen for deployment"
+  echo -e "${PURPLE}The following steps are crucial as the choice of CP4i Capabilities to be chosen for deployment ${NC}"
   echo "      1. PlatformNavigator(Mandatory & Must have)"
   echo "      2. IBM APIConnect"
   echo "      3. IBM MQ"
@@ -121,7 +127,7 @@ Select_CP4I_Capabilities()
   echo "      5. IBM EventStreams"
   echo "      6. IBM MQ Uniform Cluster"
   #echo "      7. ALL THE ABOVE"
-  echo "Let us start ...."
+  echo -e "${PURPLE}Let us start ....${NC}"
 
         Select_Individual_Capabilities "bom_280" 'ALL the listed capabilities instead of choosing 1-by-1'
         #If the 280 is chosen, then no need to check for individual capabilities
@@ -152,7 +158,7 @@ Set_Others_To_No()
 Summarize_the_Choice()
 {
       echo " "
-      echo "Choices being made....."
+      echo -e "${PURPLE}Choices being made.....${NC}"
       echo " "
       if [ ${bomIdMap["$bom_280"]} == 'y' ] ; then
         echo "       All - APIC/MQ/ES/ACE/PlatformNavigator : " ${bomIdMap["$bom_280"]}
@@ -173,17 +179,11 @@ Summarize_the_Choice()
         echo "       IBM EventStreams                       : " ${bomIdMap["$bom_250"]}
       fi
       if [ ${bomIdMap["$bom_260"]} == 'y' ] ; then
-        echo "       IBM MQ Uniform Cluster                  : " ${bomIdMap["$bom_260"]}
-      fi
-
-      echo "      CLOUD_PROVIDER                             : "$CLOUD_PROVIDER
-      if [ -z $STORAGE  ] ; then
-        echo "      STORAGE                                    : "'Already Provisioned'
-      else
-        echo "      STORAGE                                    : "$STORAGE
+        echo "       IBM MQ Uniform Cluster                 : " ${bomIdMap["$bom_260"]}
       fi
 
 
+  echo -e " ---------------------------------------------------------------------------------------------------- "
       
 }
 
@@ -215,8 +215,124 @@ Get_Confirmation_To_Proceed()
     done  
 }
 
+
+Install_RookNFS()
+{
+  SCRIPT_DIR=$(cd $(dirname $0); pwd -P)
+  WORKSPACES_DIR="${SCRIPT_DIR}/../workspaces"
+  RookNFS_WORKDIR="${WORKSPACES_DIR}/rook-nfs-workdir"
+
+  mkdir -p "${RookNFS_WORKDIR}"
+
+  #IMAGE_TO_FIND="rook/nfs:v1.7.3"
+  export IMAGE_TO_REPLACE="icr.io/cpopen/cpd/rook-nfs:kz-220512"
+  export PROVIDE_EXISTING_RWO_STORAGECLASS_NAME=""
+
+  echo ">>>${SCRIPT_DIR} "
+  echo ">>>${RookNFS_WORKDIR}"
+    
+  if [ $CLOUD_PROVIDER == 'ibm' ]  ; then
+    PROVIDE_EXISTING_RWO_STORAGECLASS_NAME=$DEFAULT_RWO_STORAGECLASS_IBM
+  elif [ $CLOUD_PROVIDER == 'aws' ]  ; then
+    PROVIDE_EXISTING_RWO_STORAGECLASS_NAME=$DEFAULT_RWO_STORAGECLASS_AWS
+  elif [ $CLOUD_PROVIDER == 'azure' ]  ; then
+    PROVIDE_EXISTING_RWO_STORAGECLASS_NAME=$DEFAULT_RWO_STORAGECLASS_AZURE
+  else
+    echo "Invalid Cloud Provider.. Hence Exiting the process..."
+    exit 0
+  fi
+  
+  cp ${SCRIPT_DIR}/rook-nfs/* ${RookNFS_WORKDIR}
+  
+  cd "${RookNFS_WORKDIR}"
+  
+  yq -i '.spec.storageClassName=env(PROVIDE_EXISTING_RWO_STORAGECLASS_NAME)' nfs-pwx-claim_pvc.yaml
+  
+  #Remove the already cloned dir if exist
+  rm -rf nfs
+
+  git clone --single-branch --branch v1.7.3 https://github.com/rook/nfs.git 
+
+  cd nfs/cluster/examples/kubernetes/nfs
+
+  if ! oc login "${TF_VAR_server_url}" --token="${TF_VAR_cluster_login_token}" --insecure-skip-tls-verify=true 1> /dev/null; then
+    echo -e "${RED} Error While Login to OCP to setup RookNFS server ${NC}"
+    exit 1
+  fi
+
+  yq -i '.spec.template.spec.containers[].image=env(IMAGE_TO_REPLACE)' operator.yaml
+
+  # #Apply the CustomResourceDefinitions to the cluster:
+  oc apply -f crds.yaml
+
+  # #Create the operator deployment:
+  oc apply -f operator.yaml
+  sleep 45
+
+  # #Grant the Rook NFS service account access to the privileged SecurityContextConstraints (SCC) resources:
+  oc adm policy add-scc-to-user privileged system:serviceaccount:rook-nfs:rook-nfs-server
+
+  cd ${RookNFS_WORKDIR}
+  #Create RBAC objects for the NFS server by applying the YAML to the cluster.
+  oc apply -f rbac.yaml
+  sleep 10
+
+  # #Apply this YAML to create a PersistentVolumeClaim (PVC) for the NFS server. 
+  # #Make sure the PVC size is large enough to support all future volumes requested from this server; a size of 200Gi is recommended. 
+  # #You must replace the value of <rwo-storage-class> with the RWO storage class you intend to use.
+  oc apply -f nfs-pwx-claim_pvc.yaml
+  sleep 15
+
+  oc apply -f NFSServer.yaml
+  sleep 30
+
+  # #Create a storageclass named 'integration-storage' which supports RWX (ReadWriteMany)
+  oc apply -f rwx_integration-storage_class.yaml
+
+
+  cd "${SCRIPT_DIR}"
+   
+}
+
+Set_Valid_Storage_Class_for_RWO_and_RWX()
+{
+
+  if [[ "${CLOUD_PROVIDER}" == "aws" ]]; then
+    RWO_STORAGE="gp2"
+  elif [[ "${CLOUD_PROVIDER}" == "azure" ]]; then
+    RWO_STORAGE="managed-premium"
+  elif [[ "${CLOUD_PROVIDER}" == "ibm" ]] ; then
+    RWO_STORAGE="ibmc-vpc-block-10iops-tier"
+  else
+    RWO_STORAGE="<your block storage on aws: gp2, on azure: managed-premium, on ibm: ibmc-vpc-block-10iops-tier>"
+  fi
+
+
+  RWX_STORAGE="integration-storage"
+
+}
+
+Check_Whether_Storage_Installed()
+{
+
+      if ! oc login "${TF_VAR_server_url}" --token="${TF_VAR_cluster_login_token}" --insecure-skip-tls-verify=true 1> /dev/null; then
+        echo -e "${RED} Error While Login to OCP to check the StorageClass existance"
+        exit 1
+      fi
+      
+      if oc get storageclass "${RWX_STORAGE}" 1> /dev/null 2> /dev/null; then
+        echo -e " ${GREEN} Found RWX StorageClass:${RWX_STORAGE} & RWO StorageClass:${RWO_STORAGE} .Will Skip storage layer...${NC}"
+      else
+          echo -e "${RED} RWX (ReadWriteMany) Storage class is missing. Hence Exiting the process... ${NC}"
+          exit 0  
+      fi
+
+}
+
+ 
 Pick_Required_Modules()
 {
+  
   echo "Setting up automation  ${WORKSPACE_DIR}"
 
   echo ${SCRIPT_DIR}
@@ -232,18 +348,18 @@ Pick_Required_Modules()
     #GitOps Module is Mandatory: 200-xxx
     if [[ $name == "200"* ]]; then
       Copy_Required_Module_In_CurrentWorkSpace $name $SCRIPT_DIR $WORKSPACE_DIR
-      
-    fi
-    if [[ "${PORTWORX_SPEC_FILE}" == "installed" ]]; then
-      # Ignore 210 Module and continue
-      continue
-    else 
-      #Choice of Storage Based on Provider: 210-xxx
-      if [[ $name == "210-$CLOUD_PROVIDER-$STORAGE-storage" ]]; then
-          Copy_Required_Module_In_CurrentWorkSpace $name $SCRIPT_DIR $WORKSPACE_DIR
-      fi  
     fi
 
+
+    #Choice of Storage Based on Provider: 210-xxx
+    if [[ $name == "210-$CLOUD_PROVIDER-$STORAGE-storage" ]]; then
+      #Just Ignore & Do nothing
+      echo ""
+
+    fi  
+
+
+    
     #Choice of CP4I Capabilities based on the user choice
     if [ ${bomIdMap["bom_280"]} == 'y'  ]; then
       if [[ $name == "280"* ]]; then
@@ -262,7 +378,9 @@ Pick_Required_Modules()
     fi
     
   done
-  echo "move to ${WORKSPACE_DIR} this is where your automation is configured"
+  echo -e "${YELLOW}        Move to ${WORKSPACE_DIR} this is where your automation is configured ${NC}"
+  
+
 }
 
 Copy_Required_Module_In_CurrentWorkSpace()
@@ -283,85 +401,15 @@ Copy_Required_Module_In_CurrentWorkSpace()
 
 }
 
-Set_Valid_Storage_Class_for_RWO_and_RWX()
-{
-
-  if [[ "${CLOUD_PROVIDER}" == "aws" ]]; then
-    RWO_STORAGE="gp2"
-  elif [[ "${CLOUD_PROVIDER}" == "azure" ]]; then
-    RWO_STORAGE="managed-premium"
-  elif [[ "${CLOUD_PROVIDER}" == "ibm" ]] || [[ "${CLOUD_PROVIDER}" == "ibmcloud" ]]; then
-    RWO_STORAGE="ibmc-vpc-block-10iops-tier"
-  else
-    RWO_STORAGE="<your block storage on aws: gp2, on azure: managed-premium, on ibm: ibmc-vpc-block-10iops-tier>"
-  fi
-
-
-  if [[ "${STORAGE}" == "portworx" ]]; then
-    RWX_STORAGE="portworx-rwx-gp3-sc"
-  elif [[ "${STORAGE}" == "odf" ]]; then
-    RWX_STORAGE="ocs-storagecluster-cephfs"
-  else
-    RWX_STORAGE="<read-write-many storage class (e.g. portworx: portworx-rwx-gp3-sc or odf: ocs-storagecluster-cephfs)>"
-  fi
-
-}
-
-Validate_Px_Spec_File()
-{
-
-  if [[ "${CLOUD_PROVIDER}" =~ aws|azure ]] && [[ -z "${PORTWORX_SPEC_FILE}" ]]; then
-    if command -v oc 1> /dev/null 2> /dev/null; then
-      echo "Looking for existing portworx storage class: ${RWX_STORAGE}"
-
-      if ! oc login "${TF_VAR_server_url}" --token="${TF_VAR_cluster_login_token}" --insecure-skip-tls-verify=true 1> /dev/null; then
-        exit 1
-      fi
-
-      if oc get storageclass "${RWX_STORAGE}" 1> /dev/null 2> /dev/null; then
-        echo "  Found existing portworx installation. Skipping storage layer..."
-        echo ""
-        PORTWORX_SPEC_FILE="installed"
-      fi
-    fi
-
-    if [[ -z "${PORTWORX_SPEC_FILE}" ]]; then
-      DEFAULT_FILE=$(find . -name "portworx*.yaml" -maxdepth 1 -exec basename {} \; | head -1)
-
-      while [[ -z "${PORTWORX_SPEC_FILE}" ]]; do
-        echo -n "Provide the Portworx config spec file name: [${DEFAULT_FILE}] "
-        read -r PORTWORX_SPEC_FILE
-
-        if [[ -z "${PORTWORX_SPEC_FILE}" ]] && [[ -n "${DEFAULT_FILE}" ]]; then
-          PORTWORX_SPEC_FILE="${DEFAULT_FILE}"
-        fi
-      done
-
-      echo ""
-    fi
-  elif [[ "${CLOUD_PROVIDER}" == "ibm" ]]; then
-    PORTWORX_SPEC_FILE=""
-  fi
-
-  if [[ -n "${PORTWORX_SPEC_FILE}" ]] && [[ "${PORTWORX_SPEC_FILE}" != "installed" ]] && [[ ! -f "${PORTWORX_SPEC_FILE}" ]]; then
-    echo "Portworx spec file not found: ${PORTWORX_SPEC_FILE}" >&2
-    exit 1
-  fi
-
-}
-
 # Get the options
-while getopts ":p:s:n:h:" option; do
+while getopts ":p:h:" option; do
    case $option in
       h) # display Help
          Usage
          exit 1;;
       p)
          CLOUD_PROVIDER=${OPTARG};;
-      s) # Enter a name
-         STORAGE=$OPTARG;;
-      n) # Enter a name
-         PREFIX_NAME=$OPTARG;;
+
      \?) # Invalid option
          echo "Error: Invalid option"
          Usage
@@ -371,6 +419,9 @@ done
 
 #Validate the Input Parameters
 Validate_Input_Param
+
+#Print the Validated Input Params
+Print_Input_Params
 
 
 #This Function helps the user to choose the required capabilities
@@ -382,12 +433,18 @@ Summarize_the_Choice
 #Help the get the confirmation on the choices being made
 Get_Confirmation_To_Proceed
 
+#Install Rook NFS Storage for supporting RWX. We automated the steps provided in 
+#https://www.ibm.com/docs/en/cloud-paks/cp-integration/2022.2?topic=ui-deploying-platform-rwo-storage
+
+echo -e "${PURPLE}Setting Up RookNFS Server...${NC}"
+Install_RookNFS
+echo -e "${Green}Setting Up RookNFS Server Completed Successfully!!! ${NC}"
+
 #Set the appropriate StorageClass for RWO & RWX based on the Storage Provider
 Set_Valid_Storage_Class_for_RWO_and_RWX
 
-#In case of aws & azure, We need to validate Portworx Specfile existence
-Validate_Px_Spec_File
-
+#Check Whether Portworx is already installed. If it already installed, then we need to have a logic to skip 210-xxx module
+Check_Whether_Storage_Installed
 
 
 SCRIPT_DIR=$(cd $(dirname $0); pwd -P)
@@ -403,24 +460,25 @@ echo "Setting up workspace in '${WORKSPACE_DIR}'"
 
 mkdir -p "${WORKSPACE_DIR}"
 
-PORTWORX_SPEC_FILE_BASENAME=$(basename "${PORTWORX_SPEC_FILE}")
-
-if [[ -n "${PORTWORX_SPEC_FILE}" ]] && [[ "${PORTWORX_SPEC_FILE}" != "installed" ]]; then
-  cp "${PORTWORX_SPEC_FILE}" "${WORKSPACE_DIR}/${PORTWORX_SPEC_FILE_BASENAME}"
-fi
-
-
 cd "${WORKSPACE_DIR}"
 
+# echo ">>>>>>SCRIPT_DIR>>>>>>>>>>>>>>>>>>" $SCRIPT_DIR
+# echo ">>>>>>PREFIX_NAME>>>>>>>>>>>>>>>>>>" $PREFIX_NAME
+# echo ">>>>>>RWX_STORAGE>>>>>>>>>>>>>>>>>>" $RWX_STORAGE
+# echo ">>>>>>RWO_STORAGE>>>>>>>>>>>>>>>>>>" $RWO_STORAGE
+# echo ">>>>>>PORTWORX_SPEC_FILE>>>>>>>>>>>>>>>>>>" $PORTWORX_SPEC_FILE
+# #echo ">>>>>>PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED>>>>>>>>>>>>>>>>>>" $PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED
+# echo ">>>>>>REGION>>>>>>>>>>>>>>>>>>" $REGION
 
-cat "${SCRIPT_DIR}/terraform.tfvars.template" | \
+
+  cat "${SCRIPT_DIR}/terraform.tfvars.template" | \
   sed "s/TO_BE_REPLACED_PREFIX/${PREFIX_NAME}/g" | \
   sed "s/TO_BE_REPLACED_RWX_STORAGE/${RWX_STORAGE}/g" | \
   sed "s/TO_BE_REPLACED_RWO_STORAGE/${RWO_STORAGE}/g" | \
-  sed "s/TO_BE_REPLACE_PORTWORX_SPEC_FILE/${PORTWORX_SPEC_FILE_BASENAME}/g" \
+#  sed "s/TO_BE_REPLACED_PORTWORX_SPEC_FILE/${PORTWORX_SPEC_FILE}/g" | \
+  sed "s/TO_BE_REPLACED_REGION/${REGION}/g" | \
+  sed "s/TO_BE_REPLACED_CONTENT_OF_PORTWORX_SPEC_IN_BASE64_ENCODED/${PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED}/g"  \
   > "${SCRIPT_DIR}/terraform.tfvars"
-
-
 
 
 
@@ -429,6 +487,7 @@ ln -s "${SCRIPT_DIR}/terraform.tfvars" ./terraform.tfvars
 cp "${SCRIPT_DIR}/apply-all.sh" "${WORKSPACE_DIR}/apply-all.sh"
 cp "${SCRIPT_DIR}/destroy-all.sh" "${WORKSPACE_DIR}/destroy-all.sh"
 cp "${SCRIPT_DIR}/credentials.properties" "${WORKSPACE_DIR}/credentials.properties"
+
 
 
 WORKSPACE_DIR=$(cd "${WORKSPACE_DIR}"; pwd -P)
