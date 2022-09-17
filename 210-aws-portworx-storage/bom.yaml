@@ -15,6 +15,18 @@ spec:
     - name: aws-portworx
       alias: aws-portworx
       version: v0.1.0
+      variables:
+        - name: region
+          scope: global
+        - name: access_key
+          scope: global
+        - name: secret_key
+          scope: global
+        - name: portworx_spec_file
+          scope: global
+        - name: portworx_spec
+          scope: global
+          important: true
     - name: ocp-login
       alias: cluster
       version: v1.6.0
@@ -22,10 +34,10 @@ spec:
     - name: region
       type: string
       description: AWS Region the cluster is deployed in
-    - name: aws-portworx_portworx_spec
+    - name: portworx_spec
       type: string
       defaultValue: ''
-    - name: aws-portworx_portworx_spec_file
+    - name: portworx_spec_file
       type: string
       description: >-
         The path to the file that contains the yaml spec for the Portworx

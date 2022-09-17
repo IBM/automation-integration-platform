@@ -44,22 +44,34 @@ spec:
           scope: global
     - name: gitops-namespace
       alias: cp4i-mq
-      version: v1.11.2
+      version: v1.12.3
       variables:
         - name: name
           value: cp4i-mq
-    - name: ocp-login
-      alias: cluster
-      version: v1.6.0
-    - name: olm
-      alias: olm
-      version: v1.3.2
-    - name: sealed-secret-cert
-      alias: sealed-secret-cert
-      version: v1.0.1
     - name: gitops-repo
       alias: gitops_repo
       version: v1.21.0
+    - name: ocp-login
+      alias: cluster
+      version: v1.6.0
+    - name: namespace
+      alias: gitea_namespace
+      version: v3.2.3
+      variables:
+        - name: name
+          value: gitea
+    - name: olm
+      alias: olm
+      version: v1.3.2
+    - name: gitea
+      alias: gitea
+      version: v0.5.0
+      dependencies:
+        - id: namespace
+          ref: gitea_namespace
+    - name: sealed-secret-cert
+      alias: sealed-secret-cert
+      version: v1.0.1
   variables:
     - name: entitlement_key
       type: string
@@ -72,13 +84,6 @@ spec:
       type: string
       description: ReadWriteOnce access type Storage Class
       defaultValue: portworx-db2-rwo-sc
-    - name: server_url
-      type: string
-      description: The url for the OpenShift api
-    - name: cluster_login_token
-      type: string
-      description: Token used for authentication
-      sensitive: true
     - name: gitops_repo_host
       type: string
       description: The host for the git repository.
@@ -111,3 +116,10 @@ spec:
       description: >-
         The short name of the repository (i.e. the part after the org/group
         name)
+    - name: server_url
+      type: string
+      description: The url for the OpenShift api
+    - name: cluster_login_token
+      type: string
+      description: Token used for authentication
+      sensitive: true

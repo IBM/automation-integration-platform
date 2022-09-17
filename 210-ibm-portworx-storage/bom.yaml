@@ -12,24 +12,12 @@ metadata:
     description: Installs Portworx in an IBM cluster
 spec:
   modules:
-    - name: gitea
-      alias: gitea
-      version: v0.5.0
-      dependencies:
-        - id: namespace
-          ref: gitea_namespace
     - name: gitops-ibm-portworx
       alias: gitops-ibm-portworx
-      version: v0.3.0
-    - name: gitops-namespace
-      alias: gitea_namespace
-      version: v1.11.2
-      variables: &ref_0
-        - name: name
-          value: gitea
+      version: v0.4.0
     - name: gitops-namespace
       alias: portworx_namespace
-      version: v1.11.2
+      version: v1.12.2
       default: true
       variables:
         - name: name
@@ -39,18 +27,11 @@ spec:
       version: v1.21.0
     - name: ibm-resource-group
       alias: resource_group
-      version: v3.3.3
-    - name: ocp-login
-      alias: cluster
-      version: v1.6.0
-    - name: olm
-      version: v1.3.2
-    - name: gitops-namespace
-      alias: gitea_namespace
-      version: v3.2.3
-      variables: *ref_0
+      version: v3.3.4
     - name: gitops-ibmcloud-operator
-      version: v0.2.1
+      version: v0.2.2
+    - name: util-clis
+      version: v1.17.0
   variables:
     - name: ibmcloud_api_key
       type: string
@@ -92,10 +73,3 @@ spec:
     - name: resource_group_name
       type: string
       description: The name of the resource group
-    - name: server_url
-      type: string
-      description: The url for the OpenShift api
-    - name: cluster_login_token
-      type: string
-      description: Token used for authentication
-      sensitive: true
