@@ -4,12 +4,6 @@
 ## rwx_storage_class: ReadWriteMany access type Storage Class
 #rwx_storage_class="portworx-rwx-gp-sc"
 
-## server_url: The url for the OpenShift api
-#server_url=""
-
-## cluster_login_token: Token used for authentication
-#cluster_login_token=""
-
 ## gitops_repo_host: The host for the git repository.
 #gitops_repo_host=""
 
@@ -30,4 +24,10 @@
 
 ## gitops_repo_repo: The short name of the repository (i.e. the part after the org/group name)
 #gitops_repo_repo=""
+
+## server_url: The url for the OpenShift api
+#server_url=""
+
+## cluster_login_token: Token used for authentication
+#cluster_login_token=""
 

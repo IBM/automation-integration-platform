@@ -10,6 +10,7 @@ The Job will:
 2. Update the kubernetes-service plugin so that it always uses the latest version
 3. Install ODF using `ibmcloud oc cluster addon enable openshift-data-foundation`
 
+**Note:** Since this module uses the `openshift-data-foundation` addon, the module supports all OpenShift versions supported by the addon. See the [addon changelog](https://cloud.ibm.com/docs/openshift?topic=openshift-odf_addon_changelog) for more details.
 
 
 ### Command-line tools

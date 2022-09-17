@@ -7,7 +7,18 @@ SRC_DIR="${SCRIPT_DIR}/automation"
 
 AUTOMATION_BASE=$(basename "${SCRIPT_DIR}")
 
-DOCKER_CMD="${1:-docker}"
+if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+  echo "Usage: launch.sh [{docker cmd}] [--pull]"
+  echo "  where:"
+  echo "    {docker cmd} is the docker command that should be used (e.g. docker, podman). Defaults to docker"
+  echo "    --pull is a flag indicating the latest version of the container image should be pulled"
+  exit 0
+fi
+
+DOCKER_CMD="docker"
+if [[ -n "$1" ]] && [[ "$1" != "--pull" ]]; then
+  DOCKER_CMD="${1:-docker}"
+fi
 
 if [[ ! -d "${SRC_DIR}" ]]; then
   SRC_DIR="${SCRIPT_DIR}"
@@ -37,10 +48,11 @@ then
   fi
 fi
 
-DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools:v1.2-v2.1.3"
-#IBM DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-ibmcloud:v1.2-v0.3.3"
-#AWS DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-aws:v1.2-v0.2.1"
-#AZURE DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-azure:v1.2-v0.2.1"
+
+DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools:v1.2-v2.2.12"
+#IBM DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-ibmcloud:v1.2-v0.4.16"
+#AWS DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-aws:v1.2-v0.3.12"
+#AZURE DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-azure:v1.2-v0.4.12"
 
 SUFFIX=$(echo $(basename ${SCRIPT_DIR}) | base64 | sed -E "s/[^a-zA-Z0-9_.-]//g" | sed -E "s/.*(.{5})/\1/g")
 CONTAINER_NAME="cli-tools-${SUFFIX}"
@@ -50,9 +62,11 @@ echo "Cleaning up old container: ${CONTAINER_NAME}"
 ${DOCKER_CMD} kill ${CONTAINER_NAME} 1> /dev/null 2> /dev/null
 ${DOCKER_CMD} rm ${CONTAINER_NAME} 1> /dev/null 2> /dev/null
 
-if [[ -n "$1" ]]; then
-    echo "Pulling container image: ${DOCKER_IMAGE}"
-    ${DOCKER_CMD} pull "${DOCKER_IMAGE}"
+ARG_ARRAY=( "$@" )
+
+if [[ " ${ARG_ARRAY[*]} " =~ " --pull " ]]; then
+  echo "Pulling container image: ${DOCKER_IMAGE}"
+  ${DOCKER_CMD} pull "${DOCKER_IMAGE}"
 fi
 
 
@@ -77,10 +91,10 @@ fi
 
 echo "Initializing container ${CONTAINER_NAME} from ${DOCKER_IMAGE}"
 ${DOCKER_CMD} run -itd --name ${CONTAINER_NAME} \
+   -u "${UID}:0" \
    --device /dev/net/tun --cap-add=NET_ADMIN \
-   -u "${UID}" \
    -v "${SRC_DIR}:/terraform" \
-   -v "workspace-${AUTOMATION_BASE}:/workspaces" \
+   -v "workspace-${AUTOMATION_BASE}-${UID}:/workspaces" \
    ${ENV_VARS} \
    -w /terraform \
    ${DOCKER_IMAGE}
