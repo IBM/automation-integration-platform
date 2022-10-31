@@ -10,6 +10,7 @@ metadata:
   annotations:
     displayName: IBM - Portworx Cluster Storage
     description: Installs Portworx in an IBM cluster
+    vpn/required: 'true'
 spec:
   modules:
     - name: gitops-ibm-portworx
@@ -24,14 +25,14 @@ spec:
           value: portworx
     - name: gitops-repo
       alias: gitops_repo
-      version: v1.21.0
+      version: v1.22.2
     - name: ibm-resource-group
       alias: resource_group
-      version: v3.3.4
+      version: v3.3.5
     - name: gitops-ibmcloud-operator
       version: v0.2.2
     - name: util-clis
-      version: v1.17.0
+      version: v1.18.1
   variables:
     - name: ibmcloud_api_key
       type: string

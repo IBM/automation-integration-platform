@@ -21,13 +21,13 @@ spec:
           value: '2022_2_1'
     - name: gitops-cp-catalogs
       alias: gitops-cp-catalogs
-      version: v1.2.4
+      version: v1.2.5
       variables:
         - name: entitlement_key
           scope: global
     - name: gitops-cp-platform-navigator
       alias: gitops-cp-platform-navigator
-      version: v2.0.0
+      version: v2.0.2
       dependencies:
         - name: namespace
           ref: cp4i-pn
@@ -37,25 +37,25 @@ spec:
           scope: global
     - name: gitops-namespace
       alias: cp4i-pn
-      version: v1.12.3
+      version: v1.14.0
       variables:
         - name: name
           value: cp4i-pn
     - name: gitops-repo
       alias: gitops_repo
-      version: v1.21.0
-    - name: ocp-login
-      alias: cluster
-      version: v1.6.0
+      version: v1.22.2
     - name: namespace
       alias: gitea_namespace
-      version: v3.2.3
+      version: v3.2.4
       variables:
         - name: name
           value: gitea
+    - name: ocp-login
+      alias: cluster
+      version: v1.6.0
     - name: olm
       alias: olm
-      version: v1.3.2
+      version: v1.3.5
     - name: gitea
       alias: gitea
       version: v0.5.0
@@ -65,6 +65,8 @@ spec:
     - name: sealed-secret-cert
       alias: sealed-secret-cert
       version: v1.0.1
+    - name: util-clis
+      version: v1.18.1
   variables:
     - name: entitlement_key
       type: string

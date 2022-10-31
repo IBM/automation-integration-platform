@@ -86,10 +86,10 @@ Validate_Input_Param()
 
 
 
-    if [ -z "$REGION" ] ; then
+  if [ -z "$REGION" ] ; then
     #In case of 'ibm' provider and 'odf' storage we need not specify 'region'
     if [ $CLOUD_PROVIDER == 'ibm' ] && [ $STORAGE == 'odf' ] ; then
-      : # nothing to do
+      continue
     else
       echo -e "${RED} Region must be provided. ${NC} Tip: Run 'oc get nodes -L=topology.kubernetes.io/region' to get the region or check with OCP Adminisrator"
       Usage

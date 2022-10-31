@@ -30,7 +30,7 @@ module "cluster" {
   tls_secret_name = var.cluster_tls_secret_name
 }
 module "config" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cluster-config?ref=v1.1.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cluster-config?ref=v1.1.1"
 
   banner_background_color = var.config_banner_background_color
   banner_text = var.config_banner_text
@@ -55,14 +55,14 @@ module "gitea" {
   username = var.gitea_username
 }
 module "gitea_namespace" {
-  source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.3"
+  source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.4"
 
   cluster_config_file_path = module.cluster.config_file_path
   create_operator_group = var.gitea_namespace_create_operator_group
   name = var.gitea_namespace_name
 }
 module "gitops_repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.21.0"
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.22.2"
 
   branch = var.gitops_repo_branch
   debug = var.debug
@@ -84,7 +84,7 @@ module "gitops_repo" {
   username = var.gitops_repo_username
 }
 module "gitops-console-link-job" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-console-link-job?ref=v1.5.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-console-link-job?ref=v1.5.1"
 
   cluster_ingress_hostname = var.gitops-console-link-job_cluster_ingress_hostname
   cluster_type = var.gitops-console-link-job_cluster_type
@@ -95,7 +95,7 @@ module "gitops-console-link-job" {
   tls_secret_name = var.gitops-console-link-job_tls_secret_name
 }
 module "olm" {
-  source = "github.com/cloud-native-toolkit/terraform-k8s-olm?ref=v1.3.2"
+  source = "github.com/cloud-native-toolkit/terraform-k8s-olm?ref=v1.3.5"
 
   cluster_config_file = module.cluster.config_file_path
   cluster_type = module.cluster.platform.type_code
@@ -122,7 +122,7 @@ module "toolkit_namespace" {
 }
 module "util-clis" {
   source = "cloud-native-toolkit/clis/util"
-  version = "1.17.0"
+  version = "1.18.1"
 
   bin_dir = var.util-clis_bin_dir
   clis = var.util-clis_clis == null ? null : jsondecode(var.util-clis_clis)

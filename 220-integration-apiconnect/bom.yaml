@@ -19,7 +19,7 @@ spec:
           value: '2022_2_1'
     - name: gitops-cp-apic
       alias: gitops-cp-apic
-      version: v0.0.2
+      version: v0.0.3
       dependencies:
         - name: namespace
           ref: cp4i-apic
@@ -31,34 +31,34 @@ spec:
           scope: global
     - name: gitops-cp-apic-operator
       alias: gitops-cp-apic-operator
-      version: v1.2.6
+      version: v1.2.7
     - name: gitops-cp-catalogs
       alias: gitops-cp-catalogs
-      version: v1.2.4
+      version: v1.2.5
       variables:
         - name: entitlement_key
           scope: global
     - name: gitops-namespace
       alias: cp4i-apic
-      version: v1.12.3
+      version: v1.14.0
       variables:
         - name: name
           value: cp4i-apic
     - name: gitops-repo
       alias: gitops_repo
-      version: v1.21.0
-    - name: ocp-login
-      alias: cluster
-      version: v1.6.0
+      version: v1.22.2
     - name: namespace
       alias: gitea_namespace
-      version: v3.2.3
+      version: v3.2.4
       variables:
         - name: name
           value: gitea
+    - name: ocp-login
+      alias: cluster
+      version: v1.6.0
     - name: olm
       alias: olm
-      version: v1.3.2
+      version: v1.3.5
     - name: gitea
       alias: gitea
       version: v0.5.0
@@ -68,6 +68,10 @@ spec:
     - name: sealed-secret-cert
       alias: sealed-secret-cert
       version: v1.0.1
+    - name: gitops-cp-platform-navigator
+      version: v2.0.2
+    - name: util-clis
+      version: v1.18.1
   variables:
     - name: rwo_storage_class
       type: string
