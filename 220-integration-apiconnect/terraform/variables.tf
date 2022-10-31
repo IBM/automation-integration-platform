@@ -6,7 +6,7 @@ variable "cp4i-version-dependency_cp4i_version" {
 variable "gitops-cp-apic_profile" {
   type = string
   description = "apic profile template"
-  default = ""n1xc7.m48" "
+  default = "n1xc7.m48"
 }
 variable "rwo_storage_class" {
   type = string
