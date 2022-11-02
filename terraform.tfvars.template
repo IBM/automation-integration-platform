@@ -16,7 +16,8 @@ gitops_repo_host="github.com"
 gitops_repo_type="github"
 
 ## gitops-repo_org: The org/group where the git repository exists/will be provisioned.
-gitops_repo_org="<your gitorg - most likely your username>"
+## your gitorg - if left blank the value will default to your username
+gitops_repo_org=""
 
 ## gitops-repo_repo: The short name of the repository (i.e. the part after the org/group name)
 gitops_repo_repo="TO_BE_REPLACED_PREFIXcp4i-gitops"

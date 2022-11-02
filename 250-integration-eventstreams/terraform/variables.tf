@@ -108,9 +108,9 @@ variable "gitops-cp-event-streams_kafka_log_message_format_version" {
   default = "3.2"
 }
 variable "gitops-cp-event-streams_kafka_listeners" {
-  type = string
+  type = list
   description = "Kafka listerners defaults to secure - override to provide light-insecure"
-  default = "[]"
+  default = []
 }
 variable "cp4i-es_name" {
   type = string
