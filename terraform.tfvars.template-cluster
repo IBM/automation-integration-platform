@@ -1,0 +1,16 @@
+## config_banner_text: The text that will appear in the top banner in the cluster
+config_banner_text="TO_BE_REPLACED_BANNER"
+
+## rwo_storage_class: ReadWriteOnce access type Storage Class
+rwo_storage_class="TO_BE_REPLACED_RWO_STORAGE"
+
+## rwx_storage_class: ReadWriteMany access type Storage Class
+rwx_storage_class="TO_BE_REPLACED_RWX_STORAGE"
+
+
+## REGION: Required for all providers while setting up Portworx storage
+region="TO_BE_REPLACED_REGION"
+
+
+## portworx_spec_file_content in base64 encoded: 
+portworx_spec="TO_BE_REPLACED_CONTENT_OF_PORTWORX_SPEC_IN_BASE64_ENCODED"

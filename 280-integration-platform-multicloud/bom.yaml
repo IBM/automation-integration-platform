@@ -234,3 +234,10 @@ spec:
       type: string
       description: Token used for authentication
       sensitive: true
+  outputs:
+    - name: entitlement_key
+      sensitive: true
+    - name: gitops_repo_token
+      sensitive: true
+    - name: cluster_login_token
+      sensitive: true

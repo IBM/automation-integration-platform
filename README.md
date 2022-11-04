@@ -154,12 +154,21 @@ We recommend using Docker Desktop if choosing the container image method, and Mu
     # Add the values for the Credentials to access the IBM Cloud
     # Instructions to access this information can be found in the README.MD
     # This is a template file and the ./launch.sh script looks for a file based on this template named credentials.properties
+
+    # The host for the git repository (e.g. github.com, bitbucket.org). Supported Git servers are GitHub, Github Enterprise, Gitlab, Bitbucket, Azure DevOps, and Gitea. If this value is left commented out, the automation will default to using Gitea.
+    #TF_VAR_gitops_repo_host=
     
     ## gitops_repo_username: The username of the user with access to the repository
-    export TF_VAR_gitops_repo_username=
+    #export TF_VAR_gitops_repo_username=
     
     ## gitops_repo_token: The personal access token used to access the repository
-    export TF_VAR_gitops_repo_token=
+    #export TF_VAR_gitops_repo_token=
+
+    # The organization/owner/group on the git server where the gitops repository will be provisioned/found. If not provided the org will default to the username.
+    #TF_VAR_gitops_repo_org=
+
+    # The project on the Azure DevOps server where the gitops repository will be provisioned/found. This value is only required for repositories on Azure DevOps.
+    #TF_VAR_gitops_repo_project
     
     ## TF_VAR_cluster_login_token: Token used for authentication to the api server
     export TF_VAR_cluster_login_token=
@@ -314,7 +323,7 @@ We recommend using Docker Desktop if choosing the container image method, and Mu
     2b. If you decided to go with 'odf' or 'portworx' storage
     
    ```shell
-        ./setup-workspace.sh [-p {cloud provider}] [-s {storage}] [-r {region}] [-x {portworx spec file}] [-n {prefix name}] 
+        ./setup-workspace-with-odf-or-portworx.sh [-p {cloud provider}] [-s {storage}] [-r {region}] [-x {portworx spec file}] [-n {prefix name}] 
    ```
     
    where:
@@ -346,10 +355,10 @@ We recommend using Docker Desktop if choosing the container image method, and Mu
          
     ```
 
-3. The `setup-workspace.sh` script configures the `terraform.tfvars` file with reasonable defaults.
+3. The `setup-workspace-odf-or-portworx.sh` and `setup-workspace-with-rook-NFS.sh` scripts configure the `cluster.tfvars` and `gitops.tfvars` files with reasonable defaults.
 
      **Note:** 
-     The default `terraform.tfvars` file is symbolically linked to the new `workspaces/current` folder so this enables you to edit the file in your native operating system using your editor of choice.
+     The default `cluster.tfvars` and `gitops.tfvars` files are symbolically linked to the new `workspaces/current` folder so this enables you to edit the file in your native operating system using your editor of choice.
 
 The following are variables that you will be updating. Here are some suggested values.
 
