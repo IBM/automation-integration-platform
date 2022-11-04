@@ -32,6 +32,9 @@ PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED=""
 DEFAULT_RWO_STORAGECLASS_IBM="ibmc-vpc-block-10iops-tier"
 DEFAULT_RWO_STORAGECLASS_AWS="gp2"
 DEFAULT_RWO_STORAGECLASS_AZURE="managed-premium"
+GIT_HOST=""
+BANNER=""
+DEFAULT_BANNER="Cloud Pak for Integration"
 
 
 RED='\033[0;31m'
@@ -51,6 +54,8 @@ Usage()
    echo "  options:"
    echo "  -p     Cloud provider valid values (aws, azure, ibm)"
    echo "  -n     (optional) prefix that should be used for all variables"
+   echo "  -b     (optional) the banner text that should be shown at the top of the cluster"
+   echo "  -g     (optional) the git host that will be used for the gitops repo. If left blank gitea will be used by default. (Github, Github Enterprise, Gitlab, Bitbucket, Azure DevOps, and Gitea servers are supported)"
    echo "  -h     Print this help"
    echo
    echo "Creates a workspace folder and populates it with automation bundles you require."
@@ -345,6 +350,11 @@ Pick_Required_Modules()
       continue
     fi  
    
+    #Cluster Module is Mandatory: 105-xxx
+    if [[ $name == "105"* ]]; then
+      Copy_Required_Module_In_CurrentWorkSpace $name $SCRIPT_DIR $WORKSPACE_DIR
+    fi
+   
     #GitOps Module is Mandatory: 200-xxx
     if [[ $name == "200"* ]]; then
       Copy_Required_Module_In_CurrentWorkSpace $name $SCRIPT_DIR $WORKSPACE_DIR
@@ -395,21 +405,27 @@ Copy_Required_Module_In_CurrentWorkSpace()
   cp -R "${SCRIPT_DIR}/${name}/terraform/"* .
   cp "${SCRIPT_DIR}/${name}/bom.yaml" .
   cp "${SCRIPT_DIR}/${name}/destroy.sh" .
-  ln -s "${WORKSPACE_DIR}"/terraform.tfvars ./terraform.tfvars
+  ln -s "${WORKSPACE_DIR}"/cluster.tfvars ./cluster.tfvars
+  ln -s "${WORKSPACE_DIR}"/gitops.tfvars ./gitops.tfvars
   cd - > /dev/null
 
 
 }
 
 # Get the options
-while getopts ":p:h:" option; do
+while getopts ":p:h:g:b:n:" option; do
    case $option in
       h) # display Help
          Usage
          exit 1;;
       p)
          CLOUD_PROVIDER=${OPTARG};;
-
+      n) # Enter a name
+         PREFIX_NAME=$OPTARG;;
+      g) # Enter a name
+         GIT_HOST=$OPTARG;;
+      b) # Enter a name
+         BANNER=$OPTARG;;
      \?) # Invalid option
          echo "Error: Invalid option"
          Usage
@@ -470,24 +486,40 @@ cd "${WORKSPACE_DIR}"
 # #echo ">>>>>>PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED>>>>>>>>>>>>>>>>>>" $PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED
 # echo ">>>>>>REGION>>>>>>>>>>>>>>>>>>" $REGION
 
+if [[ -z "${GIT_HOST}" ]]; then
+  GITHOST_COMMENT="#"
+fi
+if [[ -z "${BANNER}" ]]; then
+  BANNER="${DEFAULT_BANNER}"
+fi
 
-  cat "${SCRIPT_DIR}/terraform.tfvars.template" | \
-  sed "s/TO_BE_REPLACED_PREFIX/${PREFIX_NAME}/g" | \
+cat "${SCRIPT_DIR}/terraform.tfvars.template-cluster" | \
+  sed "s/TO_BE_REPLACED_BANNER/${BANNER}/g" | \
   sed "s/TO_BE_REPLACED_RWX_STORAGE/${RWX_STORAGE}/g" | \
   sed "s/TO_BE_REPLACED_RWO_STORAGE/${RWO_STORAGE}/g" | \
-#  sed "s/TO_BE_REPLACED_PORTWORX_SPEC_FILE/${PORTWORX_SPEC_FILE}/g" | \
   sed "s/TO_BE_REPLACED_REGION/${REGION}/g" | \
   sed "s/TO_BE_REPLACED_CONTENT_OF_PORTWORX_SPEC_IN_BASE64_ENCODED/${PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED}/g"  \
-  > "${SCRIPT_DIR}/terraform.tfvars"
+  > "${WORKSPACE_DIR}/cluster.tfvars"
+
+if [[ ! -f "${WORKSPACE_DIR}/gitops.tfvars" ]]; then
+  cat "${SCRIPT_DIR}/terraform.tfvars.template-gitops" | \
+    sed -E "s/#(.*=\"GIT_HOST\")/${GITHOST_COMMENT}\1/g" | \
+    sed "s/PREFIX/${PREFIX_NAME}/g"  | \
+    sed "s/GIT_HOST/${GIT_HOST}/g" \
+    > "${WORKSPACE_DIR}/gitops.tfvars"
+fi
 
 
 
-ln -s "${SCRIPT_DIR}/terraform.tfvars" ./terraform.tfvars
+ln -s "${SCRIPT_DIR}/cluster.tfvars" ./cluster.tfvars
+ln -s "${SCRIPT_DIR}/gitops.tfvars" ./gitops.tfvars
 
 cp "${SCRIPT_DIR}/apply-all.sh" "${WORKSPACE_DIR}/apply-all.sh"
 cp "${SCRIPT_DIR}/destroy-all.sh" "${WORKSPACE_DIR}/destroy-all.sh"
 cp "${SCRIPT_DIR}/credentials.properties" "${WORKSPACE_DIR}/credentials.properties"
-
+cp "${SCRIPT_DIR}/terragrunt.hcl" "${WORKSPACE_DIR}/terragrunt.hcl"
+cp "${SCRIPT_DIR}/layers.yaml" "${WORKSPACE_DIR}/layers.yaml"
+cp -R "${SCRIPT_DIR}/.mocks" "${WORKSPACE_DIR}/.mocks"
 
 
 WORKSPACE_DIR=$(cd "${WORKSPACE_DIR}"; pwd -P)

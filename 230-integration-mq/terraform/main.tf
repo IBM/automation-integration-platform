@@ -13,7 +13,7 @@ module "cluster" {
   tls_secret_name = var.cluster_tls_secret_name
 }
 module "cp4i-mq" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.12.3"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
 
   argocd_namespace = var.cp4i-mq_argocd_namespace
   ci = var.cp4i-mq_ci
@@ -43,14 +43,14 @@ module "gitea" {
   username = var.gitea_username
 }
 module "gitea_namespace" {
-  source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.3"
+  source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.4"
 
   cluster_config_file_path = module.cluster.config_file_path
   create_operator_group = var.gitea_namespace_create_operator_group
   name = var.gitea_namespace_name
 }
 module "gitops_repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.21.0"
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.22.2"
 
   branch = var.gitops_repo_branch
   debug = var.debug
@@ -72,17 +72,16 @@ module "gitops_repo" {
   username = var.gitops_repo_username
 }
 module "gitops-cp-catalogs" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.4"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.5"
 
   entitlement_key = var.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  namespace = var.gitops-cp-catalogs_namespace
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-mq" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq?ref=v1.1.6"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-mq?ref=v1.1.7"
 
   catalog = module.gitops-cp-catalogs.catalog_ibmoperators
   catalog_namespace = var.gitops-cp-mq_catalog_namespace
@@ -93,7 +92,7 @@ module "gitops-cp-mq" {
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-queue-manager" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-queue-manager?ref=v1.0.6"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-queue-manager?ref=v1.0.7"
 
   config_map = var.gitops-cp-queue-manager_config_map
   cpulimits = var.gitops-cp-queue-manager_cpulimits
@@ -112,7 +111,7 @@ module "gitops-cp-queue-manager" {
   storageClass = var.rwo_storage_class
 }
 module "olm" {
-  source = "github.com/cloud-native-toolkit/terraform-k8s-olm?ref=v1.3.2"
+  source = "github.com/cloud-native-toolkit/terraform-k8s-olm?ref=v1.3.5"
 
   cluster_config_file = module.cluster.config_file_path
   cluster_type = module.cluster.platform.type_code
@@ -125,4 +124,11 @@ module "sealed-secret-cert" {
   cert_file = var.sealed-secret-cert_cert_file
   private_key = var.sealed-secret-cert_private_key
   private_key_file = var.sealed-secret-cert_private_key_file
+}
+module "util-clis" {
+  source = "cloud-native-toolkit/clis/util"
+  version = "1.18.1"
+
+  bin_dir = var.util-clis_bin_dir
+  clis = var.util-clis_clis == null ? null : jsondecode(var.util-clis_clis)
 }

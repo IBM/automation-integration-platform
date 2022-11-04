@@ -13,7 +13,7 @@ module "cluster" {
   tls_secret_name = var.cluster_tls_secret_name
 }
 module "cp4i-apic" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.12.3"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
 
   argocd_namespace = var.cp4i-apic_argocd_namespace
   ci = var.cp4i-apic_ci
@@ -43,14 +43,14 @@ module "gitea" {
   username = var.gitea_username
 }
 module "gitea_namespace" {
-  source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.3"
+  source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.4"
 
   cluster_config_file_path = module.cluster.config_file_path
   create_operator_group = var.gitea_namespace_create_operator_group
   name = var.gitea_namespace_name
 }
 module "gitops_repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.21.0"
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.22.2"
 
   branch = var.gitops_repo_branch
   debug = var.debug
@@ -72,7 +72,7 @@ module "gitops_repo" {
   username = var.gitops_repo_username
 }
 module "gitops-cp-apic" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-apic?ref=v0.0.2"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-apic?ref=v0.0.3"
 
   apic_version = module.cp4i-version-dependency.apic.version
   catalog = var.gitops-cp-apic_catalog
@@ -89,7 +89,7 @@ module "gitops-cp-apic" {
   usage = module.cp4i-version-dependency.apic.license_use
 }
 module "gitops-cp-apic-operator" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-apic-operator?ref=v1.2.6"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-apic-operator?ref=v1.2.7"
 
   catalog = module.gitops-cp-catalogs.catalog_ibmoperators
   catalog_namespace = var.gitops-cp-apic-operator_catalog_namespace
@@ -100,17 +100,34 @@ module "gitops-cp-apic-operator" {
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-catalogs" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.4"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.5"
 
   entitlement_key = var.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  namespace = var.gitops-cp-catalogs_namespace
   server_name = module.gitops_repo.server_name
 }
+module "gitops-cp-platform-navigator" {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-platform-navigator?ref=v2.0.2"
+
+  catalog = module.gitops-cp-catalogs.catalog_ibmoperators
+  catalog_namespace = var.gitops-cp-platform-navigator_catalog_namespace
+  channel = module.cp4i-version-dependency.platform_navigator.channel
+  entitlement_key = module.gitops-cp-catalogs.entitlement_key
+  git_credentials = module.gitops_repo.git_credentials
+  gitops_config = module.gitops_repo.gitops_config
+  instance_version = module.cp4i-version-dependency.platform_navigator.version
+  kubeseal_cert = module.gitops_repo.sealed_secrets_cert
+  license = module.cp4i-version-dependency.platform_navigator.license
+  namespace = module.cp4i-apic.name
+  replica_count = var.gitops-cp-platform-navigator_replica_count
+  server_name = module.gitops_repo.server_name
+  storageclass = var.gitops-cp-platform-navigator_storageclass
+  subscription_namespace = var.gitops-cp-platform-navigator_subscription_namespace
+}
 module "olm" {
-  source = "github.com/cloud-native-toolkit/terraform-k8s-olm?ref=v1.3.2"
+  source = "github.com/cloud-native-toolkit/terraform-k8s-olm?ref=v1.3.5"
 
   cluster_config_file = module.cluster.config_file_path
   cluster_type = module.cluster.platform.type_code
@@ -123,4 +140,11 @@ module "sealed-secret-cert" {
   cert_file = var.sealed-secret-cert_cert_file
   private_key = var.sealed-secret-cert_private_key
   private_key_file = var.sealed-secret-cert_private_key_file
+}
+module "util-clis" {
+  source = "cloud-native-toolkit/clis/util"
+  version = "1.18.1"
+
+  bin_dir = var.util-clis_bin_dir
+  clis = var.util-clis_clis == null ? null : jsondecode(var.util-clis_clis)
 }

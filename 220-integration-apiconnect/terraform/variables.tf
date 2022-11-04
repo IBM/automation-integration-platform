@@ -37,11 +37,6 @@ variable "gitops-cp-apic-operator_catalog_namespace" {
   description = "The namespace where the catalog has been deployed"
   default = "openshift-marketplace"
 }
-variable "gitops-cp-catalogs_namespace" {
-  type = string
-  description = "The namespace where the application should be deployed"
-  default = "openshift-marketplace"
-}
 variable "cp4i-apic_name" {
   type = string
   description = "The value that should be used for the namespace"
@@ -126,6 +121,16 @@ variable "debug" {
   description = "Flag indicating that debug loggging should be enabled"
   default = false
 }
+variable "gitea_namespace_name" {
+  type = string
+  description = "The namespace that should be created"
+  default = "gitea"
+}
+variable "gitea_namespace_create_operator_group" {
+  type = bool
+  description = "Flag indicating that an operator group should be created in the namespace"
+  default = true
+}
 variable "server_url" {
   type = string
   description = "The url for the OpenShift api"
@@ -174,16 +179,6 @@ variable "cluster_ca_cert_file" {
   description = "The path to the file that contains the ca certificate"
   default = ""
 }
-variable "gitea_namespace_name" {
-  type = string
-  description = "The namespace that should be created"
-  default = "gitea"
-}
-variable "gitea_namespace_create_operator_group" {
-  type = bool
-  description = "Flag indicating that an operator group should be created in the namespace"
-  default = true
-}
 variable "gitea_instance_name" {
   type = string
   description = "The name for the instance"
@@ -223,4 +218,34 @@ variable "sealed-secret-cert_private_key_file" {
   type = string
   description = "The file containin the private key that will be used to encrypt the sealed secrets. If not provided a new private key will be generated"
   default = ""
+}
+variable "gitops-cp-platform-navigator_subscription_namespace" {
+  type = string
+  description = "The namespace where the application should be deployed"
+  default = "openshift-operators"
+}
+variable "gitops-cp-platform-navigator_catalog_namespace" {
+  type = string
+  description = "The namespace where the catalog has been deployed"
+  default = "openshift-marketplace"
+}
+variable "gitops-cp-platform-navigator_replica_count" {
+  type = number
+  description = "The number of replicas to create for the platform navigator"
+  default = 2
+}
+variable "gitops-cp-platform-navigator_storageclass" {
+  type = string
+  description = "For Platformnavigator we require RWX storage class."
+  default = "portworx-rwx-gp-sc"
+}
+variable "util-clis_bin_dir" {
+  type = string
+  description = "The directory where the clis should be downloaded. If not provided will default to ./bin"
+  default = ""
+}
+variable "util-clis_clis" {
+  type = string
+  description = "The list of clis that should be made available in the bin directory. Supported values are yq, jq, igc, helm, argocd, rosa, gh, glab, and kubeseal. (If not provided the list will default to yq, jq, and igc)"
+  default = "[\"yq\",\"jq\",\"igc\"]"
 }

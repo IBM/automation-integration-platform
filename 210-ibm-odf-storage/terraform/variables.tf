@@ -2,6 +2,96 @@ variable "ibmcloud_api_key" {
   type = string
   description = "The api key for IBM Cloud access"
 }
+variable "gitops-ibm-odf_osdStorageClassName" {
+  type = string
+  description = "Storage class that you want to use for your OSD devices"
+  default = "ibmc-vpc-block-metro-10iops-tier"
+}
+variable "gitops-ibm-odf_osdDevicePaths" {
+  type = string
+  description = "Please provide IDs of the disks to be used for OSD pods if using local disks or standard classic cluster"
+  default = ""
+}
+variable "gitops-ibm-odf_osdSize" {
+  type = string
+  description = "Size of your storage devices. The total storage capacity of your ODF cluster is equivalent to the osdSize x 3 divided by the numOfOsd."
+  default = "250Gi"
+}
+variable "gitops-ibm-odf_numOfOsd" {
+  type = string
+  description = "Number object storage daemons (OSDs) that you want to create. ODF creates three times the numOfOsd value."
+  default = "1"
+}
+variable "gitops-ibm-odf_billingType" {
+  type = string
+  description = "Billing Type for your ODF deployment (`essentials` or `advanced`)."
+  default = "advanced"
+}
+variable "gitops-ibm-odf_ocsUpgrade" {
+  type = string
+  description = "Whether to upgrade the major version of your ODF deployment."
+  default = "false"
+}
+variable "gitops-ibm-odf_clusterEncryption" {
+  type = string
+  description = "Enable encryption of storage cluster"
+  default = "false"
+}
+variable "gitops-ibm-odf_workerNodes" {
+  type = string
+  description = "Install on which worker nodes"
+  default = "all"
+}
+variable "gitops-ibm-odf_monSize" {
+  type = string
+  description = "Size of the storage devices that you want to provision for the monitor pods. The devices must be at least 20Gi each"
+  default = "20Gi"
+}
+variable "gitops-ibm-odf_monStorageClassName" {
+  type = string
+  description = "Storage class to use for your Monitor pods. For VPC clusters you must specify a block storage class"
+  default = "ibmc-vpc-block-metro-10iops-tier"
+}
+variable "gitops-ibm-odf_monDevicePaths" {
+  type = string
+  description = "Please provide IDs of the disks to be used for mon pods if using local disks or standard classic cluster"
+  default = ""
+}
+variable "gitops-ibm-odf_autoDiscoverDevices" {
+  type = string
+  description = "Auto Discover Devices"
+  default = "false"
+}
+variable "gitops-ibm-odf_hpcsEncryption" {
+  type = string
+  description = "Use Hyper Protect Crypto Services"
+  default = "false"
+}
+variable "gitops-ibm-odf_hpcsServiceName" {
+  type = string
+  description = "Enter the name of your Hyper Protect Crypto Services instance. For example: Hyper-Protect-Crypto-Services-eugb"
+  default = "false"
+}
+variable "gitops-ibm-odf_hpcsInstanceId" {
+  type = string
+  description = "Enter your Hyper Protect Crypto Services instance ID. For example: d11a1a43-aa0a-40a3-aaa9-5aaa63147aaa"
+  default = "false"
+}
+variable "gitops-ibm-odf_hpcsSecretName" {
+  type = string
+  description = "Enter the name of the secret that you created by using your Hyper Protect Crypto Services credentials. For example: ibm-hpcs-secret"
+  default = "false"
+}
+variable "gitops-ibm-odf_hpcsBaseUrl" {
+  type = string
+  description = "Enter the public endpoint of your Hyper Protect Crypto Services instance. For example: https://api.eu-gb.hs-crypto.cloud.ibm.com:8389"
+  default = "false"
+}
+variable "gitops-ibm-odf_hpcsTokenUrl" {
+  type = string
+  description = "Enter https://iam.cloud.ibm.com/oidc/token"
+  default = "false"
+}
 variable "odf_namespace_name" {
   type = string
   description = "The value that should be used for the namespace"

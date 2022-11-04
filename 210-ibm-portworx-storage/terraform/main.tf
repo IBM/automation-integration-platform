@@ -1,5 +1,5 @@
 module "gitops_repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.21.0"
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.22.2"
 
   branch = var.gitops_repo_branch
   debug = var.debug
@@ -55,8 +55,7 @@ module "portworx_namespace" {
   server_name = module.gitops_repo.server_name
 }
 module "resource_group" {
-  source = "cloud-native-toolkit/resource-group/ibm"
-  version = "3.3.4"
+  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group?ref=v3.3.5"
 
   ibmcloud_api_key = var.ibmcloud_api_key
   purge_volumes = var.purge_volumes
@@ -65,7 +64,7 @@ module "resource_group" {
 }
 module "util-clis" {
   source = "cloud-native-toolkit/clis/util"
-  version = "1.17.0"
+  version = "1.18.1"
 
   bin_dir = var.util-clis_bin_dir
   clis = var.util-clis_clis == null ? null : jsondecode(var.util-clis_clis)

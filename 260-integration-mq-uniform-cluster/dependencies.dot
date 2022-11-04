@@ -28,4 +28,5 @@ digraph {
 "gitops-cp-mq-uniform-cluster (gitops-cp-mq-uniform-cluster)"
 "cp4i-mq-cluster (gitops-namespace)" -> "gitops_repo (gitops-repo)"
 "cp4i-mq-cluster (gitops-namespace)"
+"util-clis (util-clis)"
   }

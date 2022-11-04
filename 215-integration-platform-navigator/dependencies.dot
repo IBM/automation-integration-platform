@@ -23,4 +23,5 @@ digraph {
 "gitops-cp-platform-navigator (gitops-cp-platform-navigator)"
 "cp4i-pn (gitops-namespace)" -> "gitops_repo (gitops-repo)"
 "cp4i-pn (gitops-namespace)"
+"util-clis (util-clis)"
   }
