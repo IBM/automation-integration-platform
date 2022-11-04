@@ -550,6 +550,7 @@ cat "${SCRIPT_DIR}/terraform.tfvars.template-cluster" | \
   sed "s/TO_BE_REPLACED_RWX_STORAGE/${RWX_STORAGE}/g" | \
   sed "s/TO_BE_REPLACED_RWO_STORAGE/${RWO_STORAGE}/g" | \
   sed "s/TO_BE_REPLACED_REGION/${REGION}/g" | \
+  sed "s/PREFIX/${PREFIX_NAME}/g"  | \
   sed "s/TO_BE_REPLACED_CONTENT_OF_PORTWORX_SPEC_IN_BASE64_ENCODED/${PORTWORX_SPEC_CONTENT_IN_BASE64_ENCODED}/g"  \
   > "${WORKSPACE_DIR}/cluster.tfvars"
 

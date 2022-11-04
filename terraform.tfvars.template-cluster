@@ -11,6 +11,9 @@ rwx_storage_class="TO_BE_REPLACED_RWX_STORAGE"
 ## REGION: Required for all providers while setting up Portworx storage
 region="TO_BE_REPLACED_REGION"
 
+## Resource group: Required for portworx storage on IBM Cloud
+resource_group_name="PREFIX-storage"
+
 
 ## portworx_spec_file_content in base64 encoded: 
 portworx_spec="TO_BE_REPLACED_CONTENT_OF_PORTWORX_SPEC_IN_BASE64_ENCODED"
