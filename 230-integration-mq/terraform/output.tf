@@ -77,6 +77,7 @@ output "gitops-cp-catalogs_catalog_processmining" {
 output "gitops-cp-catalogs_entitlement_key" {
   description = "Entitlement key"
   value = module.gitops-cp-catalogs.entitlement_key
+  sensitive = true
 }
 output "gitops-cp-mq_name" {
   description = "The name of the module"
