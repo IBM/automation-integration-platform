@@ -413,13 +413,15 @@ Copy_Required_Module_In_CurrentWorkSpace()
 }
 
 # Get the options
-while getopts ":p:h:" option; do
+while getopts ":p:h:g:b" option; do
    case $option in
       h) # display Help
          Usage
          exit 1;;
       p)
          CLOUD_PROVIDER=${OPTARG};;
+      n) # Enter a name
+         PREFIX_NAME=$OPTARG;;
       g) # Enter a name
          GIT_HOST=$OPTARG;;
       b) # Enter a name
