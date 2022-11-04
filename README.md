@@ -205,7 +205,7 @@ We recommend using Docker Desktop if choosing the container image method, and Mu
     export TF_VAR_azure_client_secret=
    ```
 
- 4. You will need to populate these values. Add your Git Hub username and your Personal Access Token to `TF_VAR_gitops_repo_username` and `TF_VAR_gitops_repo_token`.
+ 4. If you would like to use GitHub for your GitOps repo, then you will need to populate these values. Add your Git Hub username and your Personal Access Token to `TF_VAR_gitops_repo_username` and `TF_VAR_gitops_repo_token`.  If these values are left blank, the automation will deploy Gitea into the OpenShift cluster for the GitOps deployment, requiring no additional user interaction.
 
  5. From you OpenShift console click on top right menu and select Copy login command and click on Display Token
 
