@@ -413,7 +413,7 @@ Copy_Required_Module_In_CurrentWorkSpace()
 }
 
 # Get the options
-while getopts ":p:h:g:b" option; do
+while getopts ":p:h:g:b:n:" option; do
    case $option in
       h) # display Help
          Usage
