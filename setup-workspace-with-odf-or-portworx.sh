@@ -57,6 +57,7 @@ Usage()
    echo "  -n     (optional) prefix that should be used for all variables"
    echo "  -b     (optional) the banner text that should be shown at the top of the cluster"
    echo "  -g     (optional) the git host that will be used for the gitops repo. If left blank gitea will be used by default. (Github, Github Enterprise, Gitlab, Bitbucket, Azure DevOps, and Gitea servers are supported)"
+   echo "  -l     (optional) The comma separated list of layers to be deployed acceptable values are the layer/module number.  (280 deploys all, otherwise: 220 = apiconnect, 230 = mq, 240 = ace, 250 = eventstreams, 260 = mq)"
    echo "  -h     Print this help"
    echo
    echo "Creates a workspace folder and populates it with automation bundles you require."
