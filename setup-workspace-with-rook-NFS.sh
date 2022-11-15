@@ -20,6 +20,7 @@ WORKSPACE_DIR=""
 VALID_CLOUD_PROVIDERS=("ibm","aws","azure")
 VALID_STORAGE_PROVIDERS=("odf","portworx")
 STORAGE_CLASS_4_IBM_ODF=""
+LAYERS=""
 
 CLOUD_PROVIDER=""
 STORAGE=""
@@ -56,6 +57,7 @@ Usage()
    echo "  -n     (optional) prefix that should be used for all variables"
    echo "  -b     (optional) the banner text that should be shown at the top of the cluster"
    echo "  -g     (optional) the git host that will be used for the gitops repo. If left blank gitea will be used by default. (Github, Github Enterprise, Gitlab, Bitbucket, Azure DevOps, and Gitea servers are supported)"
+   echo "  -l     (optional) The comma separated list of layers to be deployed acceptable values are the layer/module number.  (280 deploys all, otherwise: 220 = apiconnect, 230 = mq, 240 = ace, 250 = eventstreams, 260 = mq)"
    echo "  -h     Print this help"
    echo
    echo "Creates a workspace folder and populates it with automation bundles you require."
@@ -413,7 +415,7 @@ Copy_Required_Module_In_CurrentWorkSpace()
 }
 
 # Get the options
-while getopts ":p:h:g:b:n:" option; do
+while getopts ":p:h:g:b:n:l:" option; do
    case $option in
       h) # display Help
          Usage
@@ -426,6 +428,8 @@ while getopts ":p:h:g:b:n:" option; do
          GIT_HOST=$OPTARG;;
       b) # Enter a name
          BANNER=$OPTARG;;
+      l) # Enter a name
+         LAYERS=$OPTARG;;
      \?) # Invalid option
          echo "Error: Invalid option"
          Usage
@@ -440,14 +444,42 @@ Validate_Input_Param
 Print_Input_Params
 
 
-#This Function helps the user to choose the required capabilities
-Select_CP4I_Capabilities
+# If no LAYERS passed as cli args, then prompt
+if [[ -z "${LAYERS}" ]]; then
 
-#This function helps in summarizing the choices being made
-Summarize_the_Choice
+  #This Function helps the user to choose the required capabilities
+  Select_CP4I_Capabilities
 
-#Help the get the confirmation on the choices being made
-Get_Confirmation_To_Proceed
+  #This function helps in summarizing the choices being made
+  Summarize_the_Choice
+
+  #Help the get the confirmation on the choices being made
+  Get_Confirmation_To_Proceed
+
+else 
+
+  if [[ $LAYERS == *"280"* ]]; then
+    bomIdMap["bom_280"]='y'
+    Set_Others_To_No
+  else
+    ["bom_215"]="y"
+    if [[ $LAYERS == *"220"* ]]; then
+      bomIdMap["bom_220"]='y'
+    fi
+    if [[ $LAYERS == *"230"* ]]; then
+      bomIdMap["bom_230"]='y'
+    fi
+    if [[ $LAYERS == *"240"* ]]; then
+      bomIdMap["bom_240"]='y'
+    fi
+    if [[ $LAYERS == *"250"* ]]; then
+      bomIdMap["bom_250"]='y'
+    fi
+    if [[ $LAYERS == *"260"* ]]; then
+      bomIdMap["bom_260"]='y'
+    fi
+  fi
+fi
 
 #Install Rook NFS Storage for supporting RWX. We automated the steps provided in 
 #https://www.ibm.com/docs/en/cloud-paks/cp-integration/2022.2?topic=ui-deploying-platform-rwo-storage

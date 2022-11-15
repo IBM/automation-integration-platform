@@ -355,6 +355,26 @@ We recommend using Docker Desktop if choosing the container image method, and Mu
          
     ```
 
+    Note: you can run the `setup-workspace` scripts without user prompting by using the `-l` command line argument as a comma separated list to specify the explicit layers by number.
+
+    For example, use layer `280` to specify all layers:
+    ```
+    ./setup-workspace-with-odf-or-portworx.sh -p ibm -s odf -n integration -l 280
+    ```
+    Or, use individual layer numbers to only deploy those components.
+    ```
+    ./setup-workspace-with-odf-or-portworx.sh -p ibm -s odf -n integration -l 220,230,240
+    ```
+
+    Layer numbers that can be used are:
+    - `280` All layers/components (this will override all other layers)
+    - `220` IBM API Connect
+    - `230` IBM MQ
+    - `240` IBM App Connect
+    - `250` IBM Event Streams
+    - `260` IBM MQ Uniform Cluster
+
+
 3. The `setup-workspace-odf-or-portworx.sh` and `setup-workspace-with-rook-NFS.sh` scripts configure the `cluster.tfvars` and `gitops.tfvars` files with reasonable defaults.
 
      **Note:** 
