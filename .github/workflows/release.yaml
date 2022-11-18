@@ -13,4 +13,4 @@ jobs:
   release:
     uses: cloud-native-toolkit/action-workflows/.github/workflows/release-module.yaml@v1
     secrets:
-      TOKEN: ${{ with.GITHUB_TOKEN }}
+      TOKEN: ${{ secrets.TOKEN }}
