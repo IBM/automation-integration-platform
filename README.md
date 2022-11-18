@@ -393,8 +393,8 @@ The following are variables that you will be updating. Here are some suggested v
 | config_banner_text | Banner text for the cluster console                                                                                                                              | Cloud Pak for Integration                              |
 | portworx_spec                | The content of Portworx yaml in base64 encoded format                                                                                             | Will be setup by setup-workspace-with-odf-or-portworx                              |
 
-1. Scan through the `terraform.tfvars` file thouroughly and double check the values based on your environment. 
-2. Save the `terraform.tfvars` file.
+1. Scan through the `cluster.tfvars` and `gitops.tfvar` files thouroughly and double check the values based on your environment. 
+2. Save the any changes to these files.
 
 #### Apply the automation
 1. We are now ready to start installing Cloud Pak for Integration. Ensure you are inside the running container or Multipass VM.
