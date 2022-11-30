@@ -49,7 +49,7 @@ then
 fi
 
 
-DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools:v1.2-v2.4.0"
+DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools:v1.2-v2.4.1"
 #IBM DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-ibmcloud:v1.2-v0.6.0"
 #AWS DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-aws:v1.2-v0.5.0"
 #AZURE DOCKER_IMAGE="quay.io/cloudnativetoolkit/cli-tools-azure:v1.2-v0.6.0"

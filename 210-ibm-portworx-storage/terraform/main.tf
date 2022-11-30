@@ -44,7 +44,7 @@ module "gitops-ibmcloud-operator" {
   server_name = module.gitops_repo.server_name
 }
 module "portworx_namespace" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.12.2"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.portworx_namespace_argocd_namespace
   ci = var.portworx_namespace_ci

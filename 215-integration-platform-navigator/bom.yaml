@@ -37,7 +37,7 @@ spec:
           scope: global
     - name: gitops-namespace
       alias: cp4i-pn
-      version: v1.14.0
+      version: v1.15.0
       variables:
         - name: name
           value: cp4i-pn

@@ -119,37 +119,37 @@ spec:
           scope: global
     - name: gitops-namespace
       alias: cp4i-mq-cluster
-      version: v1.14.0
+      version: v1.15.0
       variables:
         - name: name
           value: cp4i-mq-cluster
     - name: gitops-namespace
       alias: cp4i-ace
-      version: v1.14.0
+      version: v1.15.0
       variables:
         - name: name
           value: cp4i-ace
     - name: gitops-namespace
       alias: cp4i-mq
-      version: v1.14.0
+      version: v1.15.0
       variables:
         - name: name
           value: cp4i-mq
     - name: gitops-namespace
       alias: cp4i-apic
-      version: v1.14.0
+      version: v1.15.0
       variables:
         - name: name
           value: cp4i-apic
     - name: gitops-namespace
       alias: cp4i-es
-      version: v1.14.0
+      version: v1.15.0
       variables:
         - name: name
           value: cp4i-es
     - name: gitops-namespace
       alias: cp4i-pn
-      version: v1.14.0
+      version: v1.15.0
       variables:
         - name: name
           value: cp4i-pn

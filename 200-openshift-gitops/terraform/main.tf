@@ -110,7 +110,7 @@ module "sealed-secret-cert" {
   private_key_file = var.sealed-secret-cert_private_key_file
 }
 module "toolkit_namespace" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.12.2"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.toolkit_namespace_argocd_namespace
   ci = var.toolkit_namespace_ci

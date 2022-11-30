@@ -49,7 +49,7 @@ module "gitops-ibm-odf" {
   workerNodes = var.gitops-ibm-odf_workerNodes
 }
 module "odf_namespace" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.12.2"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.odf_namespace_argocd_namespace
   ci = var.odf_namespace_ci

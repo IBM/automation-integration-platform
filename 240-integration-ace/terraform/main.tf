@@ -13,7 +13,7 @@ module "cluster" {
   tls_secret_name = var.cluster_tls_secret_name
 }
 module "cp4i-ace" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.cp4i-ace_argocd_namespace
   ci = var.cp4i-ace_ci
