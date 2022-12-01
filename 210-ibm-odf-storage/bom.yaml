@@ -21,7 +21,7 @@ spec:
           scope: global
     - name: gitops-namespace
       alias: odf_namespace
-      version: v1.12.2
+      version: v1.15.0
       default: true
       variables:
         - name: name

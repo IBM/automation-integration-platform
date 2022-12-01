@@ -13,7 +13,7 @@ module "cluster" {
   tls_secret_name = var.cluster_tls_secret_name
 }
 module "cp4i-ace" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.cp4i-ace_argocd_namespace
   ci = var.cp4i-ace_ci
@@ -24,7 +24,7 @@ module "cp4i-ace" {
   server_name = module.gitops_repo.server_name
 }
 module "cp4i-apic" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.cp4i-apic_argocd_namespace
   ci = var.cp4i-apic_ci
@@ -35,7 +35,7 @@ module "cp4i-apic" {
   server_name = module.gitops_repo.server_name
 }
 module "cp4i-es" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.cp4i-es_argocd_namespace
   ci = var.cp4i-es_ci
@@ -46,7 +46,7 @@ module "cp4i-es" {
   server_name = module.gitops_repo.server_name
 }
 module "cp4i-mq" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.cp4i-mq_argocd_namespace
   ci = var.cp4i-mq_ci
@@ -57,7 +57,7 @@ module "cp4i-mq" {
   server_name = module.gitops_repo.server_name
 }
 module "cp4i-mq-cluster" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.cp4i-mq-cluster_argocd_namespace
   ci = var.cp4i-mq-cluster_ci
@@ -68,7 +68,7 @@ module "cp4i-mq-cluster" {
   server_name = module.gitops_repo.server_name
 }
 module "cp4i-pn" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.14.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.15.0"
 
   argocd_namespace = var.cp4i-pn_argocd_namespace
   ci = var.cp4i-pn_ci

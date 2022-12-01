@@ -33,7 +33,7 @@ spec:
       version: v1.5.1
     - name: gitops-namespace
       alias: toolkit_namespace
-      version: v1.12.2
+      version: v1.15.0
       default: true
       variables:
         - name: name
