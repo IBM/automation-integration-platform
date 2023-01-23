@@ -37,7 +37,7 @@ spec:
           value: false
     - name: gitops-cp-catalogs
       alias: gitops-cp-catalogs
-      version: v1.2.5
+      version: v1.2.7
       variables:
         - name: entitlement_key
           scope: global

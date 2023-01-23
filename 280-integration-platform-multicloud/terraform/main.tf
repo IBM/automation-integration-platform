@@ -184,7 +184,7 @@ module "gitops-cp-apic-operator" {
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-catalogs" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.5"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-catalogs?ref=v1.2.7"
 
   entitlement_key = var.entitlement_key
   git_credentials = module.gitops_repo.git_credentials
