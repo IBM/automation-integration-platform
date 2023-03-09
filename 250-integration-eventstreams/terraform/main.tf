@@ -92,7 +92,7 @@ module "gitops-cp-es-operator" {
   server_name = module.gitops_repo.server_name
 }
 module "gitops-cp-event-streams" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams?ref=v2.0.1"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-event-streams?ref=v2.1.1"
 
   cpulimits = var.gitops-cp-event-streams_cpulimits
   cpurequests = var.gitops-cp-event-streams_cpurequests

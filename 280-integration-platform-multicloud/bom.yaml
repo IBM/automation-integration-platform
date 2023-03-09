@@ -61,7 +61,7 @@ spec:
       version: v1.1.1
     - name: gitops-cp-event-streams
       alias: gitops-cp-event-streams
-      version: v2.0.1
+      version: v2.1.1
       dependencies:
         - name: namespace
           ref: cp4i-es
